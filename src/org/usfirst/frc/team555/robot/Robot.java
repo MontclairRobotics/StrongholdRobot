@@ -18,6 +18,9 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
+    
+    DriveTrain driveTrain;
+    HumanInterface control;
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -28,6 +31,13 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
+        
+        SmartDashboard.putNumber("PID-P", DriveModule.PID_P);
+        SmartDashboard.putNumber("PID-I", DriveModule.PID_I);
+        SmartDashboard.putNumber("PID-D", DriveModule.PID_D);
+        
+        driveTrain = new DriveTrain();
+        control = new HumanInterface();
     }
     
 	/**
@@ -59,12 +69,17 @@ public class Robot extends IterativeRobot {
             break;
     	}
     }
-
+    
     /**
      * This function is called periodically during operator control
      */
+    
     public void teleopPeriodic() {
+        DriveModule.PID_P = SmartDashboard.getNumber("PID-P");
+        DriveModule.PID_I = SmartDashboard.getNumber("PID-I");
+        DriveModule.PID_D = SmartDashboard.getNumber("PID-D");
         
+        driveTrain.setSpeedArcade(control.getY(HumanInterface.DRIVE_STICK), control.getZ(HumanInterface.DRIVE_STICK));
     }
     
     /**
