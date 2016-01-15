@@ -16,8 +16,8 @@ public class DriveTrain {
 		rightWheels = new Motor[WHEELS_PER_SIDE];
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
-			leftWheels [i]= new Motor(i*2);
-			rightWheels[i]= new Motor(i*2+1);
+			leftWheels [i]= new Motor('d',i*2);
+			rightWheels[i]= new Motor('d',i*2+1);
 		}
 	}
 	
