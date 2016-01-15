@@ -4,7 +4,7 @@ public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
 	
-	private DriveModule[] leftWheels, rightWheels;
+	private Motor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
 	
 	
@@ -12,12 +12,12 @@ public class DriveTrain {
 	
 	public DriveTrain()
 	{
-		leftWheels = new DriveModule[WHEELS_PER_SIDE];
-		rightWheels = new DriveModule[WHEELS_PER_SIDE];
+		leftWheels = new Motor[WHEELS_PER_SIDE];
+		rightWheels = new Motor[WHEELS_PER_SIDE];
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
-			leftWheels [i]= new DriveModule(i*2);
-			rightWheels[i]= new DriveModule(i*2+1);
+			leftWheels [i]= new Motor(i*2);
+			rightWheels[i]= new Motor(i*2+1);
 		}
 	}
 	
