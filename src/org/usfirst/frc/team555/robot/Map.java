@@ -3,7 +3,7 @@
  */
 public class Map
 {
-    public static final int[][] MOTOR_VALUES={
+    public static final int[][] MOTOR_PORTS={
         //{motorPort,encoderPort1,encoderPort2},
         {0,1,2},
         {3,4,5},
