@@ -22,28 +22,10 @@ public class DriveModule {
 	
 	public DriveModule(int id)
 	{
-		switch(id)
-		{
-		case 0:
-			motorPort=0;
-			encoderPort1=1;
-			encoderPort2=2;
-			break;
-		case 1:
-			motorPort=3;
-			encoderPort1=4;
-			encoderPort2=5;
-			break;
-			
-		//TODO: Fill in rest
-			
-		default:
-			shutdown=true;
-			break;
-		}
+		motorPort=Map.MOTOR_PORTS[id][0];
+		encoderPort1=Map.MOTOR_PORTS[id][1];
+		encoderPort1=Map.MOTOR_PORTS[id][2];
 		
-		
-		//begin
 		encoder = new Encoder(encoderPort1, encoderPort2);
 		motor = new TalonSRX(motorPort);
 		controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
