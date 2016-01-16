@@ -24,21 +24,21 @@ public class DriveMotor {
 	
 	public DriveMotor(int id, boolean encoders)
 	{
-		this(id, encoders, 's');
+		this(Map.MOTOR_PORTS[id], encoders, 's');
 	}
 	
 	public DriveMotor(int id) {
-		this(id, true, 'd');
+		this(Map.MOTOR_PORTS[id], true, 'd');
 	}
 	
-	public DriveMotor(int id, boolean encoders, char type) {
+	public DriveMotor(int[] ports, boolean encoders, char type) {
 		this.encoders = encoders;
-		int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
-		motorPort = ports[id][0];
+		//int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
+		motorPort = ports[0];
 		motor = new TalonSRX(motorPort);
 		if(encoders) {
-			encoderPort1 = ports[id][1];
-			encoderPort1 = ports[id][2];
+			encoderPort1 = ports[1];
+			encoderPort1 = ports[2];
 			
 			encoder = new Encoder(encoderPort1, encoderPort2);
 			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);

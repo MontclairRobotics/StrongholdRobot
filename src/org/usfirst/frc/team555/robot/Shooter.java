@@ -19,7 +19,7 @@ public class Shooter
     {
     	wheels= new ShooterMotor[2];
         
-    	for(int i=0;i<Map.SHOOTER_PORTS.length;i++)
+    	for(int i=0;i<Map.SHOOTER_MOTORS.length;i++)
     	{
     		wheels[i] = new ShooterMotor(i);
     	}

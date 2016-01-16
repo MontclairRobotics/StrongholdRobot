@@ -71,6 +71,14 @@ public class Robot extends IterativeRobot {
         	}
         	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.VALVES[i]);
         }
+        
+        update();
+    }
+    
+    public void update()
+    {
+    	driveTrain.update();
+    	shooter.update();
     }
     
     /**
