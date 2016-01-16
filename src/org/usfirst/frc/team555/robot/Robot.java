@@ -2,17 +2,9 @@
 package org.usfirst.frc.team555.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
 public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
@@ -20,35 +12,25 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     
     DriveTrain driveTrain;
-    HumanInterface control;
-	
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
+    Shooter shooter;
+    
+    boolean[] lastValveButton;
+
+    
     public void robotInit() {
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
         
-        SmartDashboard.putNumber("PID-P", DriveModule.PID_P);
-        SmartDashboard.putNumber("PID-I", DriveModule.PID_I);
-        SmartDashboard.putNumber("PID-D", DriveModule.PID_D);
+        SmartDashboard.putNumber("PID-P", DriveMotor.PID_P);
+        SmartDashboard.putNumber("PID-I", DriveMotor.PID_I);
+        SmartDashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        control = new HumanInterface();
+        shooter = new Shooter();
     }
-    
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
-	 * Dashboard, remove all of the chooser code and uncomment the getString line to get the auto name from the text box
-	 * below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the switch structure below with additional strings.
-	 * If using the SendableChooser make sure to add them to the chooser code above as well.
-	 */
+
     public void autonomousInit() {
     	autoSelected = (String) chooser.getSelected();
 //		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
@@ -75,11 +57,20 @@ public class Robot extends IterativeRobot {
      */
     
     public void teleopPeriodic() {
-        DriveModule.PID_P = SmartDashboard.getNumber("PID-P");
-        DriveModule.PID_I = SmartDashboard.getNumber("PID-I");
-        DriveModule.PID_D = SmartDashboard.getNumber("PID-D");
+        DriveMotor.PID_P = SmartDashboard.getNumber("PID-P");
+        DriveMotor.PID_I = SmartDashboard.getNumber("PID-I");
+        DriveMotor.PID_D = SmartDashboard.getNumber("PID-D");
         
-        driveTrain.setSpeedArcade(control.getY(HumanInterface.DRIVE_STICK), control.getZ(HumanInterface.DRIVE_STICK));
+        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getZ(Control.DRIVE_STICK));
+        
+        for(int i=0;i<2;i++)
+        {
+        	if(lastValveButton[i]==false && Control.getButton(Control.SHOOT_STICK,Control.VALVES[i])==true)
+        	{
+        		shooter.toggleValve(i);
+        	}
+        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.VALVES[i]);
+        }
     }
     
     /**
