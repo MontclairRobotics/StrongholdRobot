@@ -3,13 +3,13 @@ package org.usfirst.frc.team555.robot;
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
-
+	
 	private DriveMotor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
-
-
+	
+	
 	public static boolean shutdown = false;
-
+	
 	public DriveTrain()
 	{
 		leftWheels = new DriveMotor[WHEELS_PER_SIDE];
@@ -20,13 +20,13 @@ public class DriveTrain {
 			rightWheels[i]= new DriveMotor(i*2+1);
 		}
 	}
-
+	
 	public void setSpeedTank(double lSpd,double rSpd)
 	{
 		leftSpd = lSpd;
 		rightSpd = rSpd;
 	}
-
+	
 	public void setSpeedArcade(double speed,double rotation)
 	{
 		leftSpd = speed+rotation*ROT_CONSTANT;
