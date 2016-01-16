@@ -66,24 +66,25 @@ public class Shooter
     		mode='0';
     	}
     	timeToStop--;
-    	
-    	for(ShooterMotor motor : wheels) {
-    		switch(mode)
-    		{
-    		case 'r':
-    			motor.setSpeed(REEL_SPEED);
-    			break;
-    		case 's':
-    			motor.setSpeed(shootSpd);
-    		default:
-    			motor.setSpeed(0);
-    		}
-    	}
+		switch(mode)
+		{
+		case 'r':
+			setMotors(REEL_SPEED);
+			break;
+		case 's':
+			setMotors(shootSpd);
+			break;
+		default:
+			setMotors(0);
+			break;
+		}
     }
     
-    public void setValve(int valveID, boolean on)
+    public void setMotors(double spd)
     {
-    	valves[valveID].set(on);
+    	for(ShooterMotor motor : wheels) {
+    		motor.setSpeed(spd);
+    	}
     }
     
     public void toggleValve(int valve)
@@ -91,10 +92,10 @@ public class Shooter
     	switch(valve)
     	{
     	case 0:
-    		setValve(0,!valves[0].get());
-    		setValve(1,!valves[1].get());
+    		valves[0].set(!valves[0].get());
+    		valves[1].set(!valves[1].get());
     	case 1:
-    		setValve(2,!valves[2].get());
+    		valves[2].set(!valves[2].get());
     	}
     }
 }

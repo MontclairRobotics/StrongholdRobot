@@ -71,6 +71,7 @@ public class Robot extends IterativeRobot {
         	}
         	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.VALVES[i]);
         }
+        shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         
         update();
     }
