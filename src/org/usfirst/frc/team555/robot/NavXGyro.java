@@ -4,9 +4,8 @@ public class NavxGyro {
     
     private AHRS ahrs;
     
-    private public NavXGyro() {
-        // TODO: - GIVE NAVX PORT NUMBER
-        ahrs = new AHRS(0);
+    private public NavXGyro(AHRS ahrs) {
+        this.ahrs = ahrs;
         ahrs.reset(); // Resets gyro readings to 0
     }
     
