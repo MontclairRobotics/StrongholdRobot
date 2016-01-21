@@ -14,16 +14,16 @@ public class NavXAccelerometer {
           - ahrs functions are of type float
     */
     
-    public getAccelX() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelX() {
+        return ahrs.getWorldLinearAccelX();
     }
     
-    public getAccelY() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelY() {
+        return ahrs.getWorldLinearAccelX();
     }
     
-    public getAccelZ() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelZ() {
+        return ahrs.getWorldLinearAccelX();
     }
     
     /*
@@ -31,16 +31,16 @@ public class NavXAccelerometer {
           - ahrs functions are of type float
     */
     
-    public getVelocX() {
-        return (double)ahrs.getVelocityX();
+    public double getVelocX() {
+        return ahrs.getVelocityX();
     }
     
-    public getVelocY() {
-        return (double)ahrs.getVelocityY();
+    public double getVelocY() {
+        return ahrs.getVelocityY();
     }
     
-    public getVelocZ() {
-        return (double)ahrs.getVelocityZ();
+    public double getVelocZ() {
+        return ahrs.getVelocityZ();
     }
     
 }

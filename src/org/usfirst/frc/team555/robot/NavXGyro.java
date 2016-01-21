@@ -1,12 +1,12 @@
 package org.usfirst.frc.team555.robot;
 import com.kauailabs.navx.frc.AHRS;
 
-public class NavxGyro {
+public class NavXGyro {
     
     // AHRS reference from wherever NavXGyro is initialized 
     private AHRS ahrs;
     
-    private public NavXGyro(AHRS ahrs) {
+    public NavXGyro(AHRS ahrs) {
         this.ahrs = ahrs;
          // Resets gyro readings to 0 (starting orientation)
         ahrs.reset();

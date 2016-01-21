@@ -1,7 +1,10 @@
 
 package org.usfirst.frc.team555.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,6 +16,10 @@ public class Robot extends IterativeRobot {
     
     DriveTrain driveTrain;
     Shooter shooter;
+    
+    AHRS ahrs;
+    NavXAccelerometer accel;
+    NavXGyro gyro;
     
     boolean[] lastValveButton;
 
@@ -29,6 +36,10 @@ public class Robot extends IterativeRobot {
         
         driveTrain = new DriveTrain();
         shooter = new Shooter();
+        
+        ahrs = new AHRS(SPI.Port.kOnboardCS0);
+        accel = new NavXAccelerometer(ahrs);
+        gyro = new NavXGyro(ahrs);
     }
 
     public void autonomousInit() {
@@ -56,11 +67,13 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     
-    public void teleopPeriodic() {
-        DriveMotor.PID_P = SmartDashboard.getNumber("PID-P");
+    public void teleopInit() {
+    	DriveMotor.PID_P = SmartDashboard.getNumber("PID-P");
         DriveMotor.PID_I = SmartDashboard.getNumber("PID-I");
         DriveMotor.PID_D = SmartDashboard.getNumber("PID-D");
-        
+    }
+    
+    public void teleopPeriodic() {
         driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getZ(Control.DRIVE_STICK));
         
         for(int i=0;i<2;i++)
