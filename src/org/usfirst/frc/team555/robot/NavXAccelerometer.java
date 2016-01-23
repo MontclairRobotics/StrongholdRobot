@@ -9,38 +9,32 @@ public class NavXAccelerometer {
         this.ahrs = ahrs;
     }
     
-    /*
-    NOTE: - acceleration functions are measured in "m/s^2"
-          - ahrs functions are of type float
-    */
+    // Acceleration along x-axis, y-axis, and z-axis
     
-    public getAccelX() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelX() {
+        return ahrs.getWorldLinearAccelX() * 9.807; // in m/s^2
     }
     
-    public getAccelY() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelY() {
+        return ahrs.getWorldLinearAccelY() * 9.807; // in m/s^2
     }
     
-    public getAccelZ() {
-        return (double)ahrs.getWorldLinearAccelX() / 9.806;
+    public double getAccelZ() {
+        return ahrs.getWorldLinearAccelZ() * 9.807; // in m/s^2
     }
     
-    /*
-    NOTE: - velocity functions are measured in "m/s"
-          - ahrs functions are of type float
-    */
+    // Velocity along x-axis, y-axis, and z-axis
     
-    public getVelocX() {
-        return (double)ahrs.getVelocityX();
+    public double getVelocX() {
+        return ahrs.getVelocityX(); // in m/s
     }
     
-    public getVelocY() {
-        return (double)ahrs.getVelocityY();
+    public double getVelocY() {
+        return ahrs.getVelocityY(); // in m/s
     }
     
-    public getVelocZ() {
-        return (double)ahrs.getVelocityZ();
+    public double getVelocZ() {
+        return ahrs.getVelocityZ(); // in m/s
     }
     
 }

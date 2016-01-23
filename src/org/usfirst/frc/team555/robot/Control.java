@@ -2,19 +2,17 @@ package org.usfirst.frc.team555.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class HI {
-	
-	private static Joystick[] sticks;
+public class Control {
 	
 	public static final int DRIVE_STICK = 0;
 	public static final int SHOOT_STICK = 1;
+	public static final int[] VALVES={0,1};
 	
-	public static HumanInterface()
-	{
-		sticks = new Joystick[2];
-		sticks[0] = new Joystick(0);
-		sticks[1] = new Joystick(1);
-	}
+	private static Joystick[] sticks = {
+			new Joystick(DRIVE_STICK),
+			new Joystick(SHOOT_STICK)
+	};
+	
 	
 	public static double getX(int joystick) {
 		return sticks[joystick].getX();
@@ -26,5 +24,10 @@ public class HI {
 	
 	public static double getZ(int joystick) {
 		return sticks[joystick].getZ();
+	}
+	
+	public static boolean getButton(int joystick, int button)
+	{
+		return sticks[joystick].getRawButton(button);
 	}
 }
