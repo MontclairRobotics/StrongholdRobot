@@ -21,9 +21,9 @@ public class CameraXY
     public static final double heightOfCamera=1;//meters
     
     private static int x,y1,y2;
-    private static double curRotation;
+    private static double resetRot;
 
-    public static void update(double power, double rotate)//shooter power and rotation in degrees since last update
+    public static void update(double power, NavXGyro gyro)//shooter power and rotation in degrees since last update
     {
         double[] angles = Trajectory.getDegrees(power);
         if(angles==null)
@@ -37,13 +37,12 @@ public class CameraXY
             y2=getPixles(angles[1]-angleOfCamera,windowHeight,FOVheight);
         }
         
-        curRotation+=rotate;
-        x=getPixles(curRotation,windowWidth,FOVwidth);
+        x=getPixles(gyro.getZ()-resetRot,windowWidth,FOVwidth);
     }
     
-    public static void refresh()
+    public static void refresh(NavXGyro gyro)
     {
-        curRotation=0;
+        resetRot=gyro.getZ();
         x=0;
     }
     
@@ -70,6 +69,6 @@ public class CameraXY
     
     public static int getPixles(double angle,int window,int FOV)
     {
-        return (int)(window*(angle/FOV+.5));
+        return (int)(window*(angle/FOV+.5)+.5);
     }
 }
