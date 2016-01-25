@@ -12,7 +12,7 @@
 public class Trajectory
 {
     private static final double angleOfShooter=45;//degrees; 0 is facing ahead, 90 is facing ceiling
-    private static final double heightOfTarget=2;//meters
+    private static final double heightOfTarget=2.5;//meters
     private static final double heightOfShooter=1;//meters
     private static final double g=9.8;//m/s 
     private static final double powerToVelocity=1;//motor power to throw ball at one meter per second
