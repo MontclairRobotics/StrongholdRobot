@@ -23,7 +23,7 @@ public class CameraXY
     private int x,y1,y2;
     private double resetRot;
 
-    public void update(double power, NavXGyro gyro)//shooter power and rotation in degrees since last update
+    public void update(double power, double gyro)//shooter power and z rotation in degrees or whatever
     {
         double[] angles = Trajectory.getDegrees(power);
         if(angles==null)
@@ -37,12 +37,12 @@ public class CameraXY
             y2=getPixles(angles[1]-angleOfCamera,windowHeight,FOVheight);
         }
         
-        x=getPixles(gyro.getZ()-resetRot,windowWidth,FOVwidth);
+        x=getPixles(gyro-resetRot,windowWidth,FOVwidth);
     }
     
-    public void refresh(NavXGyro gyro)
+    public void refresh(double gyro)//z rotation
     {
-        resetRot=gyro.getZ();
+        resetRot=gyro;
         x=0;
     }
     

@@ -35,10 +35,11 @@ public class DriveMotor {
 		this.encoders = encoders;
 		//int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
 		motorPort = ports[0];
+		//TODO: What!?
 		motor = new TalonSRX(motorPort);
 		if(encoders) {
 			encoderPort1 = ports[1];
-			encoderPort1 = ports[2];
+			encoderPort2 = ports[2];
 			
 			encoder = new Encoder(encoderPort1, encoderPort2);
 			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
@@ -48,7 +49,7 @@ public class DriveMotor {
 	
 	public void setSpeed(double spd)
 	{
-		speed = encoders ? spd * ROT_TO_DEGREES : spd;
+		speed = encoders ? spd * ROT_TO_DEGREES : spd*100; //TODO: Control scale constant
 	}
 	
 	public void update()
@@ -64,7 +65,6 @@ public class DriveMotor {
 			return;
 		}
 		if(encoders) {
-			controller.setPID(PID_P, PID_I, PID_D);
 			controller.setSetpoint(speed);
 		} else {
 			motor.set(speed);

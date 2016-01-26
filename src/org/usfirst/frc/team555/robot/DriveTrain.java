@@ -7,6 +7,7 @@ public class DriveTrain {
 	private DriveMotor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
 	
+	private static final boolean encoders=false;
 	
 	public static boolean shutdown = false;
 	
@@ -16,8 +17,8 @@ public class DriveTrain {
 		rightWheels = new DriveMotor[WHEELS_PER_SIDE];
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
-			leftWheels [i]= new DriveMotor(i*2);
-			rightWheels[i]= new DriveMotor(i*2+1);
+			leftWheels [i]= new DriveMotor(i*2,encoders);
+			rightWheels[i]= new DriveMotor(i*2+1,encoders);
 		}
 	}
 	
@@ -42,11 +43,11 @@ public class DriveTrain {
 		for(int i=0; i<leftWheels.length; i++)
 		{
 			leftWheels[i].setSpeed(leftSpd);
-			rightWheels[i].update();
+			leftWheels[i].update();
 		}	
 		for(int i=0; i<rightWheels.length; i++)
 		{
-			leftWheels[i].setSpeed(rightSpd);
+			rightWheels[i].setSpeed(rightSpd);
 			rightWheels[i].update();
 		}
 	}

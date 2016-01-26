@@ -28,8 +28,7 @@ public class Robot extends IterativeRobot {
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
-        SmartDashboard.putData("Auto choices", chooser);
-        
+        SmartDashboard.putData("Auto choices", chooser);     
         SmartDashboard.putNumber("PID-P", DriveMotor.PID_P);
         SmartDashboard.putNumber("PID-I", DriveMotor.PID_I);
         SmartDashboard.putNumber("PID-D", DriveMotor.PID_D);
@@ -74,15 +73,15 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getZ(Control.DRIVE_STICK));
+        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getZ(Control.DRIVE_STICK)); //TODO: Practicality of using twist
         
         for(int i=0;i<2;i++)
         {
-        	if(lastValveButton[i]==false && Control.getButton(Control.SHOOT_STICK,Control.VALVES[i])==true)
+        	if(!lastValveButton[i] && Control.getButton(Control.SHOOT_STICK, Control.SHOOT_BUTTONS[i]))
         	{
         		shooter.toggleValve(i);
         	}
-        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.VALVES[i]);
+        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);
         }
         shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         
