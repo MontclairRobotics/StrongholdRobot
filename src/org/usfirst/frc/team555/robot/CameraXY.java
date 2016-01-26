@@ -20,10 +20,10 @@ public class CameraXY
     public static final int FOVwidth=60;//field of view of camera, degrees
     public static final double heightOfCamera=1;//meters
     
-    private static int x,y1,y2;
-    private static double resetRot;
+    private int x,y1,y2;
+    private double resetRot;
 
-    public static void update(double power, NavXGyro gyro)//shooter power and rotation in degrees since last update
+    public void update(double power, NavXGyro gyro)//shooter power and rotation in degrees since last update
     {
         double[] angles = Trajectory.getDegrees(power);
         if(angles==null)
@@ -40,34 +40,34 @@ public class CameraXY
         x=getPixles(gyro.getZ()-resetRot,windowWidth,FOVwidth);
     }
     
-    public static void refresh(NavXGyro gyro)
+    public void refresh(NavXGyro gyro)
     {
         resetRot=gyro.getZ();
         x=0;
     }
     
-    public static int getX()
+    public int getX()
     {
         return x;
     }
-    public static int getY1()
+    public int getY1()
     {
         return y1;
     }
-    public static int getY2()
+    public int getY2()
     {
         return y2;
     }
-    public static int getTopY1()
+    public int getTopY1()
     {
         return windowHeight-y1;
     }
-    public static int getTopY2()
+    public int getTopY2()
     {
         return windowHeight-y2;
     }
     
-    public static int getPixles(double angle,int window,int FOV)
+    public int getPixles(double angle,int window,int FOV)
     {
         return (int)(window*(angle/FOV+.5)+.5);
     }
