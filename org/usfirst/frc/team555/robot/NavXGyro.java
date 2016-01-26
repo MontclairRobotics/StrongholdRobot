@@ -11,7 +11,7 @@ public class NavXGyro {
         ahrs.reset();// Resets gyro readings to 0 (starting orientation)
     }
     
-    // Gyroscopic Readings along x-axis, y-axis, z-axis
+    // Gyroscopic readings along x-axis, y-axis, z-axis
     
     public double getX() {
         return ahrs.getPitch(); // In degrees [180°, 180°)

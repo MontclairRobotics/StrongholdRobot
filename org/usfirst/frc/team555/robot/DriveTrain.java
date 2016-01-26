@@ -5,7 +5,7 @@ public class DriveTrain {
 	public static final double ROT_CONSTANT = 1;
 	
 	private DriveMotor[] leftWheels, rightWheels;
-	private double leftSpd, rightSpd;
+	public double leftSpd, rightSpd;
 	
 	
 	public static boolean shutdown = false;

@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team555.robot;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -20,6 +19,7 @@ public class Robot extends IterativeRobot {
     AHRS ahrs;
     NavXAccelerometer accel;
     NavXGyro gyro;
+    PitchCorrector corrector;
     
     boolean[] lastValveButton;
 
@@ -40,6 +40,7 @@ public class Robot extends IterativeRobot {
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
+        corrector = new PitchCorrector(gyro, driveTrain);
     }
 
     public void autonomousInit() {
@@ -93,6 +94,7 @@ public class Robot extends IterativeRobot {
     {
     	driveTrain.update();
     	shooter.update();
+        corrector.update();
     }
     
     /**
