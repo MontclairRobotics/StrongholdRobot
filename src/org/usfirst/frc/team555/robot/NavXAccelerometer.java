@@ -4,44 +4,46 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class NavXAccelerometer {
     
+    private static final double GRAVITATIONAL_CONSTANT = 9.807;
+    
     private AHRS ahrs; // References the NavX computer
     
     public NavXAccelerometer(AHRS ahrs) {
         this.ahrs = ahrs;
     }
     
-    /*
-    NOTE: - acceleration functions are measured in "m/s^2"
-          - ahrs functions are of type float
-    */
+    // Acceleration along x-axis, y-axis, and z-axis
     
     public double getAccelX() {
-        return ahrs.getWorldLinearAccelX();
+        return ahrs.getWorldLinearAccelX() * GRAVITATIONAL_CONSTANT; // in m/s^2
     }
     
     public double getAccelY() {
-        return ahrs.getWorldLinearAccelX();
+        return ahrs.getWorldLinearAccelY() * GRAVITATIONAL_CONSTANT; // in m/s^2
     }
     
     public double getAccelZ() {
-        return ahrs.getWorldLinearAccelX();
+        return ahrs.getWorldLinearAccelZ() * GRAVITATIONAL_CONSTANT; // in m/s^2
     }
     
-    /*
-    NOTE: - velocity functions are measured in "m/s"
-          - ahrs functions are of type float
-    */
+    // Overall Speed
+    
+    public double getSpeed() {
+        return Math.sqrt(Math.pow(getVelocX(), 2.0) + Math.pow(getVelocY(), 2.0) + Math.pow(getVelocZ(), 2.0)); // In m/s
+    }
+    
+    // Velocity along x-axis, y-axis, and z-axis
     
     public double getVelocX() {
-        return ahrs.getVelocityX();
+        return ahrs.getVelocityX(); // in m/s
     }
     
     public double getVelocY() {
-        return ahrs.getVelocityY();
+        return ahrs.getVelocityY(); // in m/s
     }
     
     public double getVelocZ() {
-        return ahrs.getVelocityZ();
+        return ahrs.getVelocityZ(); // in m/s
     }
     
 }

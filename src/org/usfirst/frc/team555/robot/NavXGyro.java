@@ -8,15 +8,10 @@ public class NavXGyro {
     
     public NavXGyro(AHRS ahrs) {
         this.ahrs = ahrs;
-         // Resets gyro readings to 0 (starting orientation)
-        ahrs.reset();
+        ahrs.reset();// Resets gyro readings to 0 (starting orientation)
     }
     
-    /* 
-    NOTE: - getX(), getY(), and getZ() are measured in degrees
-          - Range: [-180°, 180°) 
-          - ahrs.getPitch(), ahrs.getRoll(), and ahrs.getYaw() return type float
-    */
+    // Gyroscopic Readings along x-axis, y-axis, z-axis
     
     public float getPitch() {
         return ahrs.getPitch();
