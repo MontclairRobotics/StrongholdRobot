@@ -18,16 +18,16 @@ public class NavXGyro {
           - ahrs.getPitch(), ahrs.getRoll(), and ahrs.getYaw() return type float
     */
     
-    public double getX() {
-        return (double)ahrs.getPitch();
+    public float getPitch() {
+        return ahrs.getPitch();
     }
     
-    public double getY() {
-        return (double)ahrs.getRoll(); // Ignore documentation; there is a typo
+    public float getRoll() {
+        return ahrs.getRoll(); // Ignore documentation; there is a typo
     }
     
-    public double getZ() {
-        return (double)ahrs.getYaw();
+    public float getYaw() {
+        return ahrs.getYaw();
     }
     
 }
