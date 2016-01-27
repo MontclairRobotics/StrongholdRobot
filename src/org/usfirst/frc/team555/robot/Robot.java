@@ -45,6 +45,7 @@ public class Robot extends IterativeRobot {
     	autoSelected = (String) chooser.getSelected();
 //		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
+		driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
     }
 
     /**
@@ -77,11 +78,11 @@ public class Robot extends IterativeRobot {
         
         for(int i=0;i<2;i++)
         {
-        	if(!lastValveButton[i] && Control.getButton(Control.SHOOT_STICK, Control.SHOOT_BUTTONS[i]))
+        	if(!lastValveButton[i] && Control.getButton(Control.SHOOT_STICK, Control.SHOOT_BUTTONS[i]))//if this button not pushed last round and pushed this round
         	{
-        		shooter.toggleValve(i);
+        		shooter.toggleValve(i);//toggle valve
         	}
-        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);
+        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);//store this round's value in last round's value
         }
         shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         

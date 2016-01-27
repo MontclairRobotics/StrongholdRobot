@@ -3,7 +3,7 @@ package org.usfirst.frc.team555.robot;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.TalonSRX;
+//import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -91,6 +91,18 @@ public class DriveMotor {
 	public static void shutdown()
 	{
 		shutdown = true;
+	}
+	
+	public double getDistance()
+	{
+		if(!encoders)return 0;
+		return encoder.getDistance();
+	}
+	
+	public void resetDistance()
+	{
+		if(!encoders)return;
+		encoder.reset();
 	}
 	
 }
