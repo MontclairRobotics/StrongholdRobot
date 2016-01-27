@@ -1,5 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
+import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
@@ -11,7 +13,7 @@ public class DriveMotor {
 	private double speed;
 	
 	private Encoder encoder;
-	private TalonSRX motor;
+	private CANTalon motor;
 	private PIDController controller;
 	SmartDashboard display;
 	
@@ -36,7 +38,7 @@ public class DriveMotor {
 		//int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
 		motorPort = ports[0];
 		//TODO: What!?
-		motor = new TalonSRX(motorPort);
+		motor = new CANTalon(motorPort);
 		if(encoders) {
 			encoderPort1 = ports[1];
 			encoderPort2 = ports[2];
@@ -45,11 +47,13 @@ public class DriveMotor {
 			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
 			controller.enable();
 		}
+		motor.changeControlMode(TalonControlMode.Current);
+		motor.enableControl();
 	}
 	
 	public void setSpeed(double spd)
 	{
-		speed = encoders ? spd * ROT_TO_DEGREES : spd*100; //TODO: Control scale constant
+		speed = encoders ? spd * ROT_TO_DEGREES : spd; //TODO: Control scale constant
 	}
 	
 	public void update()
@@ -62,6 +66,7 @@ public class DriveMotor {
 				speed = 0;
 			}
 			motor.set(0);
+			motor.disableControl();
 			return;
 		}
 		if(encoders) {
