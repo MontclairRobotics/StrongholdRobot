@@ -17,7 +17,7 @@ public class Shooter
     
     public Shooter()
     {
-    	wheels= new ShooterMotor[2];
+    	wheels= new ShooterMotor[3];
         
     	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{

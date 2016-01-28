@@ -1,5 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
+/*import edu.wpi.first.wpilibj.Ultrasonic;
+
 public class ShooterUltrasonic extends Ultrasonic {
     
     public final double[] NOMINAL_RANGE_IN = {60.0, 120.0};
@@ -39,3 +41,4 @@ public class ShooterUltrasonic extends Ultrasonic {
     }
     
 }
+*/

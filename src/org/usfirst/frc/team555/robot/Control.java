@@ -1,6 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Control {
 	
@@ -16,14 +17,17 @@ public class Control {
 	
 	
 	public static double getX(int joystick) {
+		SmartDashboard.putNumber("X-" + joystick, sticks[joystick].getX());
 		return sticks[joystick].getX();
 	}
 	
 	public static double getY(int joystick) {
+		SmartDashboard.putNumber("Y-" + joystick, sticks[joystick].getY());
 		return sticks[joystick].getY();
 	}
 	
 	public static double getZ(int joystick) {
+		SmartDashboard.putNumber("Z-" + joystick, sticks[joystick].getZ());
 		return sticks[joystick].getZ();
 	}
 	
