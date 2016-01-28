@@ -83,8 +83,7 @@ public class DriveMotor {
 		motor.setInverted(!motor.getInverted());
 	}
 	
-	public static void shutdown()
-	{
+	public static void shutdown() {
 		shutdown = true;
 	}
 	

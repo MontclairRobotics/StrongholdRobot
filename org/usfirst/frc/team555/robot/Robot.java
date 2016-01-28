@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
+	
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
@@ -90,8 +91,7 @@ public class Robot extends IterativeRobot {
         update();
     }
     
-    public void update()
-    {
+    public void update() {
     	driveTrain.update();
     	shooter.update();
         corrector.update();

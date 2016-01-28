@@ -26,8 +26,9 @@ public class PitchCorrector {
 			correctPositivePitch();
 			consecutiveCorrections++;
 		} else {
+			if (consecutiveCorrections > 0)
+				SmartDashboard.putString("Pitch Corrections", consecutiveCorrections + " consecutive corrections made");
 			consecutiveCorrections = 0;
-			SmartDashboard.putString("Pitch Corrections", consecutiveCorrections + " consecutive corrections made");
 		}
 	}
 	
