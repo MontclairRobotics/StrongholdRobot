@@ -1,5 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
@@ -33,9 +35,24 @@ public class DriveTrain {
 	
 	public void setSpeedArcade(double speed,double rotation)
 	{
+		int sign = 0;
+		if(speed > 0) {
+			sign = 1;
+		} else {
+			sign = -1;
+		}
+		speed = sign*Math.sqrt(speed*speed*4+rotation+rotation);
+		if(speed > 1) {
+			speed = 1;
+		} else if(speed < -1) {
+			speed = -1;
+		}
+		rotation = (rotation+1)/2;
 		mode='s';
-		leftSpd = speed+rotation*ROT_CONSTANT;
-		rightSpd = speed-rotation*ROT_CONSTANT;
+		leftSpd = speed*rotation;
+		rightSpd = speed*(1-rotation);
+		SmartDashboard.putNumber("leftSpeed", leftSpd);
+		SmartDashboard.putNumber("rightSpeed", rightSpd);
 	}
 	
 	public void setDistance(double d,double speed,double rotation)

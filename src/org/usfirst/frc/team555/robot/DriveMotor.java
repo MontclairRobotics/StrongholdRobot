@@ -19,10 +19,11 @@ public class DriveMotor {
 	
 	private boolean encoders;
 	
-	private static boolean shutdown;
+	private static boolean shutdown=false;
 	
 	public static final int ROT_TO_DEGREES = 360;
 	public static double PID_P = 0.1, PID_I = 0.001, PID_D = 0.0;
+	public static final double SCALE_FACTOR = 1;
 	
 	public DriveMotor(int id, boolean encoders)
 	{
@@ -47,13 +48,15 @@ public class DriveMotor {
 			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
 			controller.enable();
 		}
-		motor.changeControlMode(TalonControlMode.Current);
+		motor.setControlMode(TalonControlMode.PercentVbus.value);
+		motor.reset();
+		motor.enable();
 		motor.enableControl();
 	}
 	
 	public void setSpeed(double spd)
 	{
-		speed = encoders ? spd * ROT_TO_DEGREES : spd; //TODO: Control scale constant
+		speed = encoders ? spd * ROT_TO_DEGREES : spd*SCALE_FACTOR; //TODO: Control scale constant
 	}
 	
 	public void update()
@@ -73,6 +76,7 @@ public class DriveMotor {
 			controller.setSetpoint(speed);
 		} else {
 			motor.set(speed);
+			SmartDashboard.putNumber("Speed-" + motorPort, speed);
 		}
 	}
 	
