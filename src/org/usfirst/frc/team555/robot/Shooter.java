@@ -17,15 +17,16 @@ public class Shooter
     
     public Shooter()
     {
-    	wheels= new ShooterMotor[2];
+    	wheels= new ShooterMotor[3];
         
-    	for(int i=0;i<Map.SHOOTER_MOTORS.length;i++)
+    	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{
     		wheels[i] = new ShooterMotor(i);
     	}
         wheels[1].setInverted(true);
 
         valves=new Solenoid[2];
+        
         for(int i=0;i<Map.SOLINOID_PORTS.length;i++)
         {
         	valves[i] = new Solenoid(Map.SOLINOID_PORTS[i]);

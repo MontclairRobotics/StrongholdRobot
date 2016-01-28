@@ -16,20 +16,23 @@ public class Map
     public static final int[][] MOTOR_PORTS={
         //Motor port, encoder port 1, encoder port 2
     	//TODO: Actual values
-        {0,1,2},
-        {3,4,5},
-        {6,7,8},
-        {9,10,11},
+        {1,1,2},
+        {2,4,5},
+        {3,7,8},
+        {4,10,11}
     };
     
     public static final int[][] SHOOTER_MOTORS = {
     		//Wheel 1, wheel 2, pneumatic valve 1, valve 2
-    		{0, 1,2},
+    		/*{0, 1,2},
     		{1,2,3}
+    		{5,1,2},
+            {6,4,5},
+            {7,7,8}*/
     };
     
     public static final int[] SOLINOID_PORTS={
-    		0,1,2
+    		/*0,1,2*/
     };
     
     
