@@ -74,7 +74,9 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getZ(Control.DRIVE_STICK)); //TODO: Practicality of using twist
+    	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
+    	//We need to get the distance from the centre to allow for hard turns
+        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getX(Control.DRIVE_STICK)); //TODO: Practicality of using twist
         
         /*for(int i=0;i<2;i++)
         {

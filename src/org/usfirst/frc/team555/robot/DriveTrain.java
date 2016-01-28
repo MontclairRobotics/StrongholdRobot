@@ -35,9 +35,22 @@ public class DriveTrain {
 	
 	public void setSpeedArcade(double speed,double rotation)
 	{
+		int sign = 0;
+		if(speed > 0) {
+			sign = 1;
+		} else {
+			sign = -1;
+		}
+		speed = sign*Math.sqrt(speed*speed*4+rotation+rotation);
+		if(speed > 1) {
+			speed = 1;
+		} else if(speed < -1) {
+			speed = -1;
+		}
+		rotation = (rotation+1)/2;
 		mode='s';
-		leftSpd = speed+rotation*ROT_CONSTANT;
-		rightSpd = speed-rotation*ROT_CONSTANT;
+		leftSpd = speed*rotation;
+		rightSpd = speed*(1-rotation);
 		SmartDashboard.putNumber("leftSpeed", leftSpd);
 		SmartDashboard.putNumber("rightSpeed", rightSpd);
 	}

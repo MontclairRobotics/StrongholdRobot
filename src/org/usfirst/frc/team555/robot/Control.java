@@ -27,7 +27,7 @@ public class Control {
 	}
 	
 	public static double getZ(int joystick) {
-		SmartDashboard.putNumber("Z-" + joystick, sticks[joystick].getZ());
+		//SmartDashboard.putNumber("Z-" + joystick, sticks[joystick].getZ());
 		return sticks[joystick].getZ();
 	}
 	
