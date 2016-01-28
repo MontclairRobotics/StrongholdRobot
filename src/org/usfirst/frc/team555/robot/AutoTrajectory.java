@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 public class AutoTrajectory 
 {
 	private static final String MAIN_KEY="RoboRealm";
-	private static final String KEY="BLOBS";
+	private static final String COORDS_KEY="BLOBS";
 	
 	private static final double angleOfShooter=45;//degrees; 0 is facing ahead, 90 is facing ceiling
     private static final double heightOfTarget=2.5;//meters
@@ -34,7 +34,7 @@ public class AutoTrajectory
 		table=NetworkTable.getTable(MAIN_KEY);
 	}
 	
-	public void update(int x,int y)
+	public void update(double x,double y)
 	{
 		velocity=getVelocityFromPX(y);
 		angle=Math.toDegrees(getAngleFromPixles(x,(double)windowWidth/2,(double)FOVwidth/2));
@@ -42,8 +42,8 @@ public class AutoTrajectory
 	public void update()
 	{
 		double[] defaults={windowWidth/2,windowHeight/2};
-		table.getNumberArray(KEY, defaults);
-		int x,y;
+		double[] coords = table.getNumberArray(COORDS_KEY, defaults);
+		update(coords[0],coords[1]);
 	}
 	public double getTargetVelocity()
 	{
@@ -54,7 +54,11 @@ public class AutoTrajectory
 		return angle;
 	}
 	
-	public static double getVelocityFromPX(int heightPX)
+	
+	
+	//========================================
+	
+	public static double getVelocityFromPX(double heightPX)
 	{
 		double angle=getAngleFromPixles(heightPX,(double)windowHeight/2,(double)FOVheight/2)+Math.toRadians(angleOfCamera);
 		double distance=getDistanceFromAngle(angle,heightOfTarget-heightOfCamera);
