@@ -109,6 +109,7 @@ public class Robot extends IterativeRobot {
     	driveTrain.update();
     	shooter.update();
     	autoShooter.update();
+    	dashboard.putNumber("gyro-angle", gyro.getYaw());
     }
     
     /**
