@@ -16,6 +16,7 @@ public class Robot extends IterativeRobot {
     
     DriveTrain driveTrain;
     Shooter shooter;
+    AutoShooter autoShooter;
     
     AHRS ahrs;
     NavXAccelerometer accel;
@@ -34,7 +35,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        //shooter = new Shooter();
+        shooter = new Shooter();
+        autoShooter=new AutoShooter(driveTrain,shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
@@ -76,9 +78,13 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
     	//We need to get the distance from the centre to allow for hard turns
+    	
         driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getX(Control.DRIVE_STICK)); //TODO: Practicality of using twist
+        autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
+        shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
-        /*for(int i=0;i<2;i++)
+        /*
+        for(int i=0;i<2;i++)
         {
         	if(!lastValveButton[i] && Control.getButton(Control.SHOOT_STICK, Control.SHOOT_BUTTONS[i]))//if this button not pushed last round and pushed this round
         	{
@@ -94,7 +100,8 @@ public class Robot extends IterativeRobot {
     public void update()
     {
     	driveTrain.update();
-    	//shooter.update();
+    	shooter.update();
+    	autoShooter.update();
     }
     
     /**

@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 
 public class AutoTrajectory 
 {
+	private static final double velocityToSpeed=0.25;//TODO REAL VALUE
+	private static final double maxRotation=30;//if set to 30, the correction will be 1 for 30, .5 for 15, ect.
+	
 	private static final String MAIN_KEY="RoboRealm";
 	private static final String COORDS_KEY="BLOBS";
 	
@@ -14,12 +17,12 @@ public class AutoTrajectory
     private static final double g=9.8;//m/s 
     //private static final double powerToVelocity=1;//motor power to throw ball at one meter per second
     
-    public static final double angleOfCamera=15;//degrees; 0 is facing ahead, 90 is facing ceiling
-    public static final int windowHeight=500;//height of camera window, pixels
-    public static final int windowWidth=600;//width of camera window, pixels
-    public static final int FOVheight=60;//field of view of camera, degrees 
-    public static final int FOVwidth=60;//field of view of camera, degrees
-    public static final double heightOfCamera=1;//meters
+    private static final double angleOfCamera=15;//degrees; 0 is facing ahead, 90 is facing ceiling
+    private static final int windowHeight=500;//height of camera window, pixels
+    private static final int windowWidth=600;//width of camera window, pixels
+    private static final int FOVheight=60;//field of view of camera, degrees 
+    private static final int FOVwidth=60;//field of view of camera, degrees
+    private static final double heightOfCamera=1;//meters
 	
 	private static double y=heightOfTarget-heightOfShooter;
 	private static double tan=Math.tan(Math.toRadians(angleOfShooter));
@@ -45,13 +48,24 @@ public class AutoTrajectory
 		double[] coords = table.getNumberArray(COORDS_KEY, defaults);
 		update(coords[0],coords[1]);
 	}
-	public double getTargetVelocity()
+	public double getVelocity()
 	{
 		return velocity;
 	}
 	public double getAngle()
 	{
 		return angle;
+	}
+	public double getSpeed()
+	{
+		return velocity*velocityToSpeed;
+	}
+	public double getRotation()
+	{
+		double rot = angle/maxRotation;
+		if(rot>1)rot=1;
+		if(rot<-1)rot=-1;
+		return rot;
 	}
 	
 	
