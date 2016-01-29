@@ -31,24 +31,18 @@ public class DriveTrain {
 		rightSpd = rSpd;
 	}
 	
-	public void setSpeedArcade(double speed,double rotation)
+	public void setSpeedArcade(double speed, double rotation)
 	{
-		int sign = 0;
-		if(speed > 0) {
-			sign = 1;
-		} else {
-			sign = -1;
-		}
-		speed = sign*Math.sqrt(speed*speed*4+rotation+rotation);
-		if(speed > 1) {
-			speed = 1;
-		} else if(speed < -1) {
-			speed = -1;
-		}
-		rotation = (rotation+1)/2;
+		int sign;
+		if(speed >= 0) sign = 1;
+		else sign = -1;
+		
+		rotation = (rotation + 90)%180; //Balances so all the way to the left is 0, and all the way right is 180
+		rotation = rotation/180;
+		
 		mode='s';
-		leftSpd = speed*rotation;
-		rightSpd = speed*(1-rotation);
+		leftSpd = speed*rotation*sign;
+		rightSpd = speed*(1-rotation)*sign;
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
