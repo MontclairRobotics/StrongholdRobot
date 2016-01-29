@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveMotor {
 	
@@ -15,7 +14,6 @@ public class DriveMotor {
 	private Encoder encoder;
 	private CANTalon motor;
 	private PIDController controller;
-	SmartDashboard display;
 	
 	private boolean encoders;
 	
@@ -76,7 +74,7 @@ public class DriveMotor {
 			controller.setSetpoint(speed);
 		} else {
 			motor.set(speed);
-			SmartDashboard.putNumber("Speed-" + motorPort, speed);
+			Robot.dashboard.putNumber("Speed-" + motorPort, speed);
 		}
 	}
 	

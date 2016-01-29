@@ -1,7 +1,5 @@
 package org.usfirst.frc.team555.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
@@ -51,8 +49,8 @@ public class DriveTrain {
 		mode='s';
 		leftSpd = speed*rotation;
 		rightSpd = speed*(1-rotation);
-		SmartDashboard.putNumber("leftSpeed", leftSpd);
-		SmartDashboard.putNumber("rightSpeed", rightSpd);
+		Robot.dashboard.putNumber("leftSpeed", leftSpd);
+		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
 	
 	public void setDistance(double d,double speed,double rotation)

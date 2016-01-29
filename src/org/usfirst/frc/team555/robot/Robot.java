@@ -1,12 +1,13 @@
 
 package org.usfirst.frc.team555.robot;
 
+import java.util.Timer;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
@@ -22,17 +23,23 @@ public class Robot extends IterativeRobot {
     NavXAccelerometer accel;
     NavXGyro gyro;
     
+    Timer dashboardTimer;
+    public static SmartDashboard dashboard;
+    
     boolean[] lastValveButton;
 
     
     public void robotInit() {
+    	dashboard = new SmartDashboard();
+    	dashboardTimer = new Timer();
+    	dashboardTimer.schedule(dashboard, 0, 100);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
-        SmartDashboard.putData("Auto choices", chooser);     
-        SmartDashboard.putNumber("PID-P", DriveMotor.PID_P);
-        SmartDashboard.putNumber("PID-I", DriveMotor.PID_I);
-        SmartDashboard.putNumber("PID-D", DriveMotor.PID_D);
+        dashboard.putData("Auto choices", chooser);     
+        dashboard.putNumber("PID-P", DriveMotor.PID_P);
+        dashboard.putNumber("PID-I", DriveMotor.PID_I);
+        dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
         shooter = new Shooter();
@@ -45,7 +52,7 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
     	autoSelected = (String) chooser.getSelected();
-//		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
+//		autoSelected = dashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
     }
@@ -70,9 +77,9 @@ public class Robot extends IterativeRobot {
      */
     
     public void teleopInit() {
-    	DriveMotor.PID_P = SmartDashboard.getNumber("PID-P");
-        DriveMotor.PID_I = SmartDashboard.getNumber("PID-I");
-        DriveMotor.PID_D = SmartDashboard.getNumber("PID-D");
+    	DriveMotor.PID_P = dashboard.getNumber("PID-P");
+        DriveMotor.PID_I = dashboard.getNumber("PID-I");
+        DriveMotor.PID_D = dashboard.getNumber("PID-D");
     }
     
     public void teleopPeriodic() {
