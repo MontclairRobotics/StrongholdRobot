@@ -23,7 +23,7 @@ public class Shooter
     	{
     		wheels[i] = new ShooterMotor(i);
     	}
-        wheels[1].setInverted(true);
+    	if(wheels.length >= 2) wheels[1].setInverted(true);
 
         valves=new Solenoid[2];
         

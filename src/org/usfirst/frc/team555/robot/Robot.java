@@ -23,17 +23,18 @@ public class Robot extends IterativeRobot {
     NavXAccelerometer accel;
     NavXGyro gyro;
     
-    Timer dashboardTimer;
     public static SmartDashboard dashboard;
+    Thread dashboardThread;
     
     boolean[] lastValveButton;
 
     
     public void robotInit() {
     	dashboard = new SmartDashboard();
-    	dashboardTimer = new Timer();
-    	dashboardTimer.schedule(dashboard, 0, 100);
-        chooser = new SendableChooser();
+    	dashboardThread = new Thread(dashboard);
+    	dashboardThread.start();
+    	
+    	chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         dashboard.putData("Auto choices", chooser);     
@@ -42,8 +43,8 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        shooter = new Shooter();
-        autoShooter=new AutoShooter(driveTrain,shooter);
+        //shooter = new Shooter();
+        //autoShooter=new AutoShooter(driveTrain,shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
@@ -87,8 +88,8 @@ public class Robot extends IterativeRobot {
     	//We need to get the distance from the centre to allow for hard turns
     	
         driveTrain.setSpeedArcade(Control.getMagnitude(Control.DRIVE_STICK), Control.getDegrees(Control.DRIVE_STICK)); //TODO: Practicality of using twist
-        autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
-        shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
+        //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
+        //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
         /*
         for(int i=0;i<2;i++)
@@ -107,8 +108,8 @@ public class Robot extends IterativeRobot {
     public void update()
     {
     	driveTrain.update();
-    	shooter.update();
-    	autoShooter.update();
+    	//shooter.update();
+    	//autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     }
     
