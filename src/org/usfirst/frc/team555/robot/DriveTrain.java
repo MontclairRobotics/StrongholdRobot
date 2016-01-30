@@ -22,6 +22,9 @@ public class DriveTrain {
 			leftWheels [i]= new DriveMotor(i*2,encoders);
 			rightWheels[i]= new DriveMotor(i*2+1,encoders);
 		}
+		for(DriveMotor motor : leftWheels) {
+			motor.setInverted(true);
+		}
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -37,12 +40,18 @@ public class DriveTrain {
 	{
 		if (Control.halvingButtonPressed())
 			speed /= 2.0;
-
-		int sign;
-		if(speed >= 0) sign = 1;
-		else sign = -1;
 		
-		rotation = (rotation + 90)%180; //Balances so all the way to the left is 0, and all the way right is 180
+		rotation += 90;
+		if(rotation < 0) rotation += 360;
+		
+		Robot.dashboard.putNumber("joystick-angle", rotation);
+		
+		int sign;
+		if(rotation >= 180) {
+			sign = -1;
+			rotation = rotation-180;
+		}
+		else sign = 1;
 		rotation = rotation/180;
 		
 		mode='s';
