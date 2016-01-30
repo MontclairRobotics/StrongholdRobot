@@ -10,6 +10,7 @@ public class Control {
 	public static final int[] SHOOT_BUTTONS = {5, 3};
 	public static final int AUTOTARGET=4;//TODO
 	public static final int SHOOT_TRIGGER=6;//TODO
+	public static final int HALVING_BUTTON = 2;
 	
 	private static Joystick[] sticks = {
 			new Joystick(DRIVE_STICK),
@@ -44,4 +45,9 @@ public class Control {
 	{
 		return sticks[joystick].getRawButton(button);
 	}
+	
+	static boolean halvingButtonPressed() {
+		return getButton(DRIVE_STICK, HALVING_BUTTON);
+	}
+	
 }

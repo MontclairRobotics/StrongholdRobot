@@ -1,10 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
-/**
- * 
- */
-public class Map
-{
+public class Map {
 
 	public static final int FRONT_LEFT = 0;
 	public static final int REAR_LEFT = 1;

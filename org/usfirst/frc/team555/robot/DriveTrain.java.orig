@@ -5,9 +5,13 @@ public class DriveTrain {
 	public static final double ROT_CONSTANT = 1;
 	
 	private DriveMotor[] leftWheels, rightWheels;
+<<<<<<< .merge_file_WUSjej
 	private double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
+=======
+	public double leftSpd, rightSpd;
+>>>>>>> .merge_file_c2KR0o
 	
 	private static final boolean encoders=false;
 	
@@ -26,13 +30,20 @@ public class DriveTrain {
 	
 	public void setSpeedTank(double lSpd,double rSpd)
 	{
+<<<<<<< .merge_file_WUSjej
 		mode='s';
+=======
+		if (Control.halvingButtonPressed())
+			lSpd /= 2.0; rSpd /= 2.0;
+		
+>>>>>>> .merge_file_c2KR0o
 		leftSpd = lSpd;
 		rightSpd = rSpd;
 	}
 	
 	public void setSpeedArcade(double speed, double rotation)
 	{
+<<<<<<< .merge_file_WUSjej
 		int sign;
 		if(speed >= 0) sign = 1;
 		else sign = -1;
@@ -60,6 +71,13 @@ public class DriveTrain {
 		{
 			rightWheels[i].resetDistance();
 		};
+=======
+		if (Control.halvingButtonPressed())
+			speed /= 2.0;
+		
+		leftSpd = speed+rotation*ROT_CONSTANT;
+		rightSpd = speed-rotation*ROT_CONSTANT;
+>>>>>>> .merge_file_c2KR0o
 	}
 	
 	public void update()

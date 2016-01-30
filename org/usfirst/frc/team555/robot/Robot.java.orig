@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team555.robot;
 
 import java.util.Timer;
@@ -10,6 +9,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends IterativeRobot {
+	
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
     AHRS ahrs;
     NavXAccelerometer accel;
     NavXGyro gyro;
+    PitchCorrector corrector;
     
     public static SmartDashboard dashboard;
     Thread dashboardThread;
@@ -49,6 +50,7 @@ public class Robot extends IterativeRobot {
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
+        corrector = new PitchCorrector(gyro, driveTrain);
     }
 
     public void autonomousInit() {
@@ -105,15 +107,19 @@ public class Robot extends IterativeRobot {
         update();
     }
     
-    public void update()
-    {
+    public void update() {
     	driveTrain.update();
+<<<<<<< .merge_file_Mtte9m
     	//shooter.update();
     	//autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     	dashboard.putNumber("accel-x", accel.getAccelX());
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
+=======
+    	shooter.update();
+        corrector.update();
+>>>>>>> .merge_file_8Utuon
     }
     
     /**
