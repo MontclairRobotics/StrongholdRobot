@@ -23,12 +23,18 @@ public class DriveTrain {
 	
 	public void setSpeedTank(double lSpd,double rSpd)
 	{
+		if (Control.halvingButtonPressed())
+			lSpd /= 2.0; rSpd /= 2.0;
+		
 		leftSpd = lSpd;
 		rightSpd = rSpd;
 	}
 	
 	public void setSpeedArcade(double speed,double rotation)
 	{
+		if (Control.halvingButtonPressed())
+			speed /= 2.0;
+		
 		leftSpd = speed+rotation*ROT_CONSTANT;
 		rightSpd = speed-rotation*ROT_CONSTANT;
 	}

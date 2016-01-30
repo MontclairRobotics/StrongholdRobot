@@ -6,6 +6,7 @@ public class Control {
 	
 	public static final int DRIVE_STICK = 0;
 	public static final int SHOOT_STICK = 1;
+	public static final int HALVING_BUTTON = 2;
 	public static final int[] VALVES={0,1};
 	
 	private static Joystick[] sticks = {
@@ -30,4 +31,9 @@ public class Control {
 	{
 		return sticks[joystick].getRawButton(button);
 	}
+	
+	static boolean halvingButtonPressed() {
+		return getButton(DRIVE_STICK, HALVING_BUTTON);
+	}
+	
 }
