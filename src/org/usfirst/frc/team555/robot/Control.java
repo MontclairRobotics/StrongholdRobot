@@ -1,7 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Control {
 	
@@ -11,6 +10,7 @@ public class Control {
 	public static final int[] SHOOT_BUTTONS = {5, 3};
 	public static final int AUTOTARGET=4;//TODO
 	public static final int SHOOT_TRIGGER=6;//TODO
+	public static final int HALVING_BUTTON = 2;
 	
 	private static Joystick[] sticks = {
 			new Joystick(DRIVE_STICK),
@@ -19,12 +19,12 @@ public class Control {
 	
 	
 	public static double getX(int joystick) {
-		SmartDashboard.putNumber("X-" + joystick, sticks[joystick].getX());
+		Robot.dashboard.putNumber("X-" + joystick, sticks[joystick].getX());
 		return sticks[joystick].getX();
 	}
 	
 	public static double getY(int joystick) {
-		SmartDashboard.putNumber("Y-" + joystick, sticks[joystick].getY());
+		Robot.dashboard.putNumber("Y-" + joystick, sticks[joystick].getY());
 		return sticks[joystick].getY();
 	}
 	
@@ -33,8 +33,21 @@ public class Control {
 		return sticks[joystick].getZ();
 	}
 	
+	public static double getMagnitude(int joystick) {
+		return sticks[joystick].getMagnitude();
+	}
+	
+	public static double getDegrees(int joystick) {
+		return sticks[joystick].getDirectionDegrees();
+	}
+	
 	public static boolean getButton(int joystick, int button)
 	{
 		return sticks[joystick].getRawButton(button);
 	}
+	
+	static boolean halvingButtonPressed() {
+		return getButton(DRIVE_STICK, HALVING_BUTTON);
+	}
+	
 }

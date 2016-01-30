@@ -1,10 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
-/**
- * 
- */
-public class Map
-{
+public class Map {
 
 	public static final int FRONT_LEFT = 0;
 	public static final int REAR_LEFT = 1;
@@ -16,10 +12,10 @@ public class Map
     public static final int[][] MOTOR_PORTS={
         //Motor port, encoder port 1, encoder port 2
     	//TODO: Actual values
-        {1,1,2},
-        {2,4,5},
-        {3,7,8},
-        {4,10,11}
+        {1,0,1},
+        {2,0,1},
+        {3,2,3},
+        {4,2,3}
     };
     
     public static final int[][] SHOOTER_MOTORS = {

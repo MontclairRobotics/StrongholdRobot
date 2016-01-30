@@ -1,14 +1,15 @@
-
 package org.usfirst.frc.team555.robot;
+
+import java.util.Timer;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
+	
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
@@ -21,31 +22,40 @@ public class Robot extends IterativeRobot {
     AHRS ahrs;
     NavXAccelerometer accel;
     NavXGyro gyro;
+    //PitchCorrector corrector;
+    
+    public static SmartDashboard dashboard;
+    Thread dashboardThread;
     
     boolean[] lastValveButton;
 
     
     public void robotInit() {
-        chooser = new SendableChooser();
+    	dashboard = new SmartDashboard();
+    	//dashboardThread = new Thread(dashboard);
+    	//dashboardThread.start();
+    	
+    	chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
-        SmartDashboard.putData("Auto choices", chooser);     
-        SmartDashboard.putNumber("PID-P", DriveMotor.PID_P);
-        SmartDashboard.putNumber("PID-I", DriveMotor.PID_I);
-        SmartDashboard.putNumber("PID-D", DriveMotor.PID_D);
+        dashboard.putData("Auto choices", chooser);     
+        dashboard.putNumber("PID-P", DriveMotor.PID_P);
+        dashboard.putNumber("PID-I", DriveMotor.PID_I);
+        dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        shooter = new Shooter();
-        autoShooter=new AutoShooter(driveTrain,shooter);
+        //shooter = new Shooter();
+        //autoShooter=new AutoShooter(driveTrain,shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
+        //corrector = new PitchCorrector(gyro, driveTrain);
     }
 
     public void autonomousInit() {
     	autoSelected = (String) chooser.getSelected();
-//		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
+//		autoSelected = dashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
     }
@@ -70,18 +80,18 @@ public class Robot extends IterativeRobot {
      */
     
     public void teleopInit() {
-    	DriveMotor.PID_P = SmartDashboard.getNumber("PID-P");
-        DriveMotor.PID_I = SmartDashboard.getNumber("PID-I");
-        DriveMotor.PID_D = SmartDashboard.getNumber("PID-D");
+    	DriveMotor.PID_P = dashboard.getNumber("PID-P");
+        DriveMotor.PID_I = dashboard.getNumber("PID-I");
+        DriveMotor.PID_D = dashboard.getNumber("PID-D");
     }
     
     public void teleopPeriodic() {
     	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
     	//We need to get the distance from the centre to allow for hard turns
     	
-        driveTrain.setSpeedArcade(Control.getY(Control.DRIVE_STICK), Control.getX(Control.DRIVE_STICK)); //TODO: Practicality of using twist
-        autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
-        shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
+        driveTrain.setSpeedArcade(Control.getMagnitude(Control.DRIVE_STICK), Control.getDegrees(Control.DRIVE_STICK)); //TODO: Practicality of using twist
+        //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
+        //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
         /*
         for(int i=0;i<2;i++)
@@ -97,11 +107,16 @@ public class Robot extends IterativeRobot {
         update();
     }
     
-    public void update()
-    {
+    public void update() {
     	driveTrain.update();
-    	shooter.update();
-    	autoShooter.update();
+    	//shooter.update();
+        //corrector.update();
+    	//shooter.update();
+    	//autoShooter.update();
+    	dashboard.putNumber("gyro-angle", gyro.getYaw());
+    	dashboard.putNumber("accel-x", accel.getAccelX());
+    	dashboard.putNumber("accel-y", accel.getAccelY());
+    	dashboard.putNumber("accel-z", accel.getAccelZ());
     }
     
     /**
