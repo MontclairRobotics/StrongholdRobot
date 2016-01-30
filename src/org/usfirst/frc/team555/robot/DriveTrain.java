@@ -22,7 +22,7 @@ public class DriveTrain {
 			leftWheels [i]= new DriveMotor(i*2,encoders);
 			rightWheels[i]= new DriveMotor(i*2+1,encoders);
 		}
-		for(DriveMotor motor : leftWheels) {
+		for(DriveMotor motor : rightWheels) {
 			motor.setInverted(true);
 		}
 	}
