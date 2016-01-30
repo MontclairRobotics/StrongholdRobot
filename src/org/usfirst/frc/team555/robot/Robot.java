@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
     AHRS ahrs;
     NavXAccelerometer accel;
     NavXGyro gyro;
-    PitchCorrector corrector;
+    //PitchCorrector corrector;
     
     public static SmartDashboard dashboard;
     Thread dashboardThread;
@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
-        corrector = new PitchCorrector(gyro, driveTrain);
+        //corrector = new PitchCorrector(gyro, driveTrain);
     }
 
     public void autonomousInit() {
