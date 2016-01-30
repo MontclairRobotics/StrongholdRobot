@@ -30,7 +30,7 @@ public class SmartDashboard implements Runnable {
 	
 	@Override
 	public void run() {
-		while(running) {
+		/*while(running) {
 			runs++;
 			dashboard.putNumber("values", values.size());
 			dashboard.putNumber("numQueue", numQueue.size());
@@ -66,49 +66,56 @@ public class SmartDashboard implements Runnable {
 			} catch (InterruptedException e) {
 				dashboard.putString("ERROR", e.getMessage());
 			}
-		}
+		}*/
 	}
 	
 	public Sendable getData(String key) {
-		Sendable value = (Sendable)values.get(key);
+		/*Sendable value = (Sendable)values.get(key);
 		if(value == null) {
 			value = dashboard.getData(key);
 			values.put(key, value);
 		}
 		return value;
+		*/
+		return dashboard.getData(key);
 	}
 	
 	public double getNumber(String key) {
-		Double value = (Double)values.get(key);
+		/*Double value = (Double)values.get(key);
 		if(value == null) {
 			value = dashboard.getNumber(key);
 			values.put(key, value);
 		}
-		return value;
+		return value;*/
+		return dashboard.getNumber(key);
 	}
 	
 	public String getString(String key) {
-		String value = (String)values.get(key);
+		/*String value = (String)values.get(key);
 		if(value == null) {
 			value = dashboard.getString(key);
 			values.put(key, value);
 		}
-		return value;
+		return value;*/
+		return dashboard.getString(key);
 	}
 	
 	public void putData(String key, Sendable value) {
-		dataQueue.put(key, value);
-		values.put(key, value);
+		//dataQueue.put(key, value);
+		//values.put(key, value);
+		dashboard.putData(key, value);
 	}
 	
 	public void putNumber(String key, double value) {
-		numQueue.put(key, (Double)value);
-		values.put(key, (Double)value);
+		//numQueue.put(key, (Double)value);
+		//values.put(key, (Double)value);
+		dashboard.putNumber(key, value);
 	}
 	
 	public void putString(String key, String s) {
-		stringQueue.put(key, s);
-		values.put(key, s);
+		//stringQueue.put(key, s);
+		//values.put(key, s);
+		dashboard.putString(key, s);
 	}
 	
 	public void shutdown() {
