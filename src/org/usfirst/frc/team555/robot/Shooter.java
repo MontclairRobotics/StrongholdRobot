@@ -17,15 +17,16 @@ public class Shooter
     
     public Shooter()
     {
-    	wheels= new ShooterMotor[2];
+    	wheels= new ShooterMotor[3];
         
-    	for(int i=0;i<Map.SHOOTER_MOTORS.length;i++)
+    	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{
     		wheels[i] = new ShooterMotor(i);
     	}
-        wheels[1].setInverted(true);
+    	if(wheels.length >= 2) wheels[1].setInverted(true);
 
         valves=new Solenoid[2];
+        
         for(int i=0;i<Map.SOLINOID_PORTS.length;i++)
         {
         	valves[i] = new Solenoid(Map.SOLINOID_PORTS[i]);
@@ -33,10 +34,15 @@ public class Shooter
         mode='0';
         timeToStop=0;
     }
-    
     public void reelIn() {
     	mode='r';
     	timeToStop=REEL_TIME;
+    }
+    
+    public void setSpeed(double speed)
+    {
+    	mode='s';
+    	shootSpd=speed;
     }
     
     public void shoot(double speed) {
@@ -49,14 +55,20 @@ public class Shooter
     {
     	mode='0';
     }
-    
+    public void activateShooter(boolean on)
+    {
+    	if(on)
+    	{
+    		activateShooter();
+    	}
+    }
     public void activateShooter()
     {
     	//TODO: PUT STUFF HERE
     }
-    
     public void update()
     {
+    	/*
     	if(mode=='s' && timeToStop<ACTIVATE_SHOOTER_TIME)
     	{
     		activateShooter();
@@ -66,6 +78,7 @@ public class Shooter
     		mode='0';
     	}
     	timeToStop--;
+    	*/
 		switch(mode)
 		{
 		case 'r':

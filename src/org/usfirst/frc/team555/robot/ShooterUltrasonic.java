@@ -1,7 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
 import edu.wpi.first.wpilibj.Ultrasonic;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterUltrasonic extends Ultrasonic {
     
@@ -20,9 +19,9 @@ public class ShooterUltrasonic extends Ultrasonic {
     
     public void display() {
         if (isNominal())
-            SmartDashboard.putString("Shooter", "Distance is NOMINAL\n\t" + distanceIN + "in (" + distanceCM + "cm");
+            Robot.dashboard.putString("Shooter", "Distance is NOMINAL\n\t" + distanceIN + "in (" + distanceCM + "cm");
         else
-            SmartDashboard.putString("Shooter", "Distance is NOT nominal\n\t" + distanceIN + "in (" + distanceCM + "cm)");
+            Robot.dashboard.putString("Shooter", "Distance is NOT nominal\n\t" + distanceIN + "in (" + distanceCM + "cm)");
     }
     
     public void update() {
@@ -38,3 +37,4 @@ public class ShooterUltrasonic extends Ultrasonic {
     }
     
 }
+*/

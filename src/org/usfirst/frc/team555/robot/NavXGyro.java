@@ -13,16 +13,16 @@ public class NavXGyro {
     
     // Gyroscopic readings along x-axis, y-axis, z-axis
     
-    public double getX() {
-        return ahrs.getPitch(); // In degrees [180°, 180°)
+    public float getPitch() {
+        return ahrs.getPitch();
     }
     
-    public double getY() {
-        return ahrs.getRoll(); // In degrees [180°, 180°)
+    public float getRoll() {
+        return ahrs.getRoll(); // Ignore documentation; there is a typo
     }
     
-    public double getZ() {
-        return ahrs.getYaw(); // In degrees [180°, 180°)
+    public float getYaw() {
+        return ahrs.getYaw();
     }
     
 }
