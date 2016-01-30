@@ -31,8 +31,8 @@ public class Robot extends IterativeRobot {
     
     public void robotInit() {
     	dashboard = new SmartDashboard();
-    	dashboardThread = new Thread(dashboard);
-    	dashboardThread.start();
+    	//dashboardThread = new Thread(dashboard);
+    	//dashboardThread.start();
     	
     	chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
@@ -111,6 +111,9 @@ public class Robot extends IterativeRobot {
     	//shooter.update();
     	//autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
+    	dashboard.putNumber("accel-x", accel.getAccelX());
+    	dashboard.putNumber("accel-y", accel.getAccelY());
+    	dashboard.putNumber("accel-z", accel.getAccelZ());
     }
     
     /**

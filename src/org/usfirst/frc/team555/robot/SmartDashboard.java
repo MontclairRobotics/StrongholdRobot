@@ -59,6 +59,7 @@ public class SmartDashboard implements Runnable {
 				values.put(key, dashboard.getData(key));
 				gets++;
 			}
+			dashboard.putNumber("beforebeforesleep", 1);
 			try {
 				dashboard.putNumber("beforesleep", 1);
 				Thread.sleep(100);
