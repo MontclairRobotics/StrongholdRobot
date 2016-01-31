@@ -1,6 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
 import java.util.Map.Entry;
+import edu.wpi.first.wpilibj.Smartdashboard.
 import java.util.concurrent.ConcurrentHashMap;
 
 import edu.wpi.first.wpilibj.Sendable;
@@ -18,7 +19,7 @@ public class SmartDashboard implements Runnable {
 	
 	private boolean running = true;
 	
-	private edu.wpi.first.wpilibj.smartdashboard.SmartDashboard dashboard;
+	private SmartDashboard dashboard;
 	
 	public SmartDashboard() {
 		values = new ConcurrentHashMap<String, Object>(16, 0.75f, 3);
