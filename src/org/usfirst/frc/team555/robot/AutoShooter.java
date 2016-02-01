@@ -39,7 +39,7 @@ public class AutoShooter
 		if(mode=='t')
 		{
 			trajectory.update();
-			drive.setSpeedArcade(0.0,trajectory.getAngle());
+			//drive.setSpeedArcade(0.0,trajectory.getAngle());
 			shooter.setSpeed(trajectory.getSpeed());
 		}
 	}

@@ -36,15 +36,15 @@ public class DriveTrain {
 		rightSpd = rSpd;
 	}
 	
-	public void setSpeedArcade(double speed, double rotation)
+	/*public void setSpeedArcade(double speed, double rotation)
 	{
+		if(speed > 1) speed = 1;
 		if (Control.halvingButtonPressed())
 			speed /= 2.0;
 		
 		rotation += 90;
 		if(rotation < 0) rotation += 360;
 		
-		Robot.dashboard.putNumber("joystick-angle", rotation);
 		
 		int sign;
 		if(rotation >= 180) {
@@ -52,18 +52,79 @@ public class DriveTrain {
 			rotation = rotation-180;
 		}
 		else sign = 1;
+		
 		rotation = rotation/180;
 		
 		mode='s';
 		leftSpd = speed*rotation*sign;
 		rightSpd = speed*(1-rotation)*sign;
+		
+		Robot.dashboard.putNumber("before-left", leftSpd);
+		Robot.dashboard.putNumber("before-right", rightSpd);
+		
+		double factor = 0.0;
+		if(Math.abs(leftSpd) > Math.abs(rightSpd)) {
+			factor = Math.abs(speed/leftSpd);
+		} else {
+			factor = Math.abs(speed/rightSpd);
+		}
+		leftSpd = leftSpd * factor;
+		rightSpd = rightSpd * factor;
+		
+		
+		Robot.dashboard.putNumber("leftSpeed", leftSpd);
+		Robot.dashboard.putNumber("rightSpeed", rightSpd);
+	}*/
+	
+	public void setSpeedXY(double x, double y)
+	{   
+		if(x==0&&y==0)
+		{
+			leftSpd=0;
+			rightSpd=0;
+		}
+		else{
+			double max;
+			if(Math.abs(x)>=Math.abs(y))
+			{
+				max=1+Math.abs(y/x);
+			}
+			else
+			{
+				max=1+Math.abs(x/y);
+			}
+	        leftSpd=(y+x)/max;
+	        rightSpd=(y-x)/max;
+		}
+		if(Control.halvingButtonPressed()) {
+			leftSpd /= 2;
+			rightSpd /= 2;
+		}
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
+	/*public void setSpeedAllen(double x, double y)
+	{
+		if(x==0 && y==0) {
+			leftSpd = 0;
+			rightSpd = 0;
+		}
+		else{
+			double Max = 1.0;
+			if (x>y){
+				Max = Math.abs(Math.abs(y/x)+1);
+			}
+			else{
+				Max = Math.abs(Math.abs(x/y)+1);
+			}
+			leftSpd=(y+x)/Max;
+	        rightSpd=(y-x)/Max;
+		}
+	}*/
 	
 	public void setDistance(double d,double speed,double rotation)
 	{
-		setSpeedArcade(speed,rotation);
+		setSpeedXY(0, speed);
 		mode='d';
 		distance=d;
 		for(int i=0; i<leftWheels.length; i++)

@@ -1,7 +1,5 @@
 package org.usfirst.frc.team555.robot;
 
-import java.util.Timer;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -89,7 +87,7 @@ public class Robot extends IterativeRobot {
     	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
     	//We need to get the distance from the centre to allow for hard turns
     	
-        driveTrain.setSpeedArcade(Control.getMagnitude(Control.DRIVE_STICK), Control.getDegrees(Control.DRIVE_STICK)); //TODO: Practicality of using twist
+    	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
         //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
         //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
