@@ -19,7 +19,7 @@ public class Robot extends IterativeRobot {
     
     AHRS ahrs;
     NavXAccelerometer accel;
-    NavXGyro gyro;
+    public static NavXGyro gyro;
     //PitchCorrector corrector;
     
     public static SmartDashboard dashboard;
