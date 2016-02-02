@@ -17,11 +17,11 @@ public class Shooter
     
     public Shooter()
     {
-    	wheels= new ShooterMotor[3];
+    	wheels= new ShooterMotor[2];
         
     	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{
-    		wheels[i] = new ShooterMotor(i);
+    		wheels[i] = new ShooterMotor(i+Map.MOTOR_PORTS.length+1);
     	}
     	if(wheels.length >= 2) wheels[1].setInverted(true);
 
