@@ -19,7 +19,7 @@ public class Robot extends IterativeRobot {
     
     AHRS ahrs;
     NavXAccelerometer accel;
-    NavXGyro gyro;
+    public static NavXGyro gyro;
     //PitchCorrector corrector;
     
     public static SmartDashboard dashboard;
@@ -41,8 +41,8 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
-        driveTrain = new DriveTrain();
-        //shooter = new Shooter();
+        //driveTrain = new DriveTrain();
+        shooter = new Shooter();
         //autoShooter=new AutoShooter(driveTrain,shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
     	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
     	//We need to get the distance from the centre to allow for hard turns
     	
-    	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	//driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
         //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
         shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
@@ -106,10 +106,9 @@ public class Robot extends IterativeRobot {
     }
     
     public void update() {
-    	driveTrain.update();
-    	//shooter.update();
+    	//driveTrain.update();
+    	shooter.update();
         //corrector.update();
-    	//shooter.update();
     	//autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     	dashboard.putNumber("accel-x", accel.getAccelX());

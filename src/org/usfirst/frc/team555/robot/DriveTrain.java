@@ -3,12 +3,23 @@ package org.usfirst.frc.team555.robot;
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
+<<<<<<< HEAD
 	public static final double DEAD_ZONE= .1;
+=======
+	public static final double YAW_THRESHOLD = 5;
+	public static final double YAW_CHANGE_FACTOR = 0.01;
+>>>>>>> 6e44ff766061d2f0e6e4f90360150f131543c16a
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
+	
+	private double prevAngle = 0;
+	private double angleChange = 0;
+	
+	private int leftAdjustments = 0;
+	private int rightAdjustments = 0;
 	
 	private static final boolean encoders=false;
 	
@@ -164,6 +175,22 @@ public class DriveTrain {
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
 		}
+		angleChange = Robot.gyro.getYaw() - prevAngle;
+		//Gyro adjustments
+		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) {
+			rightAdjustments++;
+			rightSpd *= 1+(YAW_CHANGE_FACTOR*rightAdjustments);
+		} else {
+			rightAdjustments = 0;
+		}
+		if(Control.getDegrees(Control.DRIVE_STICK) > 360-10 && Math.abs(angleChange) > YAW_THRESHOLD) {
+			leftAdjustments++;
+			leftSpd *= 1+(YAW_CHANGE_FACTOR*leftAdjustments);
+		} else {
+			leftAdjustments = 0;
+		}
+		prevAngle = Robot.gyro.getYaw();
+		
 		for(int i=0; i<leftWheels.length; i++)
 		{
 			leftWheels[i].setSpeed(leftSpd);
