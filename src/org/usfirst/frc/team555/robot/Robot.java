@@ -89,7 +89,7 @@ public class Robot extends IterativeRobot {
     	
     	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
         //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
-        //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
+        shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
         /*
         for(int i=0;i<2;i++)
@@ -100,8 +100,8 @@ public class Robot extends IterativeRobot {
         	}
         	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);//store this round's value in last round's value
         }
-        shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         */
+        shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         update();
     }
     

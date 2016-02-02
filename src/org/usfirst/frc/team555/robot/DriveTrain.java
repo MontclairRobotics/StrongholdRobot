@@ -3,6 +3,7 @@ package org.usfirst.frc.team555.robot;
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
 	public static final double ROT_CONSTANT = 1;
+	public static final double DEAD_ZONE= .1;
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
@@ -78,7 +79,7 @@ public class DriveTrain {
 	
 	public void setSpeedXY(double x, double y)
 	{   
-		if(x==0&&y==0)
+		if(Math.abs(x)<DEAD_ZONE&&Math.abs(y)<DEAD_ZONE)
 		{
 			leftSpd=0;
 			rightSpd=0;
