@@ -21,7 +21,7 @@ public class Shooter
         
     	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{
-    		wheels[i] = new ShooterMotor(i+Map.MOTOR_PORTS.length+1);
+    		wheels[i] = new ShooterMotor(i);
     	}
     	if(wheels.length >= 2) wheels[1].setInverted(true);
 
@@ -79,17 +79,22 @@ public class Shooter
     	}
     	timeToStop--;
     	*/
+    	mode = 's';
+    	Robot.dashboard.putString("mode", String.valueOf(mode));
 		switch(mode)
 		{
 		case 'r':
-			setMotors(REEL_SPEED);
+			//setMotors(REEL_SPEED);
 			break;
 		case 's':
-			setMotors(shootSpd);
+			//setMotors(shootSpd);
 			break;
 		default:
 			setMotors(0);
 			break;
+		}
+		for(ShooterMotor motor : wheels) {
+			motor.update();
 		}
     }
     

@@ -5,7 +5,7 @@ public class DriveTrain {
 	public static final double ROT_CONSTANT = 1;
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
-	public static final double YAW_CHANGE_FACTOR = 0.01;
+	public static final double YAW_CHANGE_FACTOR = 1;
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	private double leftSpd, rightSpd;
@@ -172,6 +172,8 @@ public class DriveTrain {
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
 		}
+		double yaw = Robot.gyro.getYaw();
+		if(yaw > 180) yaw = -360+yaw;
 		angleChange = Robot.gyro.getYaw() - prevAngle;
 		//Gyro adjustments
 		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) {

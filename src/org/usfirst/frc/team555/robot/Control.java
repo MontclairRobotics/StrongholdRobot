@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Control {
 	
-	public static final int DRIVE_STICK = 1;
-	public static final int SHOOT_STICK = 0;
+	public static final int DRIVE_STICK = 0;
+	public static final int SHOOT_STICK = 1;
 	public static final int[] VALVES={0,1}; //TODO: Ask Jack
 	public static final int[] SHOOT_BUTTONS = {5, 3};
 	public static final int AUTOTARGET=4;//TODO
