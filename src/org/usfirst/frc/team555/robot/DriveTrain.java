@@ -92,7 +92,13 @@ public class DriveTrain {
 			leftSpd=0;
 			rightSpd=0;
 		}
-		else{
+		else if (Math.abs(x)<DEAD_ZONE)
+		{
+			leftSpd=y;
+			rightSpd=y;
+		}
+		else
+		{
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
 			{
