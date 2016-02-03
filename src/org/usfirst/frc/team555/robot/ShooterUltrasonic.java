@@ -19,7 +19,7 @@ public class ShooterUltrasonic extends Ultrasonic {
     
     public void display() {
         if (isNominal())
-            Robot.dashboard.putString("Shooter", "Distance is NOMINAL\n\t" + distanceIN + "in (" + distanceCM + "cm");
+            Robot.dashboard.putString("Shooter", "Distance is NOMINAL\n\t" + distanceIN + "in (" + distanceCM + "cm)");
         else
             Robot.dashboard.putString("Shooter", "Distance is NOT nominal\n\t" + distanceIN + "in (" + distanceCM + "cm)");
     }
