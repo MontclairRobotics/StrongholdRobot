@@ -1,6 +1,4 @@
-/*package org.usfirst.frc.team555.robot;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+package org.usfirst.frc.team555.robot;
 
 public class NavXGyroMonitor {
     
@@ -19,14 +17,14 @@ public class NavXGyroMonitor {
     }
     
     public void display() {
-        SmartDashboard.putString("Direction", getDirection().toString() + 
-            "\n\tZ-axis: " + String.valueOf(gyro.getZ()) + "°");
-        SmartDashboard.putString("Tilt", getTilt().toString() + 
-            "\n\tX-axis: " + String.valueOf(gyro.getX()) + "°, Y-axis: " + String.valueOf(gyro.getY()) + "°");
+        Robot.dashboard.putString("Direction", getDirection().toString() + 
+            "\n\tZ: " + String.valueOf(gyro.getYaw()) + "°");
+        Robot.dashboard.putString("Tilt", getTilt().toString() + 
+            "\n\tX: " + String.valueOf(gyro.getPitch()) + "°, Y: " + String.valueOf(gyro.getRoll()) + "°");
     }
     
     public Direction getDirection() {
-        double zValue = gyro.getZ();
+        double zValue = gyro.getYaw();
         
         if (zValue >= -45.0 && zValue < 45.0)
             return Direction.FORWARD;
@@ -39,8 +37,8 @@ public class NavXGyroMonitor {
     }
     
     public Tilt getTilt() {
-        double xMag = Math.abs(gyro.getX());
-        double yMag = Math.abs(gyro.getY());
+        double xMag = Math.abs(gyro.getPitch());
+        double yMag = Math.abs(gyro.getRoll());
         double greatestTilt = (xMag > yMag) ? xMag : yMag;
         
         if (greatestTilt >= 0.0 && greatestTilt < 5.0)
@@ -54,4 +52,3 @@ public class NavXGyroMonitor {
     }
     
 }
-*/

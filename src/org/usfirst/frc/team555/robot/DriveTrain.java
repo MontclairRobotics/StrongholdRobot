@@ -8,7 +8,7 @@ public class DriveTrain {
 	public static final double YAW_CHANGE_FACTOR = 0.01;
 	
 	private DriveMotor[] leftWheels, rightWheels;
-	private double leftSpd, rightSpd;
+	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
 	

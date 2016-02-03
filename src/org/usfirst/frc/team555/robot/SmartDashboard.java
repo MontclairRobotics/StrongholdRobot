@@ -18,7 +18,7 @@ public class SmartDashboard implements Runnable {
 	
 	private boolean running = true;
 	
-	private edu.wpi.first.wpilibj.smartdashboard.SmartDashboard dashboard;
+	private SmartDashboard dashboard;
 	
 	public SmartDashboard() {
 		values = new ConcurrentHashMap<String, Object>(16, 0.75f, 3);

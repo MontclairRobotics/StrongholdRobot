@@ -1,6 +1,4 @@
-/*package org.usfirst.frc.team555.robot;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+package org.usfirst.frc.team555.robot;
 
 public class PitchCorrector {
 	
@@ -19,15 +17,15 @@ public class PitchCorrector {
 	}
 	
 	public void update() {
-		if (gyro.getX() < -TIP_THRESHOLD) {
+		if (gyro.getPitch() < -TIP_THRESHOLD) {
 			correctNegativePitch();
 			consecutiveCorrections++;
-		} else if (gyro.getX() > TIP_THRESHOLD) {
+		} else if (gyro.getPitch() > TIP_THRESHOLD) {
 			correctPositivePitch();
 			consecutiveCorrections++;
 		} else {
 			if (consecutiveCorrections > 0)
-				SmartDashboard.putString("Pitch Corrections", consecutiveCorrections + " consecutive corrections made");
+				Robot.dashboard.putString("Pitch Corrections", consecutiveCorrections + " consecutive corrections made");
 			consecutiveCorrections = 0;
 		}
 	}
@@ -42,4 +40,4 @@ public class PitchCorrector {
 		train.rightSpd *= factor;
 	}
 	
-}*/
+}
