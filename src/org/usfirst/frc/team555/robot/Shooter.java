@@ -11,15 +11,13 @@ public class Shooter
     private double shootSpd;
     private int timeToStop;
     
-    private ShooterUltrasonic ultrasonic;
-    
     public static final int REEL_TIME=10,SHOOT_TIME=5,ACTIVATE_SHOOTER_TIME=1;
     
     public static final double REEL_SPEED=-0.5;
     
     public Shooter()
     {
-    	wheels= new ShooterMotor[2];
+    	wheels= new ShooterMotor[3];
         
     	for(int i = 0; i < Map.SHOOTER_MOTORS.length; i++)
     	{
@@ -35,8 +33,6 @@ public class Shooter
         }
         mode='0';
         timeToStop=0;
-        
-        ultrasonic = new ShooterUltrasonic();
     }
     public void reelIn() {
     	mode='r';
@@ -83,30 +79,17 @@ public class Shooter
     	}
     	timeToStop--;
     	*/
-    	mode = 's';
-    	Robot.dashboard.putString("mode", String.valueOf(mode));
 		switch(mode)
 		{
 		case 'r':
-			//setMotors(REEL_SPEED);
+			setMotors(REEL_SPEED);
 			break;
 		case 's':
-			//setMotors(shootSpd);
+			setMotors(shootSpd);
 			break;
 		default:
 			setMotors(0);
 			break;
-		}
-<<<<<<< HEAD
-		for(ShooterMotor motor : wheels) {
-			motor.update();
-=======
-		
-		if (distanceIsNominal()) {
-			Robot.dashboard.putString("Distance", "NOMINAL");
-		} else {
-			Robot.dashboard.putString("Distance", "OUT OF RANGE");
->>>>>>> 18164281201007b12d2585ffd072d7c65eb43bfd
 		}
     }
     
@@ -128,9 +111,4 @@ public class Shooter
     		valves[2].set(!valves[2].get());
     	}
     }
-    
-    public boolean distanceIsNominal() {
-        return ultrasonic.distanceIN > 3.0*12.0 && ultrasonic.distanceIN < 18.0*12.0
-    }
-    
 }
