@@ -19,17 +19,17 @@ public class Control {
 	
 	
 	public static double getX(int joystick) {
-		Robot.dashboard.putNumber("X-" + joystick, sticks[joystick].getX());
+		Robot.dashboard.putNumber("X:" + joystick, sticks[joystick].getX());
 		return sticks[joystick].getX();
 	}
 	
 	public static double getY(int joystick) {
-		Robot.dashboard.putNumber("Y-" + joystick, sticks[joystick].getY());
+		Robot.dashboard.putNumber("Y:" + joystick, sticks[joystick].getY());
 		return sticks[joystick].getY();
 	}
 	
 	public static double getZ(int joystick) {
-		//SmartDashboard.putNumber("Z-" + joystick, sticks[joystick].getZ());
+		//Robot.dashboard.putNumber("Z:" + joystick, sticks[joystick].getYaw());
 		return sticks[joystick].getZ();
 	}
 	

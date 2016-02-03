@@ -8,7 +8,7 @@ public class DriveTrain {
 	public static final double YAW_CHANGE_FACTOR = 1;
 	
 	private DriveMotor[] leftWheels, rightWheels;
-	private double leftSpd, rightSpd;
+	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
 	
@@ -92,7 +92,13 @@ public class DriveTrain {
 			leftSpd=0;
 			rightSpd=0;
 		}
-		else{
+		else if (Math.abs(x)<DEAD_ZONE)
+		{
+			leftSpd=y;
+			rightSpd=y;
+		}
+		else
+		{
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
 			{
