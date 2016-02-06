@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
     	//We need to get the distance from the centre to allow for hard turns
     	
     	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
         //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
         //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         

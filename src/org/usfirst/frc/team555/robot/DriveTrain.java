@@ -6,17 +6,24 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
+	private static final double P_CORRECTION_FACTOR = 0.01;
+	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fillin after P is found
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
 	
-	private double prevAngle = 0;
-	private double angleChange = 0;
+	//private double prevAngle = 0;
+	//private double angleChange = 0;
 	
-	private int leftAdjustments = 0;
-	private int rightAdjustments = 0;
+	//private int leftAdjustments = 0;
+	//private int rightAdjustments = 0;
+	
+	private double angle=0;
+	private double lastAngle=0;
+	private double goalAngle=0;
+	private boolean lastLock=false;
 	
 	private static final boolean encoders=false;
 	
@@ -87,6 +94,7 @@ public class DriveTrain {
 	
 	public void setSpeedXY(double x, double y)
 	{   
+		x*=.75;
 		if(Math.abs(x)<DEAD_ZONE&&Math.abs(y)<DEAD_ZONE)
 		{
 			leftSpd=0;
@@ -152,6 +160,26 @@ public class DriveTrain {
 		};
 	}
 	
+	public void setLock(boolean lock)
+	{
+		angle=Robot.gyro.getAngle();
+		if(lock)
+		{
+			if(!lastLock)
+			{
+				goalAngle=angle;
+			}
+			else
+			{
+				double correction=(goalAngle-angle)*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
+				leftSpd+=correction;
+				rightSpd-=correction;
+			}
+		}
+		lastLock=lock;
+		lastAngle=angle;
+	}
+	
 	public void update()
 	{
 		/*if(driveModule.shutdown)
@@ -177,7 +205,7 @@ public class DriveTrain {
 				};
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
-		}
+		}/*
 		double yaw = Robot.gyro.getYaw();
 		if(yaw > 180) yaw = -360+yaw;
 		angleChange = Robot.gyro.getYaw() - prevAngle;
@@ -194,7 +222,7 @@ public class DriveTrain {
 		} else {
 			leftAdjustments = 0;
 		}
-		prevAngle = Robot.gyro.getYaw();
+		prevAngle = Robot.gyro.getYaw();*/
 		
 		for(int i=0; i<leftWheels.length; i++)
 		{

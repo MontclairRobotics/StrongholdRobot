@@ -106,4 +106,8 @@ public class DriveMotor {
 		encoder.reset();
 	}
 	
+	public CANTalon getMotor() {
+		return motor;
+	}
+	
 }
