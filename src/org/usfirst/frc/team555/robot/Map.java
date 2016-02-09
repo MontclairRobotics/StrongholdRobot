@@ -1,7 +1,15 @@
 package org.usfirst.frc.team555.robot;
 
 public class Map {
-
+	
+	
+	//TALON CONFIG
+	/*public static final int FRONT_LEFT = 0;
+	public static final int REAR_LEFT = 1;
+	public static final int FRONT_RIGHT = 2;
+	public static final int REAR_RIGHT = 3;
+	*/
+	//VICTOR CONFIG
 	public static final int FRONT_LEFT = 0;
 	public static final int REAR_LEFT = 1;
 	public static final int FRONT_RIGHT = 2;
