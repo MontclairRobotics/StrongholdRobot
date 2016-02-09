@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveMotor {
 	
@@ -12,12 +14,13 @@ public class DriveMotor {
 	private double speed;
 	
 	private Encoder encoder;
-	private CANTalon motor;
+	private SpeedController motor;
 	private PIDController controller;
 	
 	private boolean encoders;
 	
 	private static boolean shutdown=false;
+	private static boolean SRX = false; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
 	
 	public static final int ROT_TO_DEGREES = 360;
 	public static double PID_P = 0.1, PID_I = 0.001, PID_D = 0.0;
@@ -37,7 +40,12 @@ public class DriveMotor {
 		//int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
 		motorPort = ports[0];
 		//TODO: What!?
-		motor = new CANTalon(motorPort);
+		if(SRX) {
+			motor = new CANTalon(motorPort);
+		} else {
+			motor = new VictorSP(motorPort);
+		}
+		
 		if(encoders) {
 			encoderPort1 = ports[1];
 			encoderPort2 = ports[2];
@@ -46,10 +54,13 @@ public class DriveMotor {
 			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
 			controller.enable();
 		}
-		motor.setControlMode(TalonControlMode.PercentVbus.value);
-		motor.reset();
-		motor.enable();
-		motor.enableControl();
+		if(motor instanceof CANTalon) {
+			CANTalon talon = (CANTalon)motor;
+			talon.setControlMode(TalonControlMode.PercentVbus.value);
+			talon.reset();
+			talon.enable();
+			talon.enableControl();
+		}
 	}
 	
 	public void setSpeed(double spd)
@@ -67,7 +78,7 @@ public class DriveMotor {
 				speed = 0;
 			}
 			motor.set(0);
-			motor.disableControl();
+			if(motor instanceof CANTalon) ((CANTalon)motor).disableControl();
 			return;
 		}
 		if(encoders) {
@@ -106,8 +117,8 @@ public class DriveMotor {
 		encoder.reset();
 	}
 	
-	public CANTalon getMotor() {
+	/*public SpeedController getMotor() {
 		return motor;
-	}
+	}*/
 	
 }
