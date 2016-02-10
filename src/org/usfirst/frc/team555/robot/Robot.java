@@ -115,6 +115,7 @@ public class Robot extends IterativeRobot {
     	dashboard.putNumber("accel-x", accel.getAccelX());
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
+    	dashboard.putNumber("accel-yaw", gyro.getYaw());
     }
     
     /**

@@ -6,8 +6,9 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = 0.01;
-	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fillin after P is found
+	private static final double P_CORRECTION_FACTOR = 0.0075;
+	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
+	private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
@@ -22,8 +23,8 @@ public class DriveTrain {
 	
 	private double angle=0;
 	private double lastAngle=0;
-	private double goalAngle=0;
-	private boolean lastLock=false;
+	private int timeSinceLastLock=TIME_TO_DISABLE;
+	private double netSpd;
 	
 	private static final boolean encoders=false;
 	
@@ -35,8 +36,8 @@ public class DriveTrain {
 		rightWheels = new DriveMotor[WHEELS_PER_SIDE];
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
-			leftWheels [i]= new DriveMotor(i*2,encoders);
-			rightWheels[i]= new DriveMotor(i*2+1,encoders);
+			leftWheels [i]= new DriveMotor(i*2,encoders); //1, 3
+			rightWheels[i]= new DriveMotor(i*2+1,encoders); //2, 4
 		}
 		for(DriveMotor motor : rightWheels) {
 			motor.setInverted(true);
@@ -118,6 +119,7 @@ public class DriveTrain {
 			}
 	        leftSpd=(y+x)/max;
 	        rightSpd=(y-x)/max;
+	        netSpd=y;
 		}
 		if(Control.halvingButtonPressed()) {
 			leftSpd /= 2;
@@ -162,22 +164,23 @@ public class DriveTrain {
 	
 	public void setLock(boolean lock)
 	{
-		angle=Robot.gyro.getAngle();
+		angle=Robot.gyro.getYaw();
 		if(lock)
 		{
-			if(!lastLock)
+			if(timeSinceLastLock>=TIME_TO_DISABLE)
 			{
-				goalAngle=angle;
+				Robot.gyro.zeroYaw();
 			}
 			else
 			{
-				double correction=(goalAngle-angle)*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
-				leftSpd+=correction;
-				rightSpd-=correction;
+				double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
+				leftSpd=netSpd+correction;
+				rightSpd=netSpd-correction;
 			}
+			timeSinceLastLock=0;
+			lastAngle=angle;
 		}
-		lastLock=lock;
-		lastAngle=angle;
+		timeSinceLastLock++;
 	}
 	
 	public void update()

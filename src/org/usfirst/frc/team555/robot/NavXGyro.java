@@ -26,9 +26,9 @@ public class NavXGyro {
         return ahrs.getYaw();
     }
     
-    public double getAngle()
+    public void zeroYaw()
     {
-        return ahrs.getAngle();
+        ahrs.zeroYaw();
     }
     
 }
