@@ -1,3 +1,4 @@
+
 package org.usfirst.frc.team555.robot;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -23,6 +24,11 @@ public class NavXGyro {
     
     public float getYaw() {
         return ahrs.getYaw();
+    }
+    
+    public void zeroYaw()
+    {
+        ahrs.zeroYaw();
     }
     
 }

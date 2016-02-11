@@ -1,7 +1,5 @@
 package org.usfirst.frc.team555.robot;
 
-import java.util.Timer;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -21,7 +19,7 @@ public class Robot extends IterativeRobot {
     
     AHRS ahrs;
     NavXAccelerometer accel;
-    NavXGyro gyro;
+    public static NavXGyro gyro;
     //PitchCorrector corrector;
     
     public static SmartDashboard dashboard;
@@ -44,7 +42,7 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        //shooter = new Shooter();
+        shooter = new Shooter();
         //autoShooter=new AutoShooter(driveTrain,shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -89,7 +87,8 @@ public class Robot extends IterativeRobot {
     	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
     	//We need to get the distance from the centre to allow for hard turns
     	
-        driveTrain.setSpeedArcade(Control.getMagnitude(Control.DRIVE_STICK), Control.getDegrees(Control.DRIVE_STICK)); //TODO: Practicality of using twist
+    	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
         //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
         //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
         
@@ -102,8 +101,8 @@ public class Robot extends IterativeRobot {
         	}
         	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);//store this round's value in last round's value
         }
-        shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         */
+        //shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         update();
     }
     
@@ -111,12 +110,12 @@ public class Robot extends IterativeRobot {
     	driveTrain.update();
     	//shooter.update();
         //corrector.update();
-    	//shooter.update();
     	//autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     	dashboard.putNumber("accel-x", accel.getAccelX());
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
+    	dashboard.putNumber("accel-yaw", gyro.getYaw());
     }
     
     /**

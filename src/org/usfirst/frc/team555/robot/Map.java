@@ -1,7 +1,15 @@
 package org.usfirst.frc.team555.robot;
 
 public class Map {
-
+	
+	
+	//TALON CONFIG
+	/*public static final int FRONT_LEFT = 0;
+	public static final int REAR_LEFT = 1;
+	public static final int FRONT_RIGHT = 2;
+	public static final int REAR_RIGHT = 3;
+	*/
+	//VICTOR CONFIG
 	public static final int FRONT_LEFT = 0;
 	public static final int REAR_LEFT = 1;
 	public static final int FRONT_RIGHT = 2;
@@ -20,11 +28,8 @@ public class Map {
     
     public static final int[][] SHOOTER_MOTORS = {
     		//Wheel 1, wheel 2, pneumatic valve 1, valve 2
-    		/*{0, 1,2},
-    		{1,2,3}
-    		{5,1,2},
-            {6,4,5},
-            {7,7,8}*/
+    		{5, 1,2},
+    		{6,2,3}
     };
     
     public static final int[] SOLINOID_PORTS={

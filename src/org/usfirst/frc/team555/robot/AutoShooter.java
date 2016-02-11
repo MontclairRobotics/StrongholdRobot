@@ -2,6 +2,8 @@ package org.usfirst.frc.team555.robot;
 
 public class AutoShooter 
 {
+	private static final double ANGLE_CORRECTION = 0.01;
+	private static final double SPEED_CORRECTION = 0.5;
 	private DriveTrain drive;
 	private AutoTrajectory trajectory;
 	private Shooter shooter;
@@ -39,8 +41,8 @@ public class AutoShooter
 		if(mode=='t')
 		{
 			trajectory.update();
-			drive.setSpeedArcade(0.0,trajectory.getAngle());
-			shooter.setSpeed(trajectory.getSpeed());
+			drive.setSpeedXY(0,trajectory.getAngle()*ANGLE_CORRECTION);
+			shooter.setSpeed(trajectory.getSpeed()*SPEED_CORRECTION);
 		}
 	}
 }
