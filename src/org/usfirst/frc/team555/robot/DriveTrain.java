@@ -21,6 +21,8 @@ public class DriveTrain {
 	//private int leftAdjustments = 0;
 	//private int rightAdjustments = 0;
 	
+	public boolean isControlled;
+	
 	private double angle=0;
 	private double lastAngle=0;
 	private int timeSinceLastLock=TIME_TO_DISABLE;
@@ -93,21 +95,30 @@ public class DriveTrain {
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}*/
 	
+	public void setSpeedXY(double x, double y, boolean manual)
+	{
+		setSpeedXY(x,y);
+		isControlled=manual;
+	}
+	
 	public void setSpeedXY(double x, double y)
 	{   
 		x*=.75;
-		if(Math.abs(x)<DEAD_ZONE&&Math.abs(y)<DEAD_ZONE)
+		if(Math.abs(x)<Control.DEAD_ZONE&&Math.abs(y)<Control.DEAD_ZONE)
 		{
+			isControlled=false;
 			leftSpd=0;
 			rightSpd=0;
 		}
-		else if (Math.abs(x)<DEAD_ZONE)
+		else if (Math.abs(x)<Control.DEAD_ZONE)
 		{
+			isControlled=true;
 			leftSpd=y;
 			rightSpd=y;
 		}
 		else
 		{
+			isControlled=true;
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
 			{
@@ -162,9 +173,9 @@ public class DriveTrain {
 		};
 	}
 	
+	
 	public void setLock(boolean lock)
 	{
-		angle=Robot.gyro.getYaw();
 		if(lock)
 		{
 			if(timeSinceLastLock>=TIME_TO_DISABLE)
@@ -173,14 +184,23 @@ public class DriveTrain {
 			}
 			else
 			{
-				double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
-				leftSpd=netSpd+correction;
-				rightSpd=netSpd-correction;
+				setLock(0.0);
+				timeSinceLastLock=0;
+				lastAngle=angle;
 			}
-			timeSinceLastLock=0;
-			lastAngle=angle;
 		}
-		timeSinceLastLock++;
+		else
+		{
+			timeSinceLastLock++;
+		}
+	}
+	
+	public void setLock(double angle)
+	{
+		angle=Robot.gyro.getYaw()+angle;
+		double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
+		leftSpd=netSpd+correction;
+		rightSpd=netSpd-correction;
 	}
 	
 	public void update()
