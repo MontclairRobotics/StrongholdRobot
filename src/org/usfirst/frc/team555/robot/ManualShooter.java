@@ -74,7 +74,7 @@ public class ManualShooter
     {
     	if(Math.abs(y)>Control.DEAD_ZONE)
     	{
-    		speed+=y*POWER_CHANGE;
+    		speed=y;
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
