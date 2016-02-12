@@ -185,9 +185,10 @@ public class DriveTrain {
 			else
 			{
 				setLock(0.0);
-				timeSinceLastLock=0;
-				lastAngle=angle;
+				
+				
 			}
+                        timeSinceLastLock=0;
 		}
 		else
 		{
@@ -195,9 +196,9 @@ public class DriveTrain {
 		}
 	}
 	
-	public void setLock(double angle)
+	public void setLock(double target)
 	{
-		angle=Robot.gyro.getYaw()+angle;
+		angle=Robot.gyro.getYaw()+target;
 		double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
 		leftSpd=netSpd+correction;
 		rightSpd=netSpd-correction;
@@ -228,12 +229,14 @@ public class DriveTrain {
 				};
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
-		}/*
+		}
+lastAngle=angle;
+/*
 		double yaw = Robot.gyro.getYaw();
 		if(yaw > 180) yaw = -360+yaw;
 		angleChange = Robot.gyro.getYaw() - prevAngle;
 		//Gyro adjustments
-		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) {
+		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) 
 			rightAdjustments++;
 			rightSpd *= 1+(YAW_CHANGE_FACTOR*rightAdjustments);
 		} else {
