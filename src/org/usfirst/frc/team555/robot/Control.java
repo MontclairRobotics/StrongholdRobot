@@ -13,9 +13,9 @@ public class Control {
 	public static final int SHOOT_UP=5;
 	public static final int SHOOT_DOWN=4;
 	public static final int HALVING_BUTTON = 2;
-	public static final int LOCK_BUTTON=6;
+	public static final int LOCK_BUTTON=1;
 	
-	public static final double DEAD_ZONE=0.1;
+	public static final double DEAD_ZONE=0.2;
 	
 	private static Joystick[] sticks = {
 			new Joystick(DRIVE_STICK),

@@ -1,4 +1,7 @@
 package org.usfirst.frc.team555.robot;
+import edu.wpi.first.wpilibj.PIDController; 
+
+
 
 public class DriveTrain {
 	public static final int WHEELS_PER_SIDE = 2;
@@ -6,14 +9,17 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = 0.0075;
+	private static final double P_CORRECTION_FACTOR = 0.02;
+	private static final double D_CORRECTION_FACTOR = 0.02;
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
 	private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
 	
+	private CourseLockPIDSource courseLockInput;
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
+	//private PIDController pid = new PIDController(P_CORRECTION_FACTOR, D_CORRECTION_FACTOR, I_CORRECTION_FACTOR, );
 	
 	//private double prevAngle = 0;
 	//private double angleChange = 0;
@@ -25,7 +31,8 @@ public class DriveTrain {
 	
 	private double angle=0;
 	private double lastAngle=0;
-	private int timeSinceLastLock=TIME_TO_DISABLE;
+	private double goalAngle=0;
+	private int loopsSinceLastLock=TIME_TO_DISABLE;
 	private double netSpd;
 	
 	private static final boolean encoders=false;
@@ -44,6 +51,7 @@ public class DriveTrain {
 		for(DriveMotor motor : rightWheels) {
 			motor.setInverted(true);
 		}
+		courseLockInput = new CourseLockPIDSource();
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -109,12 +117,14 @@ public class DriveTrain {
 			isControlled=false;
 			leftSpd=0;
 			rightSpd=0;
+			netSpd=0;
 		}
 		else if (Math.abs(x)<Control.DEAD_ZONE)
 		{
 			isControlled=true;
 			leftSpd=y;
 			rightSpd=y;
+			netSpd=y;
 		}
 		else
 		{
@@ -135,6 +145,7 @@ public class DriveTrain {
 		if(Control.halvingButtonPressed()) {
 			leftSpd /= 2;
 			rightSpd /= 2;
+			netSpd /= 2;
 		}
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
@@ -178,28 +189,27 @@ public class DriveTrain {
 	{
 		if(lock)
 		{
-			if(timeSinceLastLock>=TIME_TO_DISABLE)
+			if(loopsSinceLastLock>=TIME_TO_DISABLE)
 			{
-				Robot.gyro.zeroYaw();
+				courseLockInput.setTarget();
 			}
-			else
-			{
-				setLock(0.0);
-			}
-                        timeSinceLastLock=0;
+			
+			/*courseLock(goalAngle);
+            loopsSinceLastLock=0;*/
 		}
 		else
 		{
-			timeSinceLastLock++;
+			loopsSinceLastLock++;
 		}
 	}
 	
-	public double setLock(double target)
+	public double courseLock(double target)
 	{
-		angle=Robot.gyro.getYaw()+target;
-		double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
-		leftSpd=netSpd+correction;
-		rightSpd=netSpd-correction;
+		
+		//double correction=angle*P_CORRECTION_FACTOR*(angle-lastAngle)*D_CORRECTION_FACTOR;
+		leftSpd=netSpd-correction;
+		rightSpd=netSpd+correction;
+		lastAngle = angle;
 		return angle;
 	}
 	
