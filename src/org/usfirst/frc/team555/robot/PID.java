@@ -1,5 +1,15 @@
 package org.usfirst.frc.team555.robot;
 
+/*
+ * Usage:
+ * 
+ * Create with P,I,D values
+ * Call setTarget() to set the target
+ * Call get() to get the correction
+ * 
+ * It just uses the math from the WPI PIDController class.
+ * 
+ */
 
 public class PID {
 
@@ -30,6 +40,9 @@ public class PID {
 	public void setTarget()
 	{
 		setTarget(0.0);
+		error=0.0;
+		prevError=0.0;
+		totalError=0.0;
 	}
 
 	public double get()
