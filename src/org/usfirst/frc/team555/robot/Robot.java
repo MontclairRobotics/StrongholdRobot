@@ -14,7 +14,7 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     
     DriveTrain driveTrain;
-    Shooter shooter;
+    ManualShooter shooter;
     AutoShooter autoShooter;
     
     AHRS ahrs;
@@ -42,8 +42,8 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
         driveTrain = new DriveTrain();
-        shooter = new Shooter();
-        //autoShooter=new AutoShooter(driveTrain,shooter);
+        shooter = new ManualShooter(driveTrain);
+        autoShooter=new AutoShooter(shooter);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
@@ -84,33 +84,20 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-    	//Uses pythagorean theorem to get distance from centre, then gets rotation factor from the x axis
-    	//We need to get the distance from the centre to allow for hard turns
-    	
     	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
     	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
-        //autoShooter.target(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
-        //shooter.activateShooter(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
+        autoShooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
+        shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
+        		Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
+        shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK));
         
-        /*
-        for(int i=0;i<2;i++)
-        {
-        	if(!lastValveButton[i] && Control.getButton(Control.SHOOT_STICK, Control.SHOOT_BUTTONS[i]))//if this button not pushed last round and pushed this round
-        	{
-        		shooter.toggleValve(i);//toggle valve
-        	}
-        	lastValveButton[i]=Control.getButton(Control.SHOOT_STICK,Control.SHOOT_BUTTONS[i]);//store this round's value in last round's value
-        }
-        */
-        //shooter.setMotors(Control.getY(Control.SHOOT_STICK));
         update();
     }
     
     public void update() {
     	driveTrain.update();
-    	//shooter.update();
-        //corrector.update();
-    	//autoShooter.update();
+    	shooter.update();
+    	autoShooter.update();
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     	dashboard.putNumber("accel-x", accel.getAccelX());
     	dashboard.putNumber("accel-y", accel.getAccelY());

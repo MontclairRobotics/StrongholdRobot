@@ -6,9 +6,9 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = 0.0075;
-	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
-	private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
+	private static final double P_CORRECTION_FACTOR = 0.001;
+	private static final double I_CORRECTION_FACTOR = 0.00;//TODO fill in after P is found
+	//private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
 	
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
@@ -21,10 +21,13 @@ public class DriveTrain {
 	//private int leftAdjustments = 0;
 	//private int rightAdjustments = 0;
 	
+	public boolean isControlled;
+	public boolean lock=false;
+	
 	private double angle=0;
 	private double lastAngle=0;
 	private int timeSinceLastLock=TIME_TO_DISABLE;
-	private double netSpd;
+	//private double netSpd;
 	
 	private static final boolean encoders=false;
 	
@@ -93,21 +96,49 @@ public class DriveTrain {
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}*/
 	
+	/*public void setSpeedXY(double x, double y, boolean manual)
+	{
+		setSpeedXY(x,y);
+		isControlled=manual;
+	}*/
+	
 	public void setSpeedXY(double x, double y)
 	{   
 		x*=.75;
-		if(Math.abs(x)<DEAD_ZONE&&Math.abs(y)<DEAD_ZONE)
-		{
-			leftSpd=0;
-			rightSpd=0;
+		if(Control.halvingButtonPressed()) {
+			y /= 2.0;
 		}
-		else if (Math.abs(x)<DEAD_ZONE)
+		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
-			leftSpd=y;
-			rightSpd=y;
+			if(Math.abs(y)<Control.DEAD_ZONE)
+			{
+				isControlled=false;
+				lock=false;
+				leftSpd=0;
+				rightSpd=0;
+			}
+			else
+			{
+				isControlled=true;
+				if(!lock)
+				{
+					if(true)//TODO put locking switch here
+					{
+						lock=true;
+						Robot.gyro.zeroYaw();
+						correction=0.0;
+					}
+				}
+				if(lock)
+				{
+					setLock(y,0.0);
+				}
+			}
 		}
 		else
 		{
+			lock=false;
+			isControlled=true;
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
 			{
@@ -117,14 +148,10 @@ public class DriveTrain {
 			{
 				max=1+Math.abs(x/y);
 			}
-	        leftSpd=(y+x)/max;
-	        rightSpd=(y-x)/max;
-	        netSpd=y;
+	        	leftSpd=(y+x)/max;
+	        	rightSpd=(y-x)/max;
 		}
-		if(Control.halvingButtonPressed()) {
-			leftSpd /= 2;
-			rightSpd /= 2;
-		}
+		
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
@@ -162,9 +189,9 @@ public class DriveTrain {
 		};
 	}
 	
-	public void setLock(boolean lock)
+	
+	/*public void setLock(boolean lock)
 	{
-		angle=Robot.gyro.getYaw();
 		if(lock)
 		{
 			if(timeSinceLastLock>=TIME_TO_DISABLE)
@@ -173,14 +200,23 @@ public class DriveTrain {
 			}
 			else
 			{
-				double correction=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
-				leftSpd=netSpd+correction;
-				rightSpd=netSpd-correction;
+				setLock(0.0);
 			}
-			timeSinceLastLock=0;
-			lastAngle=angle;
+                        timeSinceLastLock=0;
 		}
-		timeSinceLastLock++;
+		else
+		{
+			timeSinceLastLock++;
+		}
+	}*/
+	
+	public double setLock(double netSpd,double target)
+	{
+		angle=Robot.gyro.getYaw()+target;
+		double correction+=angle*P_CORRECTION_FACTOR-(angle-lastAngle)*I_CORRECTION_FACTOR;
+		leftSpd=netSpd+correction;
+		rightSpd=netSpd-correction;
+		return angle;
 	}
 	
 	public void update()
@@ -208,12 +244,14 @@ public class DriveTrain {
 				};
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
-		}/*
+		}
+		lastAngle=angle;
+		/*
 		double yaw = Robot.gyro.getYaw();
 		if(yaw > 180) yaw = -360+yaw;
 		angleChange = Robot.gyro.getYaw() - prevAngle;
 		//Gyro adjustments
-		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) {
+		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) 
 			rightAdjustments++;
 			rightSpd *= 1+(YAW_CHANGE_FACTOR*rightAdjustments);
 		} else {

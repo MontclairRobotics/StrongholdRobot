@@ -2,22 +2,21 @@ package org.usfirst.frc.team555.robot;
 
 public class AutoShooter 
 {
-	private static final double ANGLE_CORRECTION = 0.01;
 	private static final double SPEED_CORRECTION = 0.5;
 	private DriveTrain drive;
 	private AutoTrajectory trajectory;
-	private Shooter shooter;
+	private ManualShooter shooter;
 	
 	private char mode;
 	
-	public AutoShooter(DriveTrain d,Shooter s)
+	public AutoShooter(ManualShooter s)
 	{
-		drive=d;
+		drive=s.driveTrain;
 		shooter=s;
 		trajectory=new AutoTrajectory();
 		mode='s';
 	}
-	public void target(boolean on)
+	public void setActive(boolean on)
 	{
 		if(on)
 		{
@@ -38,11 +37,13 @@ public class AutoShooter
 	}
 	public void update()
 	{
-		if(mode=='t')
+		if(mode=='t'&&!drive.isControlled)
 		{
 			trajectory.update();
-			drive.setSpeedXY(0,trajectory.getAngle()*ANGLE_CORRECTION);
-			shooter.setSpeed(trajectory.getSpeed()*SPEED_CORRECTION);
+			if(drive.setLock(trajectory.getAngle())<10);
+			{
+				shooter.setSpeed(trajectory.getSpeed()*SPEED_CORRECTION);
+			}
 		}
 	}
 }
