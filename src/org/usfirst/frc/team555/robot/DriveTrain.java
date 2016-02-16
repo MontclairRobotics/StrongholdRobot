@@ -54,7 +54,7 @@ public class DriveTrain {
 		//pid = new PIDController(P_CORRECTION_FACTOR, D_CORRECTION_FACTOR, I_CORRECTION_FACTOR, source, pidOut);
 		pid = new PIDController(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR, source, pidOut, .5);
 		//pid.setContinuous();
-		//pid.reset();
+		//pid.reset(); 
 		pid.enable();
 		pid.setInputRange(-1800, 3600);
 		pid.setOutputRange(-.25,.25);
