@@ -1,4 +1,5 @@
 package org.usfirst.frc.team555.robot;
+//import edu.wpi.first.wpilibj.PIDAllen;
 import edu.wpi.first.wpilibj.PIDController; 
 
 
@@ -9,8 +10,8 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = 0.02;
-	private static final double D_CORRECTION_FACTOR = 0.02;
+	private static final double P_CORRECTION_FACTOR = -1.0/180;
+	private static final double D_CORRECTION_FACTOR = 0/180.0;
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
 	private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
 	
@@ -19,7 +20,12 @@ public class DriveTrain {
 	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
-	//private PIDController pid = new PIDController(P_CORRECTION_FACTOR, D_CORRECTION_FACTOR, I_CORRECTION_FACTOR, );
+	private CourseLockPIDSource source;
+	//private PIDController pid;
+	private PIDController pid;
+	private CourseLockPIDOut pidOut;
+	
+	private double totalError;
 	
 	//private double prevAngle = 0;
 	//private double angleChange = 0;
@@ -43,6 +49,16 @@ public class DriveTrain {
 	{
 		leftWheels = new DriveMotor[WHEELS_PER_SIDE];
 		rightWheels = new DriveMotor[WHEELS_PER_SIDE];
+		source = new CourseLockPIDSource();
+		pidOut = new CourseLockPIDOut();
+		//pid = new PIDController(P_CORRECTION_FACTOR, D_CORRECTION_FACTOR, I_CORRECTION_FACTOR, source, pidOut);
+		pid = new PIDController(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR, source, pidOut, .5);
+		//pid.setContinuous();
+		//pid.reset();
+		pid.enable();
+		pid.setInputRange(-1800, 3600);
+		pid.setOutputRange(-.25,.25);
+		pid.setSetpoint(0.0);
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
 			leftWheels [i]= new DriveMotor(i*2,encoders); //1, 3
@@ -112,19 +128,22 @@ public class DriveTrain {
 	public void setSpeedXY(double x, double y)
 	{   
 		x*=.75;
-		if(Math.abs(x)<Control.DEAD_ZONE&&Math.abs(y)<Control.DEAD_ZONE)
+		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
-			isControlled=false;
-			leftSpd=0;
-			rightSpd=0;
-			netSpd=0;
-		}
-		else if (Math.abs(x)<Control.DEAD_ZONE)
-		{
-			isControlled=true;
-			leftSpd=y;
-			rightSpd=y;
-			netSpd=y;
+			if(Math.abs(y)<Control.DEAD_ZONE)
+			{
+				isControlled=false;
+				leftSpd=0;
+				rightSpd=0;
+				netSpd=0;
+			}
+			else
+			{
+				isControlled=true;
+				leftSpd=y;
+				rightSpd=y;
+				netSpd=y;
+			}
 		}
 		else
 		{
@@ -192,26 +211,57 @@ public class DriveTrain {
 			if(loopsSinceLastLock>=TIME_TO_DISABLE)
 			{
 				courseLockInput.setTarget();
+				Robot.dashboard.putString("Lock", "on");
 			}
-			
-			/*courseLock(goalAngle);
-            loopsSinceLastLock=0;*/
+			courseLock();
+			loopsSinceLastLock=0;
 		}
 		else
 		{
 			loopsSinceLastLock++;
+			Robot.dashboard.putString("Lock", "off");
 		}
 	}
 	
-	public double courseLock(double target)
-	{
-		
+	public double courseLock()
+	{		
 		//double correction=angle*P_CORRECTION_FACTOR*(angle-lastAngle)*D_CORRECTION_FACTOR;
+		double correction = pid.get();
 		leftSpd=netSpd-correction;
 		rightSpd=netSpd+correction;
-		lastAngle = angle;
+		//lastAngle = angle;
+		Robot.dashboard.putString("PIDEnabled?", pid.isEnabled() ? "true" : "false" );
+		Robot.dashboard.putNumber("Correction", correction);
+		Robot.dashboard.putNumber("Error", pid.getError());
+		Robot.dashboard.putNumber("Kp", pid.getP());
+		Robot.dashboard.putNumber("SetpointChange", pid.getDeltaSetpoint());
 		return angle;
 	}
+	
+	/**IF WE ARE HAVING A BAD PROBLEM AND EVERYTHING IS ON FIRE THIS IS THE PIDCONTROLLER LOGIC**/
+	/*public void courseLock(double target){
+		 double input = Robot.gyro.getYaw();
+	     double result;
+	     double error = target - input;
+	     if (I_CORRECTION_FACTOR != 0) {
+	            double potentialIGain = (totalError + error) * I_CORRECTION_FACTOR;
+	            if (potentialIGain < 180) {
+	              if (potentialIGain > -180) {
+	                totalError += error;
+	              } else {
+	                totalError = -180 / I_CORRECTION_FACTOR;
+	              }
+	            } else {
+	              m_totalError = m_maximumOutput / m_I;
+	            }
+	          }
+
+	          m_result = m_P * m_error + m_I * m_totalError +
+	                     m_D * (m_error - m_prevError) + calculateFeedForward();
+	        }
+	        m_prevError = m_error;
+	     
+	}*/
 	
 	public void update()
 	{

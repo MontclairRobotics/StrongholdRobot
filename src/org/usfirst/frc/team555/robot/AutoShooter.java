@@ -40,10 +40,10 @@ public class AutoShooter
 		if(mode=='t'&&!drive.isControlled)
 		{
 			trajectory.update();
-			if(drive.setLock(trajectory.getAngle())<10);
+			/*if(drive.source.pidGet())));
 			{
 				shooter.setSpeed(trajectory.getSpeed()*SPEED_CORRECTION);
-			}
+			}*/
 		}
 	}
 }
