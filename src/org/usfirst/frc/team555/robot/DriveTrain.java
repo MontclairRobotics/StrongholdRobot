@@ -24,7 +24,7 @@ public class DriveTrain {
 	//private PIDController pid;
 	private PIDController pid;
 	private CourseLockPIDOut pidOut;
-	private boolean backwards = false; 
+	public boolean backwards = false; 
 	private double totalError;
 	
 	//private double prevAngle = 0;
