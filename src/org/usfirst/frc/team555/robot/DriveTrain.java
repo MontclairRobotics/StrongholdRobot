@@ -24,7 +24,7 @@ public class DriveTrain {
 	//private PIDController pid;
 	private PIDController pid;
 	private CourseLockPIDOut pidOut;
-	
+	public boolean backwards = false; 
 	private double totalError;
 	
 	//private double prevAngle = 0;
@@ -128,6 +128,9 @@ public class DriveTrain {
 	public void setSpeedXY(double x, double y)
 	{   
 		x*=.75;
+		if (backwards) {
+			y = y*-1;
+		}
 		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
 			if(Math.abs(y)<Control.DEAD_ZONE)

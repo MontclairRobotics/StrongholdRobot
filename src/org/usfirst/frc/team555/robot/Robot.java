@@ -98,6 +98,14 @@ public class Robot extends IterativeRobot {
     	driveTrain.update();
     	shooter.update();
     	autoShooter.update();
+    	
+    	if (Control.getButton(Control.DRIVE_stick, 7)) {
+    		driveTrain.backwards = true;
+    		
+    	} 
+    	else  {
+    		driveTrain.backwards = false;
+    	}
     	dashboard.putNumber("gyro-angle", gyro.getYaw());
     	dashboard.putNumber("accel-x", accel.getAccelX());
     	dashboard.putNumber("accel-y", accel.getAccelY());
@@ -112,4 +120,10 @@ public class Robot extends IterativeRobot {
     
     }
     
+    public void backwards(){
+    	 
+    }
+    
+    
 }
+
