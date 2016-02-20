@@ -7,15 +7,16 @@ public class Control {
 	public static final int DRIVE_STICK = 0;
 	public static final int SHOOT_STICK = 1;
 	//public static final int[] VALVES={0,1}; //TODO: Ask Jack
-	public static final int[] SHOOT_BUTTONS = {5, 3};
-	public static final int AUTOTARGET=4;//TODO
-	public static final int SHOOT_TRIGGER=6;//TODO
+	//public static final int[] SHOOT_BUTTONS = {5, 3};
+	public static final int SHOOT_AUTOTARGET=3;//TODO
+	public static final int SHOOT_TRIGGER=1;//TODO
+	public static final int SHOOT_ACTIVE=2;//TODO
 	public static final int SHOOT_UP=5;
 	public static final int SHOOT_DOWN=4;
 	public static final int HALVING_BUTTON = 2;
 	public static final int LOCK_BUTTON=1;
 	
-	public static final double DEAD_ZONE=0.2;
+	public static final double DEAD_ZONE=0.12;
 	
 	private static Joystick[] sticks = {
 			new Joystick(DRIVE_STICK),
@@ -36,6 +37,11 @@ public class Control {
 	public static double getZ(int joystick) {
 		//Robot.dashboard.putNumber("Z:" + joystick, sticks[joystick].getYaw());
 		return sticks[joystick].getZ();
+	}
+	
+	public static double getSlider(int joystick)
+	{
+		return sticks[joystick].getThrottle();
 	}
 	
 	public static double getMagnitude(int joystick) {

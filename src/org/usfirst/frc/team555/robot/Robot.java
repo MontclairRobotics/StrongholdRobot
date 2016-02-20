@@ -16,11 +16,14 @@ public class Robot extends IterativeRobot {
     DriveTrain driveTrain;
     ManualShooter shooter;
     AutoShooter autoShooter;
+    //SocketManager netManager;
     
     AHRS ahrs;
     NavXAccelerometer accel;
     public static NavXGyro gyro;
     //PitchCorrector corrector;
+    
+    public static HTTP coordServer;
     
     public static SmartDashboard dashboard;
     Thread dashboardThread;
@@ -41,13 +44,16 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
         
+        ahrs = new AHRS(SPI.Port.kMXP);
+        accel = new NavXAccelerometer(ahrs);
+        gyro = new NavXGyro(ahrs);
+
         driveTrain = new DriveTrain();
         shooter = new ManualShooter(driveTrain);
         autoShooter=new AutoShooter(shooter);
         
-        ahrs = new AHRS(SPI.Port.kMXP);
-        accel = new NavXAccelerometer(ahrs);
-        gyro = new NavXGyro(ahrs);
+        //netManager = new SocketManager();
+        
         //corrector = new PitchCorrector(gyro, driveTrain);
     }
 
@@ -81,16 +87,20 @@ public class Robot extends IterativeRobot {
     	DriveMotor.PID_P = dashboard.getNumber("PID-P");
         DriveMotor.PID_I = dashboard.getNumber("PID-I");
         DriveMotor.PID_D = dashboard.getNumber("PID-D");
+        try {
+        	coordServer = new HTTP(5805,"coords");
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
     }
     
     public void teleopPeriodic() {
     	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
     	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
-        autoShooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.AUTOTARGET));
+        autoShooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.SHOOT_AUTOTARGET));
         shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
         		Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
         shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK));
-        
         update();
     }
     
@@ -103,6 +113,16 @@ public class Robot extends IterativeRobot {
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
     	dashboard.putNumber("accel-yaw", gyro.getYaw());
+    	
+    	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
+    	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
+    	//coordServer.setResponse(x+","+y);
+    }
+    
+    public void disabledInit() {
+    	if(coordServer != null) {
+    		coordServer.stop();
+    	}
     }
     
     /**

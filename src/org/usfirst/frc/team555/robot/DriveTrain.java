@@ -1,6 +1,6 @@
 package org.usfirst.frc.team555.robot;
 //import edu.wpi.first.wpilibj.PIDAllen;
-import edu.wpi.first.wpilibj.PIDController; 
+//import edu.wpi.first.wpilibj.PIDController; 
 
 
 
@@ -10,22 +10,22 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = -1.0/180;
-	private static final double D_CORRECTION_FACTOR = 0/180.0;
+	private static final double P_CORRECTION_FACTOR = .02;
+	private static final double D_CORRECTION_FACTOR = 0.2;
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
-	private static final int TIME_TO_DISABLE=15;//iterations until lock is deactivated
+	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
 	
-	private CourseLockPIDSource courseLockInput;
+	//private CourseLockPIDSource courseLockInput;
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
-	private CourseLockPIDSource source;
+	//private CourseLockPIDSource source;
 	//private PIDController pid;
-	private PIDController pid;
-	private CourseLockPIDOut pidOut;
+	public PID pid; //Jack's personal PIDController
+	//private CourseLockPIDOut pidOut;
 	
-	private double totalError;
+	//private double totalError;
 	
 	//private double prevAngle = 0;
 	//private double angleChange = 0;
@@ -34,10 +34,11 @@ public class DriveTrain {
 	//private int rightAdjustments = 0;
 	
 	public boolean isControlled;
+	public boolean lock;
 	
 	private double angle=0;
-	private double lastAngle=0;
-	private double goalAngle=0;
+	//private double lastAngle=0;
+	//private double goalAngle=0;
 	private int loopsSinceLastLock=TIME_TO_DISABLE;
 	private double netSpd;
 	
@@ -49,16 +50,12 @@ public class DriveTrain {
 	{
 		leftWheels = new DriveMotor[WHEELS_PER_SIDE];
 		rightWheels = new DriveMotor[WHEELS_PER_SIDE];
-		source = new CourseLockPIDSource();
-		pidOut = new CourseLockPIDOut();
-		//pid = new PIDController(P_CORRECTION_FACTOR, D_CORRECTION_FACTOR, I_CORRECTION_FACTOR, source, pidOut);
-		pid = new PIDController(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR, source, pidOut, .5);
-		//pid.setContinuous();
-		//pid.reset(); 
-		pid.enable();
-		pid.setInputRange(-1800, 3600);
-		pid.setOutputRange(-.25,.25);
-		pid.setSetpoint(0.0);
+		//source = new CourseLockPIDSource();
+		//pidOut = new CourseLockPIDOut();
+		pid = new PID(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR);
+		Robot.dashboard.putNumber("Kp", P_CORRECTION_FACTOR);
+		Robot.dashboard.putNumber("Kd", D_CORRECTION_FACTOR);
+		
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
 			leftWheels [i]= new DriveMotor(i*2,encoders); //1, 3
@@ -67,7 +64,7 @@ public class DriveTrain {
 		for(DriveMotor motor : rightWheels) {
 			motor.setInverted(true);
 		}
-		courseLockInput = new CourseLockPIDSource();
+		//courseLockInput = new CourseLockPIDSource();
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -78,46 +75,6 @@ public class DriveTrain {
 		leftSpd = lSpd;
 		rightSpd = rSpd;
 	}
-	
-	/*public void setSpeedArcade(double speed, double rotation)
-	{
-		if(speed > 1) speed = 1;
-		if (Control.halvingButtonPressed())
-			speed /= 2.0;
-		
-		rotation += 90;
-		if(rotation < 0) rotation += 360;
-		
-		
-		int sign;
-		if(rotation >= 180) {
-			sign = -1;
-			rotation = rotation-180;
-		}
-		else sign = 1;
-		
-		rotation = rotation/180;
-		
-		mode='s';
-		leftSpd = speed*rotation*sign;
-		rightSpd = speed*(1-rotation)*sign;
-		
-		Robot.dashboard.putNumber("before-left", leftSpd);
-		Robot.dashboard.putNumber("before-right", rightSpd);
-		
-		double factor = 0.0;
-		if(Math.abs(leftSpd) > Math.abs(rightSpd)) {
-			factor = Math.abs(speed/leftSpd);
-		} else {
-			factor = Math.abs(speed/rightSpd);
-		}
-		leftSpd = leftSpd * factor;
-		rightSpd = rightSpd * factor;
-		
-		
-		Robot.dashboard.putNumber("leftSpeed", leftSpd);
-		Robot.dashboard.putNumber("rightSpeed", rightSpd);
-	}*/
 	
 	public void setSpeedXY(double x, double y, boolean manual)
 	{
@@ -130,6 +87,8 @@ public class DriveTrain {
 		x*=.75;
 		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
+
+			lock=Control.getSlider(Control.DRIVE_STICK)<=0.5;
 			if(Math.abs(y)<Control.DEAD_ZONE)
 			{
 				isControlled=false;
@@ -147,6 +106,7 @@ public class DriveTrain {
 		}
 		else
 		{
+			lock=false;
 			isControlled=true;
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
@@ -169,24 +129,6 @@ public class DriveTrain {
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
-	/*public void setSpeedAllen(double x, double y)
-	{
-		if(x==0 && y==0) {
-			leftSpd = 0;
-			rightSpd = 0;
-		}
-		else{
-			double Max = 1.0;
-			if (x>y){
-				Max = Math.abs(Math.abs(y/x)+1);
-			}
-			else{
-				Max = Math.abs(Math.abs(x/y)+1);
-			}
-			leftSpd=(y+x)/Max;
-	        rightSpd=(y-x)/Max;
-		}
-	}*/
 	
 	public void setDistance(double d,double speed,double rotation)
 	{
@@ -204,20 +146,24 @@ public class DriveTrain {
 	}
 	
 	
-	public void setLock(boolean lock)
+	public void setLock(boolean userLock)
 	{
-		if(lock)
+		
+		if(lock||userLock)
 		{
 			if(loopsSinceLastLock>=TIME_TO_DISABLE)
 			{
-				courseLockInput.setTarget();
+				//courseLockInput.setTarget();
+				pid.setTarget();
 				Robot.dashboard.putString("Lock", "on");
 			}
+			pid.calculate();
 			courseLock();
 			loopsSinceLastLock=0;
 		}
 		else
 		{
+			pid.calculate();
 			loopsSinceLastLock++;
 			Robot.dashboard.putString("Lock", "off");
 		}
@@ -227,14 +173,34 @@ public class DriveTrain {
 	{		
 		//double correction=angle*P_CORRECTION_FACTOR*(angle-lastAngle)*D_CORRECTION_FACTOR;
 		double correction = pid.get();
-		leftSpd=netSpd-correction;
-		rightSpd=netSpd+correction;
+		
+		if (netSpd > 0){
+			if(1+correction!=0){
+				rightSpd=netSpd*(1/(1+correction));	
+			}
+			else
+			{
+				rightSpd=0;
+			}
+			leftSpd=netSpd*(1+correction);
+		}
+		else {
+			if(1+correction!=0){
+				leftSpd=netSpd*(1/(1+correction));
+			}
+			else
+			{
+				leftSpd=0;
+			}
+			rightSpd=netSpd*(1+correction);
+		}
 		//lastAngle = angle;
-		Robot.dashboard.putString("PIDEnabled?", pid.isEnabled() ? "true" : "false" );
+		//Robot.dashboard.putString("PIDEnabled?", pid.isEnabled() ? "true" : "false" );
 		Robot.dashboard.putNumber("Correction", correction);
 		Robot.dashboard.putNumber("Error", pid.getError());
+		pid.setPID(Robot.dashboard.getNumber("Kp"), I_CORRECTION_FACTOR, Robot.dashboard.getNumber("Kd"));
 		Robot.dashboard.putNumber("Kp", pid.getP());
-		Robot.dashboard.putNumber("SetpointChange", pid.getDeltaSetpoint());
+		Robot.dashboard.putNumber("Kd", pid.getD());
 		return angle;
 	}
 	
@@ -289,25 +255,7 @@ public class DriveTrain {
 				distance-=sum/(leftWheels.length+rightWheels.length);
 			}
 		}
-		lastAngle=angle;
-		/*
-		double yaw = Robot.gyro.getYaw();
-		if(yaw > 180) yaw = -360+yaw;
-		angleChange = Robot.gyro.getYaw() - prevAngle;
-		//Gyro adjustments
-		if(Control.getDegrees(Control.DRIVE_STICK) < 10 && Math.abs(angleChange) > YAW_THRESHOLD) 
-			rightAdjustments++;
-			rightSpd *= 1+(YAW_CHANGE_FACTOR*rightAdjustments);
-		} else {
-			rightAdjustments = 0;
-		}
-		if(Control.getDegrees(Control.DRIVE_STICK) > 360-10 && Math.abs(angleChange) > YAW_THRESHOLD) {
-			leftAdjustments++;
-			leftSpd *= 1+(YAW_CHANGE_FACTOR*leftAdjustments);
-		} else {
-			leftAdjustments = 0;
-		}
-		prevAngle = Robot.gyro.getYaw();*/
+		//lastAngle=angle;
 		
 		for(int i=0; i<leftWheels.length; i++)
 		{

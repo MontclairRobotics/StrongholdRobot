@@ -78,7 +78,7 @@ public class ManualShooter
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
-    		driveTrain.setSpeedXY(x, 0, false);
+    		driveTrain.setSpeedXY(x/2, 0, false);
     	}
     }
 }

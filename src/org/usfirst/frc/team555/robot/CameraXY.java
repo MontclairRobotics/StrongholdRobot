@@ -11,7 +11,7 @@ package org.usfirst.frc.team555.robot;
  * getX() and getY1() and getY2() for x and y
  * getTopY1() and getTopY2 for y starting at the top of display and increasing downwards
  */
-public class CameraXY
+/*public class CameraXY
 {   
     public static final double angleOfCamera=15;//degrees; 0 is facing ahead, 90 is facing ceiling
     public static final int windowHeight=500;//height of camera window, pixels
@@ -71,4 +71,4 @@ public class CameraXY
     {
         return (int)(window*(angle/FOV+.5)+.5);
     }
-}
+}*/

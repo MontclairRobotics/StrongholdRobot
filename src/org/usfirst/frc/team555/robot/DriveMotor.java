@@ -15,12 +15,11 @@ public class DriveMotor {
 	
 	private Encoder encoder;
 	private SpeedController motor;
-	private PIDController controller;
 	
 	private boolean encoders;
 	
 	private static boolean shutdown=false;
-	private static boolean SRX = false; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
+	private static boolean SRX = true; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
 	//Change values in Map for motor ports when switching modes
 	
 	public static final int ROT_TO_DEGREES = 360;
@@ -52,8 +51,6 @@ public class DriveMotor {
 			encoderPort2 = ports[2];
 			
 			encoder = new Encoder(encoderPort1, encoderPort2);
-			controller = new PIDController(PID_P,PID_I,PID_D, encoder, motor);
-			controller.enable();
 		}
 		if(motor instanceof CANTalon) {
 			CANTalon talon = (CANTalon)motor;
@@ -74,7 +71,6 @@ public class DriveMotor {
 		if(shutdown)
 		{
 			if(encoders) {
-				controller.disable();
 			} else {
 				speed = 0;
 			}
@@ -82,12 +78,12 @@ public class DriveMotor {
 			if(motor instanceof CANTalon) ((CANTalon)motor).disableControl();
 			return;
 		}
-		if(encoders) {
+		/*if(encoders) {
 			controller.setSetpoint(speed);
-		} else {
+		} else {*/
 			motor.set(speed);
 			Robot.dashboard.putNumber("Speed-" + motorPort, speed);
-		}
+		//}
 	}
 	
 	public boolean isInverted() {
