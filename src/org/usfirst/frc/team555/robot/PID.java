@@ -67,8 +67,7 @@ public class PID {
 
 	public double get()
 	{
-		angle=getCurrentVal()-target;
-		angle=((angle+180)%360+360)%360-180;
+		
 		return out;
 	}
 	
@@ -86,7 +85,9 @@ public class PID {
 	
 	public void calculate()
 	{
-		error=target-angle;
+		error=target-getCurrentVal();
+		error=((error+180)%360+360)%360-180;
+		//error=target-angle;
 		totalError+=error;
 		if (I != 0) 
 		{

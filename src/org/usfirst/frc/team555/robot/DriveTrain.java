@@ -10,8 +10,8 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = .02;
-	private static final double D_CORRECTION_FACTOR = 0.2;
+	private static final double P_CORRECTION_FACTOR = .01;
+	private static final double D_CORRECTION_FACTOR = 10*P_CORRECTION_FACTOR;
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
 	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
 	
@@ -157,6 +157,7 @@ public class DriveTrain {
 				pid.setTarget();
 				Robot.dashboard.putString("Lock", "on");
 			}
+			
 			pid.calculate();
 			courseLock();
 			loopsSinceLastLock=0;
@@ -175,7 +176,7 @@ public class DriveTrain {
 		double correction = pid.get();
 		
 		if (netSpd > 0){
-			if(1+correction!=0){
+			if(1+correction > 0){
 				rightSpd=netSpd*(1/(1+correction));	
 			}
 			else
