@@ -1,0 +1,59 @@
+<html>
+	<head>
+	<style>
+.outsideWrapper{ 
+    width:256px; height:256px; 
+    margin:20px 60px; 
+    border:1px solid blue;}
+.insideWrapper{ 
+    width:100%; height:100%; 
+    position:relative;}
+.coveredImage{ 
+    width:100%; height:100%; 
+    position:absolute; top:0px; left:0px;
+}
+.coveringCanvas{ 
+    width:100%; height:100%; 
+    position:absolute; top:0px; left:0px;
+    background-color: rgba(255,0,0,.1);
+}
+</style>
+		<script>
+			var SIZE=20;
+			function update()
+			{
+				function reqListener () {
+				  result(this.responseText);
+				}
+
+				var oReq = new XMLHttpRequest();
+				oReq.addEventListener("load", reqListener);
+				oReq.open("GET", "http://localhost:8000/test");
+				oReq.send();
+			}
+			
+			function result(r)
+			{
+			document.getElementById("spot").innerHTML=r;
+			var coord=r.split(",");
+			
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.clearRect(0, 0, c.width, c.height);
+			var ctx = c.getContext("2d");
+			ctx.fillStyle = "#FF0000";
+			ctx.fillRect(coord[0]-SIZE/2,coord[1]-SIZE/2,SIZE,SIZE);
+			}
+			window.setInterval(function(){ update(); },100);
+		</script>
+	</head>
+	<body>
+		<div class="outsideWrapper">
+    <div class="insideWrapper">
+        <img src="blue.jpg" class="coveredImage">
+        <canvas class="coveringCanvas" id="myCanvas" width="250" height="250"></canvas>
+    </div>
+</div>
+	<div id="spot"></div>
+	</body>
+</html>
