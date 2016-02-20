@@ -20,12 +20,12 @@ public class DriveTrain {
 	double leftSpd, rightSpd;
 	private char mode;
 	private double distance;
-	//private CourseLockPIDSource source;
-	//private PIDController pid;
+	
 	public PID pid; //Jack's personal PIDController
-	//private CourseLockPIDOut pidOut;
 	
 	//private double totalError;
+	public boolean backwards = false; 
+	private double totalError;
 	
 	//private double prevAngle = 0;
 	//private double angleChange = 0;
@@ -85,6 +85,9 @@ public class DriveTrain {
 	public void setSpeedXY(double x, double y)
 	{   
 		x*=.75;
+		if (backwards) {
+			y = y*-1;
+		}
 		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
 
