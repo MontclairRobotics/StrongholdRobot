@@ -14,13 +14,15 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     
     DriveTrain driveTrain;
-    ManualShooter shooter;
-    AutoShooter autoShooter;
+    Shooter shooter;
+    //AutoShooter autoShooter;
     //SocketManager netManager;
     
     AHRS ahrs;
     NavXAccelerometer accel;
     public static NavXGyro gyro;
+    private ShooterMotor leftShoot = new ShooterMotor(0);
+    private ShooterMotor rightShoot = new ShooterMotor(1);
     //PitchCorrector corrector;
     
     public static HTTP coordServer;
@@ -49,8 +51,9 @@ public class Robot extends IterativeRobot {
         gyro = new NavXGyro(ahrs);
 
         driveTrain = new DriveTrain();
-        shooter = new ManualShooter(driveTrain);
-        autoShooter=new AutoShooter(shooter);
+        shooter = new Shooter(driveTrain);
+        
+        //autoShooter=new AutoShooter(shooter);
         
         //netManager = new SocketManager();
         
@@ -97,19 +100,21 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
     	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
-        autoShooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.SHOOT_AUTOTARGET));
-        shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
-        		Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
+        //shooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.SHOOT_AUTOTARGET));
+        //shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
+        	//	Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
         shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK));
+        leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
+        rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
         update();
     }
     
     public void update() {
     	driveTrain.update();
     	shooter.update();
-    	autoShooter.update();
+    	//autoShooter.update();
     	
-    	if (Control.getButton(Control.DRIVE_stick, 7)) {
+    	if (Control.getButton(Control.DRIVE_STICK, 3)) {
     		driveTrain.backwards = true;
     		
     	} 

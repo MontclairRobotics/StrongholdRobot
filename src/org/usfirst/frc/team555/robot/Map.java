@@ -28,14 +28,18 @@ public class Map {
     
     public static final int[][] SHOOTER_MOTORS = {
     		//Wheel 1, wheel 2, pneumatic valve 1, valve 2
-    		{5, 1,2},
-    		{6,2,3}
+    		{6,7, 1},
+    		{7,2,3}
     };
     
-    public static final int[] SOLINOID_PORTS={
+    public static final int[] LIFT_SOLENOID_PORTS={
     		/*0,1,2*/
+    		0,1
     };
     
+    public static final int[] SHOOTER_SOLENOID_PORTS={
+    		3
+    };
     
     //BEGIN USELESS STUFF
     

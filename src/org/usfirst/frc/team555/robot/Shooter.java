@@ -101,20 +101,19 @@ public class Shooter {
 	
 	public void update()
 	{
+		updateButtons();
+		if(auto)
+		{
+			driveTrain.pid.setTargetNonReset(trajectory.getAngle());
+			speed=trajectory.getSpeed();
+		}
+		
 		if(on)
 		{
 			for(ShooterMotor motor : wheels) 
 	    	{
 	    		motor.setSpeed(speed);
 	    	}
-		}
-		if(auto)
-		{
-			driveTrain.pid.setTargetNonReset(trajectory.getAngle());
-		}
-		else
-		{
-			driveTrain.pid.setTarget();
 		}
 		
 		double[] autoCoords=trajectory.getNetworkTable();

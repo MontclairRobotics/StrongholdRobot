@@ -25,9 +25,9 @@ public class ManualShooter
     	wheels[1].setInverted(true);
 
         valves=new Solenoid[2];
-        for(int i=0;i<Map.SOLINOID_PORTS.length;i++)
+        for(int i=0;i<Map.SHOOTER_SOLENOID_PORTS.length;i++)
         {
-        	valves[i] = new Solenoid(Map.SOLINOID_PORTS[i]);
+        	valves[i] = new Solenoid(Map.SHOOTER_SOLENOID_PORTS[i]);
         }
         
         driveTrain=d;

@@ -19,7 +19,7 @@ public class DriveMotor {
 	private boolean encoders;
 	
 	private static boolean shutdown=false;
-	private static boolean SRX = true; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
+	private static boolean SRX = false; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
 	//Change values in Map for motor ports when switching modes
 	
 	public static final int ROT_TO_DEGREES = 360;
