@@ -25,7 +25,6 @@ public class DriveTrain {
 	
 	//private double totalError;
 	public boolean backwards = false; 
-	private double totalError;
 	
 	//private double prevAngle = 0;
 	//private double angleChange = 0;
@@ -35,6 +34,7 @@ public class DriveTrain {
 	
 	public boolean isControlled;
 	public boolean lock;
+	public boolean shooterLock;
 	
 	private double angle=0;
 	//private double lastAngle=0;
@@ -152,7 +152,7 @@ public class DriveTrain {
 	public void setLock(boolean userLock)
 	{
 		
-		if(lock||userLock)
+		if(lock||userLock||shooterLock)
 		{
 			if(loopsSinceLastLock>=TIME_TO_DISABLE)
 			{
@@ -161,22 +161,21 @@ public class DriveTrain {
 				Robot.dashboard.putString("Lock", "on");
 			}
 			
-			pid.calculate();
-			courseLock();
+			courseLock(pid.get());
 			loopsSinceLastLock=0;
 		}
 		else
 		{
-			pid.calculate();
+			pid.get();
 			loopsSinceLastLock++;
 			Robot.dashboard.putString("Lock", "off");
 		}
 	}
 	
-	public double courseLock()
+	public double courseLock(double correction)
 	{		
 		//double correction=angle*P_CORRECTION_FACTOR*(angle-lastAngle)*D_CORRECTION_FACTOR;
-		double correction = pid.get();
+		//double correction = pid.get();
 		
 		if (netSpd > 0){
 			if(1+correction > 0){
@@ -271,5 +270,19 @@ public class DriveTrain {
 			rightWheels[i].setSpeed(rightSpd);
 			rightWheels[i].update();
 		};
+	}
+	
+	public void setShooterTarget(double target)
+	{
+		if(isControlled)
+		{
+			pid.setTarget(target,false);
+			shooterLock=true;
+		}
+		else
+		{
+			pid.setTarget(0.0,false);
+			shooterLock=false;
+		}
 	}
 }

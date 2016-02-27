@@ -39,15 +39,18 @@ public class PID {
 	
 	public void setTarget(double t)
 	{
-		target=getCurrentVal()+t;
-		error=0.0;
-		prevError=0.0;
-		totalError=0.0;
+		setTarget(t,true);
 	}
 	
-	public void setTargetNonReset(double t)
+	public void setTarget(double t,boolean reset)
 	{
 		target=getCurrentVal()+t;
+		if(reset)
+		{
+			error=0.0;
+			prevError=0.0;
+			totalError=0.0;
+		}
 	}
 	
 	public void setPID(double P, double I, double D){
@@ -62,12 +65,12 @@ public class PID {
 	
 	public void setTarget()
 	{
-		setTarget(0.0);
+		setTarget(0.0,true);
 	}
 
 	public double get()
 	{
-		
+		calculate();
 		return out;
 	}
 	

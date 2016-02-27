@@ -87,24 +87,28 @@ public class Shooter {
 	
 	public void setJoystick(double x,double y)
     {
-		x*=TURN_FACTOR;
-		y*=AJUST_FACTOR;
     	if(Math.abs(y)>Control.DEAD_ZONE)
     	{
-    		goalY+=y;
+    		goalY+=y*AJUST_FACTOR;
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
-    		driveTrain.setSpeedXY(x/2, 0, false);
+    		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false);
     	}
+    	if(Math.abs(y)>Control.DEAD_ZONE && Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE))
+    	{
+    		setSpeed(y);
+    	}
+    	update();
     }
 	
 	public void update()
 	{
 		updateButtons();
+		trajectory.update();
 		if(auto)
 		{
-			driveTrain.pid.setTargetNonReset(trajectory.getAngle());
+			driveTrain.setShooterTarget(trajectory.getAngle());
 			speed=trajectory.getSpeed();
 		}
 		

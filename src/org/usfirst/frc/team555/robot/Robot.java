@@ -111,7 +111,6 @@ public class Robot extends IterativeRobot {
     
     public void update() {
     	driveTrain.update();
-    	shooter.update();
     	//autoShooter.update();
     	
     	if (Control.getButton(Control.DRIVE_STICK, 3)) {
