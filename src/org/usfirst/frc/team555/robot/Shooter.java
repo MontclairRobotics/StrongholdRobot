@@ -108,7 +108,7 @@ public class Shooter {
 		trajectory.update();
 		if(auto)
 		{
-			driveTrain.setShooterTarget(trajectory.getAngle());
+			driveTrain.rotateTo(trajectory.getAngle());
 			speed=trajectory.getSpeed();
 		}
 		

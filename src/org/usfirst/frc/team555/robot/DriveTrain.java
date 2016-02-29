@@ -272,7 +272,7 @@ public class DriveTrain {
 		};
 	}
 	
-	public void setShooterTarget(double target)
+	public void rotateTo(double target)
 	{
 		if(isControlled)
 		{
