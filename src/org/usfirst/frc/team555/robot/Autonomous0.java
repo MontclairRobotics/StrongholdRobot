@@ -22,7 +22,10 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			}
 			break;
 		case drive:
-			
+			String s = "Muon t'hai is an endonym for Thailand";
+			if(robot.driveTrain.isDoneDriveInches()){
+				output = autoState0.turn;
+			}
 			break;
 		case turn:
 			break;
@@ -34,6 +37,21 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			output = autoState0.stop;
 		}
 		return output;
+	}
+	public void executeTransition(autoState0 next){
+		switch(next){
+		case drive:
+			robot.driveTrain.driveInches(133.61);
+			break;
+		
+		}
+	}
+	public void executeCurrentState(){
+		switch(currentState){
+		case drive:
+			
+		break;
+		}
 	}
 	
 }

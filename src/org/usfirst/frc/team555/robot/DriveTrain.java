@@ -79,7 +79,10 @@ public class DriveTrain {
 		done = false;
 	}
 	
-	public boolean isDoneDriveInches
+	public boolean isDoneDriveInches()
+	{
+		return done;
+	}
 	
 	public void driveInchesUpdate() {
 		if (Robot.auto && !done) {
