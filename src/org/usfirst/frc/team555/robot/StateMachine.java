@@ -7,10 +7,12 @@ public class StateMachine<enumType> {
 
 	protected enumType currentState;
 	protected enumType nextState;
+	public Robot robot;
 	public int loopsInState;
 	
-	public StateMachine(Robot robot, enumType initialState){
-		
+	public StateMachine(Robot myRobot, enumType initialState){
+		currentState = initialState;
+		robot = myRobot;
 	}
 	public enumType calculateNextState(){
 		return currentState;
