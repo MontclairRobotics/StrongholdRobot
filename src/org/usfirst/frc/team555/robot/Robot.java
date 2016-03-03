@@ -26,6 +26,7 @@ public class Robot extends IterativeRobot {
     //PitchCorrector corrector;
     
     public static HTTP coordServer;
+    public static boolean auto;
     
     public static SmartDashboard dashboard;
     Thread dashboardThread;
@@ -65,6 +66,7 @@ public class Robot extends IterativeRobot {
 //		autoSelected = dashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
+		auto = true;
     }
 
     /**
@@ -95,6 +97,7 @@ public class Robot extends IterativeRobot {
         } catch(Exception e) {
         	e.printStackTrace();
         }
+        auto = false;
     }
     
     public void teleopPeriodic() {

@@ -15,6 +15,12 @@ public class DriveTrain {
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
 	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
 	
+	public static final double WHEEL_CIRC = 8 * Math.PI;
+	public static final int SLOW_CLICKS = 180;
+	private double clicksRemaining = 0;
+	private double prevClicks = 0;
+	private boolean done = true;
+	
 	//private CourseLockPIDSource courseLockInput;
 	private DriveMotor[] leftWheels, rightWheels;
 	double leftSpd, rightSpd;
@@ -65,6 +71,40 @@ public class DriveTrain {
 			motor.setInverted(true);
 		}
 		//courseLockInput = new CourseLockPIDSource();
+	}
+	
+	public void driveInches(double in) {
+		clicksRemaining = in / WHEEL_CIRC * 360;
+		prevClicks = getAvgEncoderClicks();
+		done = false;
+	}
+	
+	public boolean isDoneDriveInches
+	
+	public void driveInchesUpdate() {
+		if (Robot.auto && !done) {
+			clicksRemaining -= getAvgEncoderClicks() - prevClicks;
+			prevClicks = getAvgEncoderClicks();
+			
+			if (clicksRemaining > 0) {
+				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
+				leftSpd = rightSpd = spd;
+			} else {
+				//clicksRemaining = 0;
+				leftSpd = rightSpd = 0;
+				done = true;
+			}
+		}
+	}
+	
+	public double getAvgEncoderClicks() {
+		double sum = 0;
+		
+		for (int i = 0; i < 2; i++) {
+			sum += leftWheels[i].getDistance() + rightWheels[i].getDistance();
+		}
+		
+		return sum / 4;
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -238,6 +278,10 @@ public class DriveTrain {
 		{
 			return;
 		}*/
+		if (Robot.auto) {
+			driveInchesUpdate();
+		}
+		
 		if(mode=='d')
 		{
 			if(distance<=0)
