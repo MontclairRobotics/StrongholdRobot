@@ -79,6 +79,16 @@ public class DriveTrain {
 		done = false;
 	}
 	
+	// TODO: driveFeet(double) derives from driveInches(double)
+	public void driveFeet(double ft) {
+		return driveInches(12*ft)
+	}
+	
+	// TODO: drive(double, double) derives from driveInches(double)
+	public void drive(double ft, double in) {
+		return driveFeet(ft) + driveInches(in)
+	}
+	
 	public boolean isDoneDriveInches()
 	{
 		return done;
