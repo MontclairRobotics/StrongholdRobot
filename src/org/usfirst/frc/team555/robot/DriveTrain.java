@@ -76,6 +76,11 @@ public class DriveTrain {
 	public void driveInches(double in) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		prevClicks = getAvgEncoderClicks();
+		
+		if (!done) {
+			Robot.dashboard.putString("auto", "DRIVE: interrupted");
+		}
+		
 		done = false;
 		
 		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
@@ -83,12 +88,12 @@ public class DriveTrain {
 	
 	// TODO: driveFeet(double) derives from driveInches(double)
 	public void driveFeet(double ft) {
-		return driveInches(12*ft);
+		driveInches(12*ft);
 	}
 	
 	// TODO: drive(double, double) derives from driveInches(double)
 	public void drive(double ft, double in) {
-		return driveFeet(ft) + driveInches(in);
+		driveInches(12*ft + in);
 	}
 	
 	public boolean isDoneDriveInches()
