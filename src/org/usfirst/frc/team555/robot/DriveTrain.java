@@ -91,14 +91,10 @@ public class DriveTrain {
 			
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
-				//leftSpd = rightSpd = spd;
-				if(spd>1)spd=1;
-				if(spd<-1)spd=-1;
-				setSpeedXY(0,spd);
+				leftSpd = rightSpd = spd;
 			} else {
 				//clicksRemaining = 0;
-				//leftSpd = rightSpd = 0;
-				setSpeedXY(0,0);
+				leftSpd = rightSpd = 0;
 				done = true;
 			}
 		}
@@ -335,9 +331,5 @@ public class DriveTrain {
 			pid.setTarget(0.0,false);
 			shooterLock=false;
 		}
-	}
-	public void rotateToRad(double rad)//I don't think this will be useful, but I am including it anyway.
-	{
-		rotateTo(Math.toDegrees(rad));
 	}
 }
