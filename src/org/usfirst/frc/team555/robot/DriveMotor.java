@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveMotor {
@@ -19,31 +20,54 @@ public class DriveMotor {
 	private boolean encoders;
 	
 	private static boolean shutdown=false;
-	private static boolean SRX = false; //TRUE FOR TALONSRX, FALSE FOR VICTORSP
+	private static char defaultType = 's'; //s FOR TALONSRX, v FOR VICTORSP, t for Talon
 	//Change values in Map for motor ports when switching modes
 	
 	public static final int ROT_TO_DEGREES = 360;
 	public static double PID_P = 0.1, PID_I = 0.001, PID_D = 0.0;
 	public static final double SCALE_FACTOR = 1;
 	
-	public DriveMotor(int id, boolean encoders)
-	{
-		this(Map.MOTOR_PORTS[id], encoders, 's');
-	}
+	
 	
 	public DriveMotor(int id) {
-		this(Map.MOTOR_PORTS[id], true, 'd');
+		this(Map.MOTOR_PORTS[id]);
+	}
+	public DriveMotor(int[] ports)
+	{
+		this(ports,true);
 	}
 	
-	public DriveMotor(int[] ports, boolean encoders, char type) {
+	public DriveMotor(int id, boolean encoders)
+	{
+		this(Map.MOTOR_PORTS[id], encoders);
+	}
+	public DriveMotor(int[]ports, boolean encoders)
+	{
+		this(ports,encoders,defaultType);
+	}
+	
+	public DriveMotor(int id,boolean encoders, char motorType)
+	{
+		this(Map.MOTOR_PORTS[id],encoders,motorType);
+	}
+	public DriveMotor(int[] ports, boolean encoders,char motorType) {
 		this.encoders = encoders;
 		//int[][] ports = type == 'd' ? Map.MOTOR_PORTS : Map.SHOOTER_PORTS;
 		motorPort = ports[0];
-		//TODO: What!?
-		if(SRX) {
+		// What!?
+		switch(motorType)
+		{
+		case 's':
 			motor = new CANTalon(motorPort);
-		} else {
+			break;
+		case 'v':
 			motor = new VictorSP(motorPort);
+			break;
+		case 't':
+			motor = new Talon(motorPort);
+			break;
+		default:
+			break;
 		}
 		
 		if(encoders) {
@@ -63,7 +87,7 @@ public class DriveMotor {
 	
 	public void setSpeed(double spd)
 	{
-		speed = encoders ? spd * ROT_TO_DEGREES : spd*SCALE_FACTOR; //TODO: Control scale constant
+		speed = encoders ? spd * ROT_TO_DEGREES : spd*SCALE_FACTOR; // Control scale constant
 	}
 	
 	public void update()

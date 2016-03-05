@@ -21,10 +21,13 @@ public class DriveTrain {
 	private double prevClicks = 0;
 	private boolean driveDone = true;
 	
-	public static final int SLOW_DEGS = 5;
-	private float degreesRemaining = 0;
-	private float prevDegrees = 0;
-	private boolean rotationDone = true;
+	//public static final int SLOW_DEGS = 5;
+	//private double degreesRemaining = 0;
+	//private double prevDegrees = 0;
+	//private boolean rotationDone = true;
+	private double rotTarget=0.0;
+	private boolean rotDone=true;
+	private double rotSlow=5.0;
 	
 	
 	//private CourseLockPIDSource courseLockInput;
@@ -79,7 +82,7 @@ public class DriveTrain {
 		//courseLockInput = new CourseLockPIDSource();
 	}
 	
-	public boolean autoInterrupted() {
+	/*public boolean autoInterrupted() {
 		boolean isRude = false;
 		
 		switch (false) {
@@ -95,43 +98,51 @@ public class DriveTrain {
 		}
 		
 		return isRude;
-	}
+	}*/
 	
-	public void driveInches(double in) {
+	public void driveInches(double in,boolean dir) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		prevClicks = getAvgEncoderClicks();
-		autoInterrupted();
+		//autoInterrupted();
 		driveDone = false;
-		
+		backwards=!dir;
+		pid.setTarget();
 		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
 	}
 	
-	// TODO: driveFeet(double) derives from driveInches(double)
-	public void driveFeet(double ft) {
-		driveInches(12*ft);
+	// driveFeet(double) derives from driveInches(double)
+	public void driveFeet(double ft,boolean dir) {
+		driveInches(12*ft,dir);
 	}
 	
-	// TODO: drive(double, double) derives from driveInches(double)
-	public void drive(double ft, double in) {
-		driveInches(12*ft + in);
+	//  drive(double, double) derives from driveInches(double)
+	public void driveFtIn(double ft, double in,boolean dir) {
+		driveInches(12*ft + in,dir);
 	}
 	
 	public boolean isDoneDriveInches()
 	{
 		return driveDone;
 	}
+	public boolean isDoneRotation()
+	{
+		return rotDone;
+	}
 	
 	public void driveInchesUpdate() {
 		if (Robot.auto && !driveDone) {
-			clicksRemaining -= (getAvgEncoderClicks(leftWheels + rightWheels) - prevClicks);
-			prevClicks = getAvgEncoderClicks(leftWheels + rightWheels);
+			double clicks=getAvgEncoderClicks();
+			if(backwards)clicks=-1*clicks;
+			clicksRemaining -= (clicks - prevClicks);
+			prevClicks = clicks;
 			
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
-				leftSpd = rightSpd = spd;
+				setSpeedXY(0,spd,false,false);
+				setLock();
 			} else {
 				//clicksRemaining = 0;
-				leftSpd = rightSpd = 0;
+				setSpeedXY(0,0,false,false);
 				driveDone = true;
 				
 				Robot.dashboard.putString("auto", "DRIVE: completed");
@@ -139,7 +150,19 @@ public class DriveTrain {
 		}
 	}
 	
-	// NOTE: Positive degrees is clockwise
+	public void rotateDegrees(double deg)
+	{
+		pid.setTarget(deg);
+		rotTarget=deg+Robot.gyro.getYaw();
+	}
+	public void rotateDegreesUpdate()
+	{
+		setSpeedXY(0,0,false,false);
+		setLock();
+		rotDone=(Math.abs(Robot.gyro.getYaw()-rotTarget)<rotSlow);
+	}
+	
+	/*// NOTE: Positive degrees is clockwise
 	public void rotateDegrees(double deg) {
 		degreesRemaining = deg;
 		prevDegrees = Robot.gyro.getYaw();
@@ -166,16 +189,16 @@ public class DriveTrain {
 				Robot.dashboard.putString("auto", "ROTATION: completed");
 			}
 		}
-	}
+	}*/
 	
-	public double getAvgEncoderClicks(DriveMotor[] wheels) {
+	public double getAvgEncoderClicks() {
 		double sum = 0;
 		
-		for (int i = 0; i < wheels.length; i++) {
-			sum += leftWheels[i].getDistance();
+		for (int i = 0; i < leftWheels.length; i++) {
+			sum += leftWheels[i].getDistance()+rightWheels[i].getDistance();
 		}
 		
-		return sum / wheels.length;
+		return sum / leftWheels.length;
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -186,14 +209,17 @@ public class DriveTrain {
 		leftSpd = lSpd;
 		rightSpd = rSpd;
 	}
-	
+	/*
 	public void setSpeedXY(double x, double y, boolean manual)
 	{
-		setSpeedXY(x,y);
-		isControlled=manual;
-	}
+		setSpeedXY(x,y,manual,
+	}*/
 	
 	public void setSpeedXY(double x, double y)
+	{
+		setSpeedXY(x,y,true,Control.getSlider(Control.DRIVE_STICK)<=0.5);
+	}
+	public void setSpeedXY(double x, double y,boolean manual,boolean userLock)
 	{   
 		x*=.75;
 		if (backwards) {
@@ -202,7 +228,7 @@ public class DriveTrain {
 		if (Math.abs(x)<Control.DEAD_ZONE)
 		{
 
-			lock=Control.getSlider(Control.DRIVE_STICK)<=0.5;
+			lock=userLock;
 			if(Math.abs(y)<Control.DEAD_ZONE)
 			{
 				isControlled=false;
@@ -212,7 +238,7 @@ public class DriveTrain {
 			}
 			else
 			{
-				isControlled=true;
+				isControlled=manual;
 				leftSpd=y;
 				rightSpd=y;
 				netSpd=y;
@@ -221,7 +247,7 @@ public class DriveTrain {
 		else
 		{
 			lock=false;
-			isControlled=true;
+			isControlled=manual;
 			double max;
 			if(Math.abs(x)>=Math.abs(y))
 			{
@@ -272,8 +298,7 @@ public class DriveTrain {
 				Robot.dashboard.putString("Lock", "on");
 			}
 			
-			courseLock(pid.get());
-			loopsSinceLastLock=0;
+			setLock();
 		}
 		else
 		{
@@ -281,6 +306,11 @@ public class DriveTrain {
 			loopsSinceLastLock++;
 			Robot.dashboard.putString("Lock", "off");
 		}
+	}
+	
+	public void setLock()
+	{
+		courseLock(pid.get());
 	}
 	
 	public double courseLock(double correction)
@@ -387,7 +417,7 @@ public class DriveTrain {
 			rightWheels[i].update();
 		};
 	}
-	
+	/*
 	public void rotateTo(double target)
 	{
 		if(isControlled)
@@ -400,5 +430,5 @@ public class DriveTrain {
 			pid.setTarget(0.0,false);
 			shooterLock=false;
 		}
-	}
+	}*/
 }

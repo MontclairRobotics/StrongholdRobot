@@ -36,7 +36,7 @@ public class StateMachine<enumType> {
 		
 	}
 	
-	public void executeTransition(enumType current, enumType next){
+	public void executeTransition(enumType cur,enumType next){
 		
 	}
 }

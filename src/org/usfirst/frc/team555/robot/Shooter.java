@@ -27,8 +27,13 @@ public class Shooter {
 		valves=new Valves();
 		driveTrain=dt;
 		trajectory=new AutoTrajectory();
+		wheels=new ShooterMotor[2];
+		for(int i=0;i<wheels.length;i++)
+		{
+			wheels[i]=new ShooterMotor(i);
+		}
+		wheels[1].setInverted(true);
 	}
-	
 	public void setSpeed(double spd)
 	{
 		speed=spd;
@@ -93,7 +98,7 @@ public class Shooter {
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
-    		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false);
+    		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
     	}
     	if(Math.abs(y)>Control.DEAD_ZONE && Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE))
     	{
@@ -108,8 +113,8 @@ public class Shooter {
 		trajectory.update();
 		if(auto)
 		{
-			driveTrain.rotateTo(trajectory.getAngle());
-			speed=trajectory.getSpeed();
+			//driveTrain.rotateTo(trajectory.getAngle());
+			//speed=trajectory.getSpeed();
 		}
 		
 		if(on)

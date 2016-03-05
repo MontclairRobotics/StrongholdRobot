@@ -41,7 +41,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	public void executeTransition(autoState0 next){
 		switch(next){
 		case drive:
-			robot.driveTrain.driveInches(133.61);
+			robot.driveTrain.driveInches(133.61,true);
 			break;
 		
 		}
