@@ -21,8 +21,8 @@ public class Map {
         //Motor port, encoder port 1, encoder port 2
     	//TODO: Actual values
         {3,0,1},
-        {5,0,1},
-        {2,2,3},
+        {2,0,1},
+        {5,2,3},
         {4,2,3}
     };
     

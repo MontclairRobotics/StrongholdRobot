@@ -21,8 +21,8 @@ public class Robot extends IterativeRobot {
     AHRS ahrs;
     NavXAccelerometer accel;
     public static NavXGyro gyro;
-    private ShooterMotor leftShoot = new ShooterMotor(0);
-    private ShooterMotor rightShoot = new ShooterMotor(1);
+    //private ShooterMotor leftShoot = new ShooterMotor(0);
+    //private ShooterMotor rightShoot = new ShooterMotor(1);
     //PitchCorrector corrector;
     
     public static HTTP coordServer;
@@ -107,8 +107,8 @@ public class Robot extends IterativeRobot {
         //shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
         	//	Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
         shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK));
-        leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
-        rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
+        //leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
+        //rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
         update();
     }
     

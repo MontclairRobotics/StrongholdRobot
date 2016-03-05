@@ -20,6 +20,7 @@ public class DriveTrain {
 	private double clicksRemaining = 0;
 	private double prevClicks = 0;
 	private boolean driveDone = true;
+	private double autoDriveSpd;
 	
 	//public static final int SLOW_DEGS = 5;
 	//private double degreesRemaining = 0;
@@ -100,24 +101,25 @@ public class DriveTrain {
 		return isRude;
 	}*/
 	
-	public void driveInches(double in,boolean dir) {
+	public void driveInches(double in,boolean dir,double spd) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		prevClicks = getAvgEncoderClicks();
 		//autoInterrupted();
 		driveDone = false;
+		autoDriveSpd=spd;
 		backwards=!dir;
 		pid.setTarget();
 		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
 	}
 	
 	// driveFeet(double) derives from driveInches(double)
-	public void driveFeet(double ft,boolean dir) {
-		driveInches(12*ft,dir);
+	public void driveFeet(double ft,boolean dir,double spd) {
+		driveInches(12*ft,dir,spd);
 	}
 	
 	//  drive(double, double) derives from driveInches(double)
-	public void driveFtIn(double ft, double in,boolean dir) {
-		driveInches(12*ft + in,dir);
+	public void driveFtIn(double ft, double in,boolean dir,double spd) {
+		driveInches(12*ft + in,dir,spd);
 	}
 	
 	public boolean isDoneDriveInches()
@@ -138,6 +140,8 @@ public class DriveTrain {
 			
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
+				if(spd>autoDriveSpd)spd=autoDriveSpd;
+				if(spd<-autoDriveSpd)spd=-autoDriveSpd;
 				setSpeedXY(0,spd,false,false);
 				setLock();
 			} else {
