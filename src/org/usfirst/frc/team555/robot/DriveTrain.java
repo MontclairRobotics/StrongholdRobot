@@ -19,7 +19,13 @@ public class DriveTrain {
 	public static final int SLOW_CLICKS = 180;
 	private double clicksRemaining = 0;
 	private double prevClicks = 0;
-	private boolean done = true;
+	private boolean driveDone = true;
+	
+	public static final int SLOW_DEGS = 5;
+	private float degreesRemaining = 0;
+	private float prevDegrees = 0;
+	private boolean rotationDone = true;
+	
 	
 	//private CourseLockPIDSource courseLockInput;
 	private DriveMotor[] leftWheels, rightWheels;
@@ -73,21 +79,52 @@ public class DriveTrain {
 		//courseLockInput = new CourseLockPIDSource();
 	}
 	
+	public boolean autoInterrupted() {
+		boolean isRude = false;
+		
+		switch (false) {
+			case driveDone:
+				isRude = true;
+				driveDone = true;
+				Robot.dashboard.putString("auto", "DRIVE: interrupted");
+			case rotationDone:
+				isRude = true;
+				driveDone = true;
+				Robot.dashboard.putString("auto", "ROTATION: interrupted");
+			default: break;
+		}
+		
+		return isRude;
+	}
+	
 	public void driveInches(double in) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		prevClicks = getAvgEncoderClicks();
-		done = false;
+		autoInterrupted();
+		driveDone = false;
+		
+		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
+	}
+	
+	// TODO: driveFeet(double) derives from driveInches(double)
+	public void driveFeet(double ft) {
+		driveInches(12*ft);
+	}
+	
+	// TODO: drive(double, double) derives from driveInches(double)
+	public void drive(double ft, double in) {
+		driveInches(12*ft + in);
 	}
 	
 	public boolean isDoneDriveInches()
 	{
-		return done;
+		return driveDone;
 	}
 	
 	public void driveInchesUpdate() {
-		if (Robot.auto && !done) {
-			clicksRemaining -= getAvgEncoderClicks() - prevClicks;
-			prevClicks = getAvgEncoderClicks();
+		if (Robot.auto && !driveDone) {
+			clicksRemaining -= (getAvgEncoderClicks(leftWheels + rightWheels) - prevClicks);
+			prevClicks = getAvgEncoderClicks(leftWheels + rightWheels);
 			
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
@@ -95,19 +132,50 @@ public class DriveTrain {
 			} else {
 				//clicksRemaining = 0;
 				leftSpd = rightSpd = 0;
-				done = true;
+				driveDone = true;
+				
+				Robot.dashboard.putString("auto", "DRIVE: completed");
 			}
 		}
 	}
 	
-	public double getAvgEncoderClicks() {
+	// NOTE: Positive degrees is clockwise
+	public void rotateDegrees(double deg) {
+		degreesRemaining = deg;
+		prevDegrees = Robot.gyro.getYaw();
+		autoInterrupted();
+		rotationDone = false;
+		
+		Robot.dashboard.putString("auto", "ROTATION " + deg + "°: initialized");
+	}
+	
+	public void rotateDegreesUpdate() {
+		if (Robot.auto && !rotationDone) {
+			degreesRemaining -= (Robot.gyro.getYaw() - prevDegrees);
+			prevDegrees = Robot.gyro.getYaw();
+			
+			if (degreesRemaining > 0) {
+				double spd = degreesRemaining / SLOW_DEGS + 0.25;
+				leftSpd = spd;
+				rightSpd = -spd;
+			} else {
+				//degreesRemaining = 0;
+				leftSpd = rightSpd = 0;
+				rotationDone = true;
+				
+				Robot.dashboard.putString("auto", "ROTATION: completed");
+			}
+		}
+	}
+	
+	public double getAvgEncoderClicks(DriveMotor[] wheels) {
 		double sum = 0;
 		
-		for (int i = 0; i < 2; i++) {
-			sum += leftWheels[i].getDistance() + rightWheels[i].getDistance();
+		for (int i = 0; i < wheels.length; i++) {
+			sum += leftWheels[i].getDistance();
 		}
 		
-		return sum / 4;
+		return sum / wheels.length;
 	}
 	
 	public void setSpeedTank(double lSpd,double rSpd)
@@ -283,6 +351,7 @@ public class DriveTrain {
 		}*/
 		if (Robot.auto) {
 			driveInchesUpdate();
+			rotateDegreesUpdate();
 		}
 		
 		if(mode=='d')
