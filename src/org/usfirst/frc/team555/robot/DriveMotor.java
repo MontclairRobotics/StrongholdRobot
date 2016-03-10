@@ -88,6 +88,8 @@ public class DriveMotor {
 	public void setSpeed(double spd)
 	{
 		speed = encoders ? spd * ROT_TO_DEGREES : spd*SCALE_FACTOR; // Control scale constant
+	
+		Robot.dashboard.putNumber("Motor "+motorPort, spd);
 	}
 	
 	public void update()

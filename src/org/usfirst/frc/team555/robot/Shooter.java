@@ -13,6 +13,7 @@ public class Shooter {
     private boolean out=false;
     private boolean on=false;
     private boolean auto=false;
+    private boolean manual=false;
     
     private double goalY=0.0;
     
@@ -90,8 +91,9 @@ public class Shooter {
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
 	}
 	
-	public void setJoystick(double x,double y)
+	public void setJoystick(double x,double y,boolean manual)
     {
+		this.manual=manual;
     	if(Math.abs(y)>Control.DEAD_ZONE)
     	{
     		goalY+=y*AJUST_FACTOR;
@@ -100,7 +102,7 @@ public class Shooter {
     	{
     		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
     	}
-    	if(Math.abs(y)>Control.DEAD_ZONE && Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE))
+    	if(Math.abs(y)>Control.DEAD_ZONE && manual)
     	{
     		setSpeed(y);
     	}
@@ -117,11 +119,13 @@ public class Shooter {
 			//speed=trajectory.getSpeed();
 		}
 		
-		if(on)
+		if(on||manual||true)
 		{
 			for(ShooterMotor motor : wheels) 
 	    	{
 	    		motor.setSpeed(speed);
+	    		//motor.setSpeed(100);
+	    		motor.update();
 	    	}
 		}
 		
