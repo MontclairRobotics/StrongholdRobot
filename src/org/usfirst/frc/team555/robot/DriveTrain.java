@@ -22,13 +22,13 @@ public class DriveTrain {
 	private boolean driveDone = true;
 	private double autoDriveSpd;
 	
-	//public static final int SLOW_DEGS = 5;
-	//private double degreesRemaining = 0;
-	//private double prevDegrees = 0;
-	//private boolean rotationDone = true;
-	private double rotTarget=0.0;
-	private boolean rotDone=true;
-	private double rotSlow=5.0;
+	public static final int SLOW_DEGS = 5;
+	private double degreesRemaining = 0;
+	private double prevDegrees = 0;
+	private boolean rotationDone = true;
+	//private double rotTarget=0.0;
+	//private boolean rotDone=true;
+	//private double rotSlow=5.0;
 	
 	
 	//private CourseLockPIDSource courseLockInput;
@@ -83,7 +83,7 @@ public class DriveTrain {
 		//courseLockInput = new CourseLockPIDSource();
 	}
 	
-	/*public boolean autoInterrupted() {
+	public boolean autoInterrupted() {
 		boolean isRude = false;
 		
 		switch (false) {
@@ -99,27 +99,27 @@ public class DriveTrain {
 		}
 		
 		return isRude;
-	}*/
+	}
 	
-	public void driveInches(double in,boolean dir,double spd) {
+	public void driveInches(double in, double spd) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		prevClicks = getAvgEncoderClicks();
-		//autoInterrupted();
+		autoInterrupted();
 		driveDone = false;
 		autoDriveSpd=spd;
-		backwards=!dir;
 		pid.setTarget();
+		
 		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
 	}
 	
 	// driveFeet(double) derives from driveInches(double)
-	public void driveFeet(double ft,boolean dir,double spd) {
-		driveInches(12*ft,dir,spd);
+	public void driveFeet(double ft, double spd) {
+		driveInches(12*ft, spd);
 	}
 	
 	//  drive(double, double) derives from driveInches(double)
-	public void driveFtIn(double ft, double in,boolean dir,double spd) {
-		driveInches(12*ft + in,dir,spd);
+	public void driveFtIn(double ft, double in, double spd) {
+		driveInches(12*ft + in, spd);
 	}
 	
 	public boolean isDoneDriveInches()
@@ -154,7 +154,7 @@ public class DriveTrain {
 		}
 	}
 	
-	public void rotateDegrees(double deg)
+	/*public void rotateDegrees(double deg)
 	{
 		pid.setTarget(deg);
 		rotTarget=deg+Robot.gyro.getYaw();
@@ -164,9 +164,9 @@ public class DriveTrain {
 		setSpeedXY(0,0,false,false);
 		setLock();
 		rotDone=(Math.abs(Robot.gyro.getYaw()-rotTarget)<rotSlow);
-	}
+	}*/
 	
-	/*// NOTE: Positive degrees is clockwise
+	// NOTE: Positive degrees is clockwise
 	public void rotateDegrees(double deg) {
 		degreesRemaining = deg;
 		prevDegrees = Robot.gyro.getYaw();
@@ -193,13 +193,13 @@ public class DriveTrain {
 				Robot.dashboard.putString("auto", "ROTATION: completed");
 			}
 		}
-	}*/
+	}
 	
 	public double getAvgEncoderClicks() {
 		double sum = 0;
 		
-		for (int i = 0; i < leftWheels.length; i++) {
-			sum += leftWheels[i].getDistance()+rightWheels[i].getDistance();
+		for (int i = 0; i < 2; i++) {
+			sum += leftWheels[i].getDistance() + rightWheels[i].getDistance();
 		}
 		
 		return sum / leftWheels.length;
