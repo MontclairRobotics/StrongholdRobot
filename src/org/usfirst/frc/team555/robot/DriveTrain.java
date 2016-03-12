@@ -10,7 +10,7 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = .01;
+	private static final double P_CORRECTION_FACTOR = .03;//.01;
 	private static final double D_CORRECTION_FACTOR = 10*P_CORRECTION_FACTOR;
 	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
 	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
@@ -132,17 +132,19 @@ public class DriveTrain {
 	}
 	
 	public void driveInchesUpdate() {
-		if (Robot.auto && !driveDone) {
+		Robot.dashboard.putString("REACHED POINT A","AAAAA");
+		if (!driveDone) {
+			Robot.dashboard.putString("REACHED POINT B", "BBBBB");
 			double clicks=getAvgEncoderClicks();
 			if(backwards)clicks=-1*clicks;
 			clicksRemaining -= (clicks - prevClicks);
 			prevClicks = clicks;
-			
+			Robot.dashboard.putNumber("clicks remaining",clicksRemaining);
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
 				if(spd>autoDriveSpd)spd=autoDriveSpd;
 				if(spd<-autoDriveSpd)spd=-autoDriveSpd;
-				setSpeedXY(0,spd,false,false);
+				setSpeedXY(0,spd,false,true);
 				setLock();
 			} else {
 				//clicksRemaining = 0;
@@ -301,7 +303,7 @@ public class DriveTrain {
 				pid.setTarget();
 				Robot.dashboard.putString("Lock", "on");
 			}
-			
+			loopsSinceLastLock=0;
 			setLock();
 		}
 		else

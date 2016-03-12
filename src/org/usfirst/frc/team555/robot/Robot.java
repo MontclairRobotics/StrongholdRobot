@@ -13,8 +13,8 @@ public class Robot extends IterativeRobot {
     String autoSelected;
     SendableChooser chooser;
     
-    DriveTrain driveTrain;
-    Shooter shooter;
+    public static DriveTrain driveTrain;
+    public static Shooter shooter;
     //AutoShooter autoShooter;
     //SocketManager netManager;
     
@@ -26,12 +26,14 @@ public class Robot extends IterativeRobot {
     //PitchCorrector corrector;
     
     public static HTTP coordServer;
-    public static boolean auto;
+    public static boolean auto=false;
     
     public static SmartDashboard dashboard;
     Thread dashboardThread;
     
     boolean[] lastValveButton;
+    
+    Autonomous0 Auto0;
 
     
     public void robotInit() {
@@ -53,6 +55,7 @@ public class Robot extends IterativeRobot {
 
         driveTrain = new DriveTrain();
         shooter = new Shooter(driveTrain);
+        Auto0 = new Autonomous0();
         
         //autoShooter=new AutoShooter(shooter);
         
@@ -62,18 +65,20 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
-    	autoSelected = (String) chooser.getSelected();
+    	//autoSelected = (String) chooser.getSelected();
 //		autoSelected = dashboard.getString("Auto Selector", defaultAuto);
-		System.out.println("Auto selected: " + autoSelected);
-		driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
+		//System.out.println("Auto selected: " + autoSelected);
+		//driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
 		auto = true;
+		Auto0.loopsInState=0;
+    	
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	switch(autoSelected) {
+    	/*switch(autoSelected) {
     	case customAuto:
         //Put custom auto code here   
             break;
@@ -81,7 +86,10 @@ public class Robot extends IterativeRobot {
     	default:
     	//Put default auto code here
             break;
-    	}
+    	}*/
+    	Auto0.update();
+    	driveTrain.update();
+    	
     }
     
     /**

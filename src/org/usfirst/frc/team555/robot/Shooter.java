@@ -102,7 +102,7 @@ public class Shooter {
     	{
     		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
     	}
-    	if(Math.abs(y)>Control.DEAD_ZONE && manual)
+    	if(Math.abs(y)>Control.DEAD_ZONE && manual||true)
     	{
     		setSpeed(y);
     	}
@@ -111,7 +111,7 @@ public class Shooter {
 	
 	public void update()
 	{
-		updateButtons();
+		//updateButtons();
 		trajectory.update();
 		if(auto)
 		{
