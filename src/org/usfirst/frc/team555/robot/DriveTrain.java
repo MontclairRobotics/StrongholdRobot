@@ -83,7 +83,7 @@ public class DriveTrain {
 		//courseLockInput = new CourseLockPIDSource();
 	}
 	
-	public boolean autoInterrupted() {
+	/*public boolean autoInterrupted() {
 		boolean isRude = false;
 		
 		switch (false) {
@@ -99,12 +99,17 @@ public class DriveTrain {
 		}
 		
 		return isRude;
-	}
+	}*/
 	
 	public void driveInches(double in, double spd) {
+		driveInches(in, false, spd);
+	}
+	
+	public void driveInches(double in, boolean backwards, double spd) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
+		if(backwards) clicksRemaining *= -1;
 		prevClicks = getAvgEncoderClicks();
-		autoInterrupted();
+		//autoInterrupted();
 		driveDone = false;
 		autoDriveSpd=spd;
 		pid.setTarget();
@@ -114,22 +119,22 @@ public class DriveTrain {
 	
 	// driveFeet(double) derives from driveInches(double)
 	public void driveFeet(double ft, double spd) {
-		driveInches(12*ft, spd);
+		driveInches(12*ft, false, spd);
 	}
 	
 	//  drive(double, double) derives from driveInches(double)
 	public void driveFtIn(double ft, double in, double spd) {
-		driveInches(12*ft + in, spd);
+		driveInches(12*ft + in, false, spd);
 	}
 	
 	public boolean isDoneDriveInches()
 	{
 		return driveDone;
 	}
-	public boolean isDoneRotation()
+	/*public boolean isDoneRotation()
 	{
 		return rotDone;
-	}
+	}*/
 	
 	public void driveInchesUpdate() {
 		Robot.dashboard.putString("REACHED POINT A","AAAAA");
@@ -172,7 +177,7 @@ public class DriveTrain {
 	public void rotateDegrees(double deg) {
 		degreesRemaining = deg;
 		prevDegrees = Robot.gyro.getYaw();
-		autoInterrupted();
+		//autoInterrupted();
 		rotationDone = false;
 		
 		Robot.dashboard.putString("auto", "ROTATION " + deg + "°: initialized");
