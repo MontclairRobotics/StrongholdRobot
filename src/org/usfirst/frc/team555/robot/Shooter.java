@@ -25,13 +25,13 @@ public class Shooter {
 	
 	public Shooter(DriveTrain dt)
 	{
-		valves=new Valves();
-		driveTrain=dt;
-		trajectory=new AutoTrajectory();
-		wheels=new ShooterMotor[2];
-		for(int i=0;i<wheels.length;i++)
+		valves = new Valves();
+		driveTrain = dt;
+		trajectory = new AutoTrajectory();
+		wheels = new ShooterMotor[2];
+		for(int i = 0; i < wheels.length; i++)
 		{
-			wheels[i]=new ShooterMotor(i);
+			wheels[i] = new ShooterMotor(i);
 		}
 		wheels[1].setInverted(true);
 	}
@@ -102,7 +102,7 @@ public class Shooter {
     	{
     		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
     	}
-    	if(Math.abs(y)>Control.DEAD_ZONE && manual||true)
+    	if(Math.abs(y)>Control.DEAD_ZONE && manual)
     	{
     		setSpeed(y);
     	}
@@ -111,20 +111,19 @@ public class Shooter {
 	
 	public void update()
 	{
-		//updateButtons();
+		updateButtons();
 		trajectory.update();
 		if(auto)
 		{
-			//driveTrain.rotateTo(trajectory.getAngle());
-			//speed=trajectory.getSpeed();
+			driveTrain.rotateTo(trajectory.getAngle());
+			speed=trajectory.getSpeed();
 		}
 		
-		if(on||manual||true)
+		if(on||manual)
 		{
 			for(ShooterMotor motor : wheels) 
 	    	{
 	    		motor.setSpeed(speed);
-	    		//motor.setSpeed(100);
 	    		motor.update();
 	    	}
 		}

@@ -9,17 +9,16 @@ public class Valves {
 	
 	public Valves()
 	{
-		LiftValves=new Solenoid[2];
-        for(int i=0;i<Map.LIFT_SOLENOID_PORTS.length;i++)
+		LiftValves = new Solenoid[2];
+        for(int i = 0; i < Map.LIFT_SOLENOID_PORTS.length; i++)
         {
         	LiftValves[i] = new Solenoid(Map.LIFT_SOLENOID_PORTS[i]);
         }
         
-        for(int i=0;i<Map.SHOOTER_SOLENOID_PORTS.length;i++)
+        for(int i = 0; i < Map.SHOOTER_SOLENOID_PORTS.length; i++)
         {
-        //	ShooterValves[i] = new Solenoid(Map.SHOOTER_SOLENOID_PORTS[i]);
+        	ShooterValves[i] = new Solenoid(Map.SHOOTER_SOLENOID_PORTS[i]);
         }
-        
 	}
 	
 	public void raise()

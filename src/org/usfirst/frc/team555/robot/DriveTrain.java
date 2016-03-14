@@ -423,7 +423,7 @@ public class DriveTrain {
 			rightWheels[i].update();
 		};
 	}
-	/*
+	
 	public void rotateTo(double target)
 	{
 		if(isControlled)
@@ -436,5 +436,5 @@ public class DriveTrain {
 			pid.setTarget(0.0,false);
 			shooterLock=false;
 		}
-	}*/
+	}
 }
