@@ -6,15 +6,18 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	
 	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI;
 	
-	public Autonomous0(Robot robot, autoState0 initialState) {
-		super(robot, initialState);
+	public Autonomous0(autoState0 initialState) {
+		super(initialState);
+	}
+	public Autonomous0(){
+		super(autoState0.start);
 	}
 
 	public autoState0 calculateNextState(){
 		autoState0 output = currentState;
 		switch (currentState){
 		case start:
-			output = autoState0.dropArm;
+			output = autoState0.drive;
 			break;
 		case dropArm:
 			if(loopsInState >= 75){
@@ -22,8 +25,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			}
 			break;
 		case drive:
-			String s = "Muon t'hai is an endonym for Thailand";
-			if(robot.driveTrain.isDoneDriveInches()){
+			//String s = "Muon t'hai is an endonym for Thailand";
+			if(Robot.driveTrain.isDoneDriveInches()){
 				output = autoState0.turn;
 			}
 			break;
@@ -38,12 +41,17 @@ public class Autonomous0 extends StateMachine<autoState0> {
 		}
 		return output;
 	}
-	public void executeTransition(autoState0 next){
-		switch(next){
-		case drive:
-			robot.driveTrain.driveInches(133.61,true, 50.0);
-			break;
-		
+	public void executeTransition(autoState0 cur,autoState0 next){
+		if(!cur.equals(next)){
+			switch(next){
+			case drive:
+				Robot.driveTrain.driveInches(133.61,true, 50.0);
+				Robot.dashboard.putString("DriceInchesActive", "reachedPoint1");
+				break;
+			default:
+				break;
+			
+			}
 		}
 	}
 	public void executeCurrentState(){
