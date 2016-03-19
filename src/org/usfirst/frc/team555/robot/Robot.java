@@ -2,9 +2,11 @@ package org.usfirst.frc.team555.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public class Robot extends IterativeRobot {
 	
@@ -34,6 +36,9 @@ public class Robot extends IterativeRobot {
     boolean[] lastValveButton;
     
     StateMachine<?> autoProgram;
+    
+    USBCamera camera;
+    CameraServer server;
 
     
     public void robotInit() {
@@ -66,6 +71,10 @@ public class Robot extends IterativeRobot {
 
         driveTrain = new DriveTrain();
         shooter = new Shooter(driveTrain);
+        
+        camera = new USBCamera();
+        server = CameraServer.getInstance();
+        server.startAutomaticCapture(camera);
         
         //autoShooter=new AutoShooter(shooter);
         
