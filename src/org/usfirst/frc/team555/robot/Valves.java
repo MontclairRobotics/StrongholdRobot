@@ -31,6 +31,7 @@ public class Valves {
 	
 	public void raise()
 	{
+		resetShooterPush();
 		for(Solenoid s : LiftValves) {
 			s.set(true);
 		}
@@ -39,6 +40,7 @@ public class Valves {
 	
 	public void lower()
 	{
+		resetShooterPush();
 		for(Solenoid s : LiftValves) {
 			s.set(false);
 		}
@@ -47,15 +49,22 @@ public class Valves {
 	
 	//TODO: Fill these in
 	public void raiseOne(){
-		
+		resetShooterPush();
+		for(Solenoid s : LiftValves) {
+			s.set(true);
+		}
 	}
 	
 	public void lowerOne(){
-		
+		resetShooterPush();
+		for(Solenoid s : LiftValves) {
+			s.set(false);
+		}
 	}
 	
 	public void halfOn()
 	{
+		resetShooterPush();
 		for(Solenoid s:HalfValves)
 		{
 			s.set(true);
@@ -63,6 +72,7 @@ public class Valves {
 	}
 	public void halfOff()
 	{
+		resetShooterPush();
 		for(Solenoid s:HalfValves)
 		{
 			s.set(false);
@@ -82,4 +92,12 @@ public class Valves {
 			s.set(false);
 		}
 	}
+	
+	public void resetShooterPush() {
+		for(Solenoid s : ShooterValves)
+        {
+        	s.set(false);
+        }
+	}
+	
 }
