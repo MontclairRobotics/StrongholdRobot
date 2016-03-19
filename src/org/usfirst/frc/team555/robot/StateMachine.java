@@ -7,11 +7,13 @@ public abstract class StateMachine<enumType> {
 
 	protected enumType currentState;
 	protected enumType nextState;
+	protected enumType startState;
 	//public Robot robot;
 	public int loopsInState;
 	
 	public StateMachine(enumType initialState){
 		currentState = initialState;
+		startState = initialState;
 	}
 	public abstract enumType calculateNextState();/*{
 		return currentState;
@@ -36,4 +38,9 @@ public abstract class StateMachine<enumType> {
 	public abstract void executeCurrentState();
 	
 	public abstract void executeTransition(enumType next);
+	
+	public void reset() {
+		loopsInState = 0;
+		currentState = startState;
+	}
 }

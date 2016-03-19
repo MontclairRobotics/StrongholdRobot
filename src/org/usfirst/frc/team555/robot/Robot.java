@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
-    SendableChooser chooser;
+    SendableChooser chooser, obstacleChooser;
     
     public static DriveTrain driveTrain;
     public static Shooter shooter;
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     
     boolean[] lastValveButton;
     
-    Autonomous0 Auto0;
+    StateMachine<?> autoProgram;
 
     
     public void robotInit() {
@@ -42,12 +42,23 @@ public class Robot extends IterativeRobot {
     	//dashboardThread.start();
     	
     	chooser = new SendableChooser();
-        chooser.addDefault("Default Auto", defaultAuto);
-        chooser.addObject("My Auto", customAuto);
+        chooser.addDefault("Forward", new Autonomous0());
+        chooser.addObject("Adjustable", new AutonomousAdjustable());
         dashboard.putData("Auto choices", chooser);     
+        
+        obstacleChooser = new SendableChooser();
+        obstacleChooser.addDefault("none", obstacles.none);
+        obstacleChooser.addObject("cheval", obstacles.chev);
+        obstacleChooser.addObject("low bar", obstacles.lowBar);
+        obstacleChooser.addObject("moat", obstacles.moat);
+        obstacleChooser.addObject("ramps", obstacles.ramps);
+        obstacleChooser.addObject("terrain", obstacles.terrain);
+        obstacleChooser.addObject("wall", obstacles.wall);
+        
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
+        dashboard.putNumber("auto position", 0);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
@@ -55,7 +66,6 @@ public class Robot extends IterativeRobot {
 
         driveTrain = new DriveTrain();
         shooter = new Shooter(driveTrain);
-        Auto0 = new Autonomous0();
         
         //autoShooter=new AutoShooter(shooter);
         
@@ -70,7 +80,21 @@ public class Robot extends IterativeRobot {
 		//System.out.println("Auto selected: " + autoSelected);
 		//driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
 		auto = true;
-		Auto0.loopsInState=0;
+		autoProgram = (StateMachine<?>)chooser.getSelected();
+		if(autoProgram instanceof AutonomousAdjustable) {
+			obstacles mode = (obstacles) obstacleChooser.getSelected();
+			int pos = (int) dashboard.getNumber("auto position");
+			boolean dir;
+			switch(mode) {
+			case none:
+				dir = true;
+				break;
+			default:
+				dir = true;
+				break;
+			}
+			autoProgram = new AutonomousAdjustable(dir, pos, mode);
+		}
     	
     }
 
@@ -87,7 +111,7 @@ public class Robot extends IterativeRobot {
     	//Put default auto code here
             break;
     	}*/
-    	Auto0.update();
+    	((StateMachine<?>)chooser.getSelected()).update();
     	driveTrain.update();
     	
     }

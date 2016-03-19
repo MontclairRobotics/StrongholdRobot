@@ -33,7 +33,7 @@ public class AutonomousAdjustable extends StateMachine<states> {
 			output = states.obstacle;
 			break;
 		case obstacle:
-			if(true/*driver.isDone()*/){
+			if(driver.isDone()){
 				output = states.turn;
 			}
 			break;

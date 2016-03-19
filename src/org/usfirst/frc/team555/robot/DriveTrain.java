@@ -12,7 +12,7 @@ public class DriveTrain {
 	public static final double YAW_CHANGE_FACTOR = 1;
 	private static final double P_CORRECTION_FACTOR = .03;//.01;
 	private static final double D_CORRECTION_FACTOR = 10*P_CORRECTION_FACTOR;
-	private static final double I_CORRECTION_FACTOR = 0.0;//TODO fill in after P is found
+	private static final double I_CORRECTION_FACTOR = 0.0;
 	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
 	
 	public static final double WHEEL_CIRC = 8 * Math.PI;
@@ -86,7 +86,7 @@ public class DriveTrain {
 	/*public boolean autoInterrupted() {
 		boolean isRude = false;
 		
-		switch (false) {
+		switch (true) {
 			case driveDone:
 				isRude = true;
 				driveDone = true;
@@ -106,6 +106,7 @@ public class DriveTrain {
 	}
 	
 	public void driveInches(double in, boolean backwards, double spd) {
+		//Speed between 0 and 1
 		clicksRemaining = in / WHEEL_CIRC * 360;
 		this.backwards = backwards;
 		prevClicks = getAvgEncoderClicks();
