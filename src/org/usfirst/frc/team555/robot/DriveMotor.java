@@ -106,7 +106,7 @@ public class DriveMotor {
 		} else {*/
 			motor.set(speed);
 			Robot.dashboard.putNumber("Speed-" + motorPort, speed);
-			Robot.dashboard.putNumber("encoder-" + motorPort, encoder.get());
+			if(encoders) Robot.dashboard.putNumber("encoder-" + motorPort, encoder.get());
 		//}
 	}
 	
