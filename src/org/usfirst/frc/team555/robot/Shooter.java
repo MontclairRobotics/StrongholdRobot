@@ -110,6 +110,7 @@ public class Shooter {
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
 		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
 		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
+		setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
 	}
 	
 	public void setJoystick(double x,double y,boolean manual)
@@ -129,6 +130,10 @@ public class Shooter {
     	}
     	update();
     }
+	
+	public void setReset(boolean val) {
+		if(val) valves.resetShooterPush();
+	}
 	
 	public void update()
 	{
