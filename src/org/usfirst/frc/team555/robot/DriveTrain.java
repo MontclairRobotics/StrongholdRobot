@@ -58,7 +58,7 @@ public class DriveTrain {
 	private int loopsSinceLastLock=TIME_TO_DISABLE;
 	private double netSpd;
 	
-	private static final boolean encoders=false;
+	private static final boolean encoders = false;
 	
 	public static boolean shutdown = false;
 	

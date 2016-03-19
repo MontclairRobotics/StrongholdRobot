@@ -96,10 +96,7 @@ public class DriveMotor {
 	{
 		if(shutdown)
 		{
-			if(encoders) {
-			} else {
-				speed = 0;
-			}
+			speed = 0;
 			motor.set(0);
 			if(motor instanceof CANTalon) ((CANTalon)motor).disableControl();
 			return;
@@ -109,6 +106,7 @@ public class DriveMotor {
 		} else {*/
 			motor.set(speed);
 			Robot.dashboard.putNumber("Speed-" + motorPort, speed);
+			Robot.dashboard.putNumber("encoder-" + motorPort, encoder.get());
 		//}
 	}
 	
