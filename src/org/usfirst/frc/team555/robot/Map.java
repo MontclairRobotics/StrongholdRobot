@@ -34,11 +34,15 @@ public class Map {
     
     public static final int[] LIFT_SOLENOID_PORTS={
     		/*0,1,2*/
-    		0,1
+    		0
     };
     
     public static final int[] SHOOTER_SOLENOID_PORTS={
     		3
+    };
+    
+    public static final int[] LIFT_HALF_PORTS={
+    		4
     };
     
     //BEGIN USELESS STUFF

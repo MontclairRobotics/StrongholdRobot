@@ -102,12 +102,12 @@ public class DriveTrain {
 	}*/
 	
 	public void driveInches(double in, double spd) {
-		driveInches(in, false, spd);
+		driveInches(in, spd < 0, Math.abs(spd));
 	}
 	
 	public void driveInches(double in, boolean backwards, double spd) {
 		clicksRemaining = in / WHEEL_CIRC * 360;
-		if(backwards) clicksRemaining *= -1;
+		this.backwards = backwards;
 		prevClicks = getAvgEncoderClicks();
 		//autoInterrupted();
 		driveDone = false;

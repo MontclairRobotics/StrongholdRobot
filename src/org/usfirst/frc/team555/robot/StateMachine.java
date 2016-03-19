@@ -27,7 +27,7 @@ public abstract class StateMachine<enumType> {
 			changed = !nextState.equals(currentState);
 			if(changed){
 				loopsInState = 0;
-				executeTransition(currentState, nextState);
+				executeTransition(nextState);
 			}
 			currentState = nextState;
 			executeCurrentState();
@@ -35,5 +35,5 @@ public abstract class StateMachine<enumType> {
 	}
 	public abstract void executeCurrentState();
 	
-	public abstract void executeTransition(enumType cur,enumType next);
+	public abstract void executeTransition(enumType next);
 }

@@ -6,10 +6,13 @@ public class Valves {
 	
 	private Solenoid[] LiftValves;
 	private Solenoid[] ShooterValves;
+	private Solenoid[] HalfValves;
 	
 	public Valves()
 	{
-		LiftValves = new Solenoid[2];
+		LiftValves = new Solenoid[Map.LIFT_SOLENOID_PORTS.length];
+		ShooterValves = new Solenoid[Map.SHOOTER_SOLENOID_PORTS.length];
+		HalfValves = new Solenoid[Map.LIFT_HALF_PORTS.length];
         for(int i = 0; i < Map.LIFT_SOLENOID_PORTS.length; i++)
         {
         	LiftValves[i] = new Solenoid(Map.LIFT_SOLENOID_PORTS[i]);
@@ -19,6 +22,11 @@ public class Valves {
         {
         	ShooterValves[i] = new Solenoid(Map.SHOOTER_SOLENOID_PORTS[i]);
         }
+        
+        for(int i = 0; i < Map.LIFT_HALF_PORTS.length; i++)
+        {
+        	HalfValves[i] = new Solenoid(Map.LIFT_HALF_PORTS[i]);
+        }
 	}
 	
 	public void raise()
@@ -26,11 +34,37 @@ public class Valves {
 		for(Solenoid s : LiftValves) {
 			s.set(true);
 		}
+		halfOn();
 	}
 	
 	public void lower()
 	{
 		for(Solenoid s : LiftValves) {
+			s.set(false);
+		}
+		halfOff();
+	}
+	
+	//TODO: Fill these in
+	public void raiseOne(){
+		
+	}
+	
+	public void lowerOne(){
+		
+	}
+	
+	public void halfOn()
+	{
+		for(Solenoid s:HalfValves)
+		{
+			s.set(true);
+		}
+	}
+	public void halfOff()
+	{
+		for(Solenoid s:HalfValves)
+		{
 			s.set(false);
 		}
 	}

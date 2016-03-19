@@ -13,6 +13,7 @@ public class Shooter {
     private boolean out=false;
     private boolean on=false;
     private boolean auto=false;
+    private boolean half=false;
     private boolean manual=false;
     
     private double goalY=0.0;
@@ -58,6 +59,24 @@ public class Shooter {
 		}
 	}
 	
+	public void halfUp(boolean val)
+	{
+		if(val && !half)
+		{
+			half=true;
+			valves.halfOn();
+		}
+	}
+	
+	public void halfDown(boolean val)
+	{
+		if(val && half)
+		{
+			half=false;
+			valves.halfOff();
+		}
+	}
+	
 	public void setOut(boolean val)
 	{
 		if(val && !out)
@@ -89,6 +108,8 @@ public class Shooter {
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
 		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
+		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
+		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
 	}
 	
 	public void setJoystick(double x,double y,boolean manual)
