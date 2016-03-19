@@ -59,6 +59,24 @@ public class Shooter {
 		}
 	}
 	
+	public void setOneUp(boolean val)
+	{
+		if(val && !up)
+		{
+			up=true;
+			valves.raiseOne();
+		}
+	}
+	
+	public void setOneDown(boolean val)
+	{
+		if(val && up)
+		{
+			up=false;
+			valves.lowerOne();
+		}
+	}
+	
 	public void halfUp(boolean val)
 	{
 		if(val && !half)
@@ -111,6 +129,9 @@ public class Shooter {
 		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
 		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
 		setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
+		setOneUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_UP_ONE));
+		setOneDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_DOWN_ONE));
+		
 	}
 	
 	public void setJoystick(double x,double y,boolean manual)
