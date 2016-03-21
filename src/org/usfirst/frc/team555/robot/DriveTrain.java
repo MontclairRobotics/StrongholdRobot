@@ -68,7 +68,7 @@ public class DriveTrain {
 		rightWheels = new DriveMotor[WHEELS_PER_SIDE];
 		//source = new CourseLockPIDSource();
 		//pidOut = new CourseLockPIDOut();
-		pid = new PID(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR);
+		pid = new PID(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR,-180,180);
 		Robot.dashboard.putNumber("Kp", P_CORRECTION_FACTOR);
 		Robot.dashboard.putNumber("Kd", D_CORRECTION_FACTOR);
 		
@@ -113,7 +113,7 @@ public class DriveTrain {
 		//autoInterrupted();
 		driveDone = false;
 		autoDriveSpd=spd;
-		pid.setTarget();
+		pid.setTarget(getCurrentVal());
 		
 		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
 	}
@@ -306,7 +306,7 @@ public class DriveTrain {
 			if(loopsSinceLastLock>=TIME_TO_DISABLE)
 			{
 				//courseLockInput.setTarget();
-				pid.setTarget();
+				pid.setTarget(getCurrentVal());
 				Robot.dashboard.putString("Lock", "on");
 			}
 			loopsSinceLastLock=0;
@@ -314,7 +314,7 @@ public class DriveTrain {
 		}
 		else
 		{
-			pid.get();
+			pid.get(getCurrentVal());
 			loopsSinceLastLock++;
 			Robot.dashboard.putString("Lock", "off");
 		}
@@ -322,7 +322,19 @@ public class DriveTrain {
 	
 	public void setLock()
 	{
-		courseLock(pid.get());
+		courseLock(pid.get(getCurrentVal()));
+	}
+	
+	private double getCurrentVal()//make this the input value
+	{
+		if(PID.gyroEnabled)
+		{
+			return Robot.gyro.getYaw();
+		}
+		else
+		{
+			return 0.0;
+		}
 	}
 	
 	public double courseLock(double correction)
@@ -434,12 +446,12 @@ public class DriveTrain {
 	{
 		if(isControlled)
 		{
-			pid.setTarget(target,false);
+			pid.setTarget(target+getCurrentVal(),false);
 			shooterLock=true;
 		}
 		else
 		{
-			pid.setTarget(0.0,false);
+			pid.setTarget(getCurrentVal(),false);
 			shooterLock=false;
 		}
 	}

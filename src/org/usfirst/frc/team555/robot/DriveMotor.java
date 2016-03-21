@@ -132,6 +132,15 @@ public class DriveMotor {
 		return encoder.getDistance();
 	}
 	
+	public double getSpeed() {
+		return getRate();
+	}
+	
+	public double getRate() {
+		if(!encoders) return 0;
+		return encoder.getRate();
+	}
+	
 	public void resetDistance()
 	{
 		if(!encoders)return;

@@ -1,7 +1,5 @@
 package org.usfirst.frc.team555.robot;
 
-import edu.wpi.first.wpilibj.Solenoid;
-
 public class Shooter {
 
 	
@@ -15,12 +13,17 @@ public class Shooter {
     private boolean auto=false;
     private boolean half=false;
     private boolean manual=false;
+    private PID pid;
     
     private double goalY=0.0;
     
     
     public static final double AJUST_FACTOR=0.25;
     public static final double TURN_FACTOR=0.25;
+    
+    public static double P_CORRECTION_FACTOR = 0.0;
+    public static double I_CORRECTION_FACTOR = 0.0;
+    public static double D_CORRECTION_FACTOR = 0.0;
     
 	private Valves valves;
 	
@@ -35,6 +38,8 @@ public class Shooter {
 			wheels[i] = new ShooterMotor(i);
 		}
 		wheels[1].setInverted(true);
+		
+		pid = new PID(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR, D_CORRECTION_FACTOR,-1.0, 1.0, -1.0, 1.0);
 	}
 	public void setSpeed(double spd)
 	{
@@ -154,6 +159,15 @@ public class Shooter {
 	
 	public void setReset(boolean val) {
 		if(val) valves.resetShooterPush();
+	}
+	
+	public void setWheelsShoot(boolean val) {
+		if(!val) return;
+		pid.setTarget(wheels[0].getRate());
+		double correction = pid.get(wheels[1].getRate());
+		double correctionPercent = correction / wheels[1].getRate();
+		wheels[0].setSpeed(0.8);
+		wheels[1].setSpeed(0.8*correctionPercent);
 	}
 	
 	public void update()

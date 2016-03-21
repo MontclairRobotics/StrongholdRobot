@@ -20,21 +20,30 @@ public class PID {
 	private double angle;
 	private double out;
 	
+	private double negVal,posVal;
+	
 	public static final boolean gyroEnabled=true;
 	
-	public PID(double P,double I,double D,double minOut,double maxOut)
+	public PID(double P,double I,double D, double minIn, double maxIn, double minOut, double maxOut)
 	{
 		this.P=P;
 		this.I=I;
 		this.D=D;
 		this.minOut=minOut;
 		this.maxOut=maxOut;
+		this.negVal=minIn;
+		this.posVal=maxIn;
 		setTarget();
+	}
+	
+	public PID(double P,double I,double D,double minIn,double maxIn)
+	{
+		this(P,I,D,minIn,maxIn,-10.0,10.0);
 	}
 	
 	public PID(double P,double I,double D)
 	{
-		this(P,I,D,-10.0,10.0);
+		this(P,I,D,0,0);
 	}
 	
 	public void setTarget(double t)
@@ -44,7 +53,7 @@ public class PID {
 	
 	public void setTarget(double t,boolean reset)
 	{
-		target=getCurrentVal()+t;
+		target=t;
 		if(reset)
 		{
 			error=0.0;
@@ -68,13 +77,13 @@ public class PID {
 		setTarget(0.0,true);
 	}
 
-	public double get()
+	public double get(double val)
 	{
-		calculate();
+		calculate(val);
 		return out;
 	}
 	
-	private double getCurrentVal()//make this the input value
+	/*private double getCurrentVal()//make this the input value
 	{
 		if(gyroEnabled)
 		{
@@ -84,12 +93,16 @@ public class PID {
 		{
 			return 0.0;
 		}
-	}
+	}*/
 	
-	public void calculate()
+	public void calculate(double val)
 	{
-		error=target-getCurrentVal();
-		error=((error+180)%360+360)%360-180;
+		error=target-val;
+		if(negVal!=0&&posVal!=0)
+		{
+			double diff=posVal-negVal;
+			error=((error-negVal)%diff+diff)%diff+negVal;
+		}
 		//error=target-angle;
 		totalError+=error;
 		if (I != 0) 

@@ -72,7 +72,9 @@ public class Robot extends IterativeRobot {
         gyro = new NavXGyro(ahrs);
 
         driveTrain = new DriveTrain();
-        shooter = new Shooter(driveTrain);
+        
+        //ABCD
+        //shooter = new Shooter(driveTrain);
         
         //camera = new USBCamera();
         //server = CameraServer.getInstance();
@@ -149,7 +151,12 @@ public class Robot extends IterativeRobot {
         //shooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.SHOOT_AUTOTARGET));
         //shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
         	//	Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
-        shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
+    	
+    	
+    	//ABCD
+        //shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
+        
+        
         //leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
         //rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
         update();
@@ -158,7 +165,12 @@ public class Robot extends IterativeRobot {
     public void update() {
     	driveTrain.update();
     	//autoShooter.update();
-    	shooter.update();
+    	
+    	
+    	//ABCD
+    	//shooter.update();
+    	
+    	
     	if (Control.getButton(Control.DRIVE_STICK, 3)) {
     		driveTrain.backwards = true;
     		
