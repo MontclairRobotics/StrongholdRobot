@@ -60,6 +60,8 @@ public class Robot extends IterativeRobot {
         obstacleChooser.addObject("terrain", obstacles.terrain);
         obstacleChooser.addObject("wall", obstacles.wall);
         
+        dashboard.putData("Obstacle choices", obstacleChooser);
+        
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
