@@ -152,7 +152,8 @@ public class Shooter {
     	}
     	if(Math.abs(y)>Control.DEAD_ZONE && manual)
     	{
-    		setSpeed(y);
+    		if(y > 0) setWheelsShoot(true);
+    		else setWheelsIntake(true);
     	}
     	update();
     }
@@ -168,6 +169,15 @@ public class Shooter {
 		double correctionPercent = correction / wheels[1].getRate();
 		wheels[0].setSpeed(0.8);
 		wheels[1].setSpeed(0.8*correctionPercent);
+	}
+	
+	public void setWheelsIntake(boolean val) {
+		if(!val) return;
+		pid.setTarget(wheels[0].getRate());
+		double correction = pid.get(wheels[1].getRate());
+		double correctionPercent = correction / wheels[1].getRate();
+		wheels[0].setSpeed(-0.8);
+		wheels[1].setSpeed(-0.8*correctionPercent);
 	}
 	
 	public void update()
