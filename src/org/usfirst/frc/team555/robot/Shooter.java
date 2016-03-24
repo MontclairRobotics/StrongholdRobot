@@ -25,6 +25,8 @@ public class Shooter {
     public static double I_CORRECTION_FACTOR = 0.0;
     public static double D_CORRECTION_FACTOR = 0.0;
     
+    public static final boolean encoders = false;
+    
 	private Valves valves;
 	
 	public Shooter(DriveTrain dt)
@@ -35,7 +37,7 @@ public class Shooter {
 		wheels = new ShooterMotor[2];
 		for(int i = 0; i < wheels.length; i++)
 		{
-			wheels[i] = new ShooterMotor(i);
+			wheels[i] = new ShooterMotor(i, encoders);
 		}
 		wheels[1].setInverted(true);
 		
@@ -164,20 +166,30 @@ public class Shooter {
 	
 	public void setWheelsShoot(boolean val) {
 		if(!val) return;
-		pid.setTarget(wheels[0].getRate());
-		double correction = pid.get(wheels[1].getRate());
-		double correctionPercent = correction / wheels[1].getRate();
-		wheels[0].setSpeed(0.8);
-		wheels[1].setSpeed(0.8*correctionPercent);
+		if(encoders) {
+			pid.setTarget(wheels[0].getRate());
+			double correction = pid.get(wheels[1].getRate());
+			double correctionPercent = correction / wheels[1].getRate();
+			wheels[0].setSpeed(0.8);
+			wheels[1].setSpeed(0.8*correctionPercent);
+		} else {
+			wheels[0].setSpeed(0.8);
+			wheels[1].setSpeed(0.8);
+		}
 	}
 	
 	public void setWheelsIntake(boolean val) {
 		if(!val) return;
-		pid.setTarget(wheels[0].getRate());
-		double correction = pid.get(wheels[1].getRate());
-		double correctionPercent = correction / wheels[1].getRate();
-		wheels[0].setSpeed(-0.8);
-		wheels[1].setSpeed(-0.8*correctionPercent);
+		if(encoders) {
+			pid.setTarget(wheels[0].getRate());
+			double correction = pid.get(wheels[1].getRate());
+			double correctionPercent = correction / wheels[1].getRate();
+			wheels[0].setSpeed(-0.8);
+			wheels[1].setSpeed(-0.8*correctionPercent);
+		} else {
+			wheels[0].setSpeed(-0.8);
+			wheels[1].setSpeed(-0.8);
+		}
 	}
 	
 	public void update()

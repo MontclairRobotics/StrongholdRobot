@@ -76,9 +76,9 @@ public class Robot extends IterativeRobot {
         //ABCD
         //shooter = new Shooter(driveTrain);
         
-        //camera = new USBCamera();
-        //server = CameraServer.getInstance();
-        //server.startAutomaticCapture(camera);
+        camera = new USBCamera();
+        server = CameraServer.getInstance();
+        server.startAutomaticCapture(camera);
         
         //autoShooter=new AutoShooter(shooter);
         
