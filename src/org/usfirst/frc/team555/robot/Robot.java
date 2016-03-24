@@ -15,6 +15,8 @@ public class Robot extends IterativeRobot {
     String autoSelected;
     SendableChooser chooser, obstacleChooser;
     
+    public static final boolean USBcamera = true;
+    
     public static DriveTrain driveTrain;
     public static Shooter shooter;
     //AutoShooter autoShooter;
@@ -75,10 +77,11 @@ public class Robot extends IterativeRobot {
         
         //ABCD
         //shooter = new Shooter(driveTrain);
-        
-        camera = new USBCamera();
-        server = CameraServer.getInstance();
-        server.startAutomaticCapture(camera);
+        if(USBcamera) {
+        	camera = new USBCamera("cam1");
+        	server = CameraServer.getInstance();
+        	server.startAutomaticCapture(camera);
+        }
         
         //autoShooter=new AutoShooter(shooter);
         
