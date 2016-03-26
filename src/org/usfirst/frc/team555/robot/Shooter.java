@@ -170,7 +170,7 @@ public class Shooter {
 	public void setWheelsShoot(boolean val) {
 		if(!val) return;
 		if(encoders) {
-			pid.setTarget(wheels[0].getRate());
+			pid.setTarget(wheels[0].getRate(),false);
 			double correction = pid.get(wheels[1].getRate());
 			double correctionPercent = correction / wheels[1].getRate();
 			wheels[0].setSpeed(0.8);
@@ -184,7 +184,7 @@ public class Shooter {
 	public void setWheelsIntake(boolean val) {
 		if(!val) return;
 		if(encoders) {
-			pid.setTarget(wheels[0].getRate());
+			pid.setTarget(wheels[0].getRate(),false);
 			double correction = pid.get(wheels[1].getRate());
 			double correctionPercent = correction / wheels[1].getRate();
 			wheels[0].setSpeed(-0.8);
