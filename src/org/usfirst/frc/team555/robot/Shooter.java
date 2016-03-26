@@ -48,7 +48,7 @@ public class Shooter {
 		speed=spd;
 	}
 	
-	public void setUp(boolean val)
+	public void setUp(boolean val)//raise arm
 	{
 		if(val && !up)
 		{
@@ -57,15 +57,16 @@ public class Shooter {
 		}
 	}
 	
-	public void setDown(boolean val)
+	public void setDown(boolean val)//lower arm
 	{
 		if(val && up)
 		{
 			up=false;
 			valves.lower();
+			halfUp(true);
 		}
 	}
-	
+	/*
 	public void setOneUp(boolean val)
 	{
 		if(val && !up)
@@ -83,8 +84,8 @@ public class Shooter {
 			valves.lowerOne();
 		}
 	}
-	
-	public void halfUp(boolean val)
+	*/
+	public void halfUp(boolean val)//raise half
 	{
 		if(val && !half)
 		{
@@ -93,7 +94,7 @@ public class Shooter {
 		}
 	}
 	
-	public void halfDown(boolean val)
+	public void halfDown(boolean val)//lower half
 	{
 		if(val && half)
 		{
@@ -102,7 +103,7 @@ public class Shooter {
 		}
 	}
 	
-	public void setOut(boolean val)
+	public void setOut(boolean val)//shoot out
 	{
 		if(val && !out)
 		{
@@ -135,9 +136,11 @@ public class Shooter {
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
 		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
 		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
-		setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
-		setOneUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_UP_ONE));
-		setOneDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_DOWN_ONE));
+		setWheelsIntake(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_INTAKE_MOTORS_ON));
+		setWheelsShoot(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_SHOOT_MOTORS_ON));
+		//setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
+		//setOneUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_UP_ONE));
+		//setOneDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_DOWN_ONE));
 		
 	}
 	
@@ -152,11 +155,11 @@ public class Shooter {
     	{
     		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
     	}
-    	if(Math.abs(y)>Control.DEAD_ZONE && manual)
+    	/*if(Math.abs(y)>Control.DEAD_ZONE && manual)
     	{
     		if(y > 0) setWheelsShoot(true);
     		else setWheelsIntake(true);
-    	}
+    	}*/
     	update();
     }
 	
