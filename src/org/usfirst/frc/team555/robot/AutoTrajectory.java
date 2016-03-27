@@ -19,12 +19,12 @@ public class AutoTrajectory
     private static final double g=9.8;//m/s 
     //private static final double powerToVelocity=1;//motor power to throw ball at one meter per second
     
-    private static final double angleOfCamera=0;//degrees; 0 is facing ahead, 90 is facing ceiling
-    private static final int windowHeight=240;//height of camera window, pixels
-    private static final int windowWidth=320;//width of camera window, pixels
-    private static final double FOVheight=57.6;//field of view of camera, degrees 
-    private static final double FOVwidth=76.8;//field of view of camera, degrees
-    private static final double heightOfCamera=1;//meters
+    public static final double angleOfCamera=0;//degrees; 0 is facing ahead, 90 is facing ceiling
+    public static final int windowHeight=240;//height of camera window, pixels
+    public static final int windowWidth=320;//width of camera window, pixels
+    public static final double FOVheight=57.6;//field of view of camera, degrees 
+    public static final double FOVwidth=76.8;//field of view of camera, degrees
+    public static final double heightOfCamera=1;//meters
 	
 	private static double y=heightOfTarget-heightOfShooter;
 	private static double tan=Math.tan(Math.toRadians(angleOfShooter));

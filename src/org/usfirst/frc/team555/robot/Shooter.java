@@ -213,7 +213,7 @@ public class Shooter {
 	public void updateHTTP()
 	{
 		double[] autoCoords=trajectory.getNetworkTable();	
-		Robot.coordServer.setResponse("0"+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
+		Robot.coordServer.setResponse(trajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
 	}
 	
 	public void update()
