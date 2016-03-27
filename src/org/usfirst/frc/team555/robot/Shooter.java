@@ -151,6 +151,8 @@ public class Shooter {
     	if(Math.abs(y)>Control.DEAD_ZONE)
     	{
     		goalY+=y*AJUST_FACTOR;
+    		if(goalY>AutoTrajectory.windowHeight)goalY=AutoTrajectory.windowHeight;
+    		if(goalY<0)goalY=0;
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
@@ -213,7 +215,7 @@ public class Shooter {
 	public void updateHTTP()
 	{
 		double[] autoCoords=trajectory.getNetworkTable();	
-		Robot.coordServer.setResponse(trajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
+		Robot.coordServer.setResponse(AutoTrajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
 	}
 	
 	public void update()
