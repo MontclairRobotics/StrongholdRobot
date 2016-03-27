@@ -9,8 +9,8 @@ public class Shooter {
     private double speed=0.0;
     private boolean up=false;
     private boolean out=false;
-    private boolean on=false;
-    private boolean auto=false;
+    private boolean auto_shoot_on=false;
+    private boolean auto_align=false;
     private boolean half=false;
     private boolean manual=false;
     private PID pid;
@@ -119,12 +119,13 @@ public class Shooter {
 	
 	public void setOn(boolean val)
 	{
-		on=val;
+		auto_shoot_on=val;
 	}
 	
 	public void setAuto(boolean val)
 	{
-		auto=val;
+		auto_align=val;
+		goalY=trajectory.getNetworkTable()[1];
 	}
 	
 	public void updateButtons()
@@ -160,27 +161,41 @@ public class Shooter {
     		if(y > 0) setWheelsShoot(true);
     		else setWheelsIntake(true);
     	}*/
-    	update();
+    	//update();
     }
 	
 	public void setReset(boolean val) {
 		if(val) valves.resetShooterPush();
 	}
 	
-	public void setWheelsShoot(boolean val) {
-		if(!val) return;
+	public void setWheelsIntake(boolean val)
+	{
+		if(!val)return;
+		manual=true;
+		setWheels(-0.8);
+		
+	}
+	
+	public void setWheelsShoot(boolean val)
+	{
+		if(!val)return;
+		manual=true;
+		setWheels(0.8);
+		
+	}
+	public void setWheels(double spd) {
 		if(encoders) {
 			pid.setTarget(wheels[0].getRate(),false);
 			double correction = pid.get(wheels[1].getRate());
 			double correctionPercent = correction / wheels[1].getRate();
-			wheels[0].setSpeed(0.8);
-			wheels[1].setSpeed(0.8*correctionPercent);
+			wheels[0].setSpeed(spd);
+			wheels[1].setSpeed(spd*correctionPercent);
 		} else {
-			wheels[0].setSpeed(0.8);
-			wheels[1].setSpeed(0.8);
+			wheels[0].setSpeed(spd);
+			wheels[1].setSpeed(spd);
 		}
 	}
-	
+	/*
 	public void setWheelsIntake(boolean val) {
 		if(!val) return;
 		if(encoders) {
@@ -193,29 +208,40 @@ public class Shooter {
 			wheels[0].setSpeed(-0.8);
 			wheels[1].setSpeed(-0.8);
 		}
+	}*/
+	
+	public void updateHTTP()
+	{
+		double[] autoCoords=trajectory.getNetworkTable();	
+		Robot.coordServer.setResponse("0"+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
 	}
 	
 	public void update()
 	{
 		updateButtons();
-		trajectory.update();
-		if(auto)
+		trajectory.update(goalY);
+		if(!manual)
 		{
-			driveTrain.rotateTo(trajectory.getAngle());
-			speed=trajectory.getSpeed();
+			if(auto_align)
+			{
+				driveTrain.rotateTo(trajectory.getAngle());
+			}
+			if(auto_shoot_on)
+			{
+				speed=trajectory.getSpeed();
+			}
+			else
+			{
+				speed=0.0;
+			}
+			setWheels(speed);
 		}
+		for(ShooterMotor motor : wheels) 
+    	{
+    		motor.update();
+    	}
 		
-		if(on||manual)
-		{
-			for(ShooterMotor motor : wheels) 
-	    	{
-	    		motor.setSpeed(speed);
-	    		motor.update();
-	    	}
-		}
-		
-		double[] autoCoords=trajectory.getNetworkTable();
-		
-		Robot.coordServer.setResponse("160,"+goalY+" "+(int)(autoCoords[0])+","+(int)(autoCoords[1]));
+		updateHTTP();
+		manual=false;
 	}
 }

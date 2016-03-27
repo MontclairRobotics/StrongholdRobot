@@ -41,7 +41,7 @@ public class AutoTrajectory
 	
 	public void update(double x,double y)
 	{
-		velocity=getVelocityFromPX(y);
+		velocity=getVelocityFromPX(windowHeight-y);
 		angle=Math.toDegrees(getAngleFromPixles(x,(double)windowWidth/2,(double)FOVwidth/2));
 	}
 	public void update(double y)
@@ -72,13 +72,13 @@ public class AutoTrajectory
 	{
 		return velocity*velocityToPercentage;
 	}
-	public double getRotation()
+	/*public double getRotation()
 	{
 		double rot = angle/maxRotation;
 		if(rot>1)rot=1;
 		if(rot<-1)rot=-1;
 		return rot;
-	}
+	}*/
 	
 	
 	
