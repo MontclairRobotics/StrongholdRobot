@@ -133,7 +133,7 @@ public class Shooter {
 		setUp(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP));
 		setDown(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
-		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_ACTIVE));
+		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTO_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
 		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
 		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
