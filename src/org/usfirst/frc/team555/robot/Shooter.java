@@ -18,7 +18,7 @@ public class Shooter {
     private double goalY=0.0;
     
     
-    public static final double AJUST_FACTOR=0.25;
+    public static final double AJUST_FACTOR=25;
     public static final double TURN_FACTOR=0.25;
     
     public static double P_CORRECTION_FACTOR = 0.0;
