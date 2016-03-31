@@ -15,7 +15,7 @@ public class Map {
 	public static final int FRONT_RIGHT = 2;
 	public static final int REAR_RIGHT = 3;
 	
-	public static final int SHOOTER_PNEUMATICS=2;
+	//public static final int SHOOTER_PNEUMATICS=2;
 	
     public static final int[][] MOTOR_PORTS={
         //Motor port, encoder port 1, encoder port 2

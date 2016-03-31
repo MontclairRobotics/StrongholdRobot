@@ -4,7 +4,7 @@ enum autoState0 {start, dropArm, drive, turn, drive2, fire, stop}
 
 public class Autonomous0 extends StateMachine<autoState0> {
 	
-	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI;
+	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI; //Inches
 	
 	public Autonomous0(autoState0 initialState) {
 		super(initialState);
@@ -45,7 +45,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			switch(next){
 			case drive:
 				Robot.driveTrain.driveInches(133.61,true, 50.0);
-				Robot.dashboard.putString("DriceInchesActive", "reachedPoint1");
+				Robot.dashboard.putString("DriveInchesActive", "reachedPoint1");
 				break;
 			default:
 				break;
@@ -58,6 +58,9 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			
 		break;
 		}
+	}
+	public void update(){
+		super.update();
 	}
 	
 }

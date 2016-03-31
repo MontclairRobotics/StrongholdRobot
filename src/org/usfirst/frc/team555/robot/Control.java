@@ -15,11 +15,11 @@ public class Control {
 	public static final int SHOOT_DOWN=4;
 	public static final int SHOOT_HALF_UP=6;
 	public static final int SHOOT_HALF_DOWN=7;
-	//public static final int SHOOT_UP_ONE = 8;
-	//public static final int SHOOT_DOWN_ONE = 9;
-	//public static final int SHOOT_RESET=11;
-	//public static final int SHOOT_OVERRIDE=10;
-	public static final int SHOOT_SHOOT_MOTORS_ON=10;
+	public static final int SHOOT_UP_ONE = 8;
+	public static final int SHOOT_DOWN_ONE = 9;
+	public static final int SHOOT_RESET=11;
+	public static final int SHOOT_OVERRIDE=10;
+	public static final int SHOOT_SHOOT_MOTORS_ON=11;
 	public static final int SHOOT_INTAKE_MOTORS_ON=10;
 	
 	public static final int HALVING_BUTTON = 2;

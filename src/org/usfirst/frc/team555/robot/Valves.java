@@ -47,7 +47,6 @@ public class Valves {
 		halfOff();
 	}
 	
-	//TODO: Fill these in
 	public void raiseOne(){
 		resetShooterPush();
 		for(Solenoid s : LiftValves) {

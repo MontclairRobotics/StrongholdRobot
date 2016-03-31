@@ -11,7 +11,7 @@ public class AutoTrajectory
 	private static final double maxRotation=30;//if set to 30, the correction will be 1 for 30, .5 for 15, ect.
 	
 	private static final String MAIN_KEY="RoboRealm";
-	private static final String COORDS_KEY="BLOBS";
+	private static final String COORDS_KEY="Target";
 	
 	private static final double angleOfShooter=45;//degrees; 0 is facing ahead, 90 is facing ceiling
     private static final double heightOfTarget=2.5;//meters

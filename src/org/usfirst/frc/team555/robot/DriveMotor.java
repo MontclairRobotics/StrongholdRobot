@@ -20,7 +20,7 @@ public class DriveMotor {
 	private boolean encoders;
 	
 	private static boolean shutdown=false;
-	private static char defaultType = 'v'; //s FOR TALONSRX, v FOR VICTORSP, t for Talon
+	private static char defaultType = 't'; //s FOR TALONSRX, v FOR VICTORSP, t for Talon XYZ
 	//Change values in Map for motor ports when switching modes
 	
 	public static final int ROT_TO_DEGREES = 360;

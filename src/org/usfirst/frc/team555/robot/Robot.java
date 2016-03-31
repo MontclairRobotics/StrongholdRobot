@@ -3,6 +3,7 @@ package org.usfirst.frc.team555.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,7 +14,8 @@ public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
-    SendableChooser chooser, obstacleChooser;
+    SendableChooser chooser, obstacleChooser, cameraEnabler;
+    int ticks = 0;
     
     public static final boolean USBcamera = true;
     
@@ -41,6 +43,7 @@ public class Robot extends IterativeRobot {
     
     USBCamera camera;
     CameraServer server;
+    Compressor compressor;
 
     
     public void robotInit() {
@@ -61,8 +64,12 @@ public class Robot extends IterativeRobot {
         obstacleChooser.addObject("ramps", obstacles.ramps);
         obstacleChooser.addObject("terrain", obstacles.terrain);
         obstacleChooser.addObject("wall", obstacles.wall);
-        
         dashboard.putData("Obstacle choices", obstacleChooser);
+        
+        cameraEnabler = new SendableChooser();
+        chooser.addDefault("Enabled", true);
+        chooser.addObject("Disabled", false);
+        dashboard.putData("Camera enabler", cameraEnabler);
         
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
@@ -75,14 +82,16 @@ public class Robot extends IterativeRobot {
 
         driveTrain = new DriveTrain();
         
-        //ABCD
-        //shooter = new Shooter(driveTrain);
+        shooter = new Shooter(driveTrain);
         if(USBcamera) {
         	camera = new USBCamera("cam1");
+        	//camera.setSize(640, 480);
         	server = CameraServer.getInstance();
         	server.startAutomaticCapture(camera);
         }
         
+        compressor = new Compressor(0);
+        compressor.start();
         //autoShooter=new AutoShooter(shooter);
         
         //netManager = new SocketManager();
@@ -156,8 +165,7 @@ public class Robot extends IterativeRobot {
         	//	Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
     	
     	
-    	//ABCD
-        //shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
+        shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
         
         
         //leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
@@ -170,8 +178,7 @@ public class Robot extends IterativeRobot {
     	//autoShooter.update();
     	
     	
-    	//ABCD
-    	//shooter.update();
+    	shooter.update();
     	
     	
     	if (Control.getButton(Control.DRIVE_STICK, 3)) {
@@ -186,6 +193,21 @@ public class Robot extends IterativeRobot {
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
     	dashboard.putNumber("accel-yaw", gyro.getYaw());
+    	
+    	/*ticks++;
+    	if(ticks % 10 == 0) {
+    		ticks = 0;
+    		if(USBcamera) {
+    			boolean enabled = (boolean) cameraEnabler.getSelected();
+    			if(enabled != server.isAutoCaptureStarted()) {
+    				if(enabled) {
+    					camera.startCapture();
+    				} else {
+    					camera.stopCapture();
+    				}
+    			}
+    		}
+    	}*/
     	
     	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
     	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
