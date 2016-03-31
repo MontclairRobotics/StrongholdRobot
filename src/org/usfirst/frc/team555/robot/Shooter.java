@@ -18,7 +18,7 @@ public class Shooter {
     private double goalY=0.0;
     
     
-    public static final double AJUST_FACTOR=0.25;
+    public static final double AJUST_FACTOR=25;
     public static final double TURN_FACTOR=0.25;
     
     public static double P_CORRECTION_FACTOR = 0.0;
@@ -133,7 +133,7 @@ public class Shooter {
 		setUp(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP));
 		setDown(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
-		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_ACTIVE));
+		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTO_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
 		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
 		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
@@ -151,6 +151,8 @@ public class Shooter {
     	if(Math.abs(y)>Control.DEAD_ZONE)
     	{
     		goalY+=y*AJUST_FACTOR;
+    		if(goalY>AutoTrajectory.windowHeight)goalY=AutoTrajectory.windowHeight;
+    		if(goalY<0)goalY=0;
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
@@ -213,7 +215,7 @@ public class Shooter {
 	public void updateHTTP()
 	{
 		double[] autoCoords=trajectory.getNetworkTable();	
-		Robot.coordServer.setResponse("0"+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
+		Robot.coordServer.setResponse(AutoTrajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
 	}
 	
 	public void update()
