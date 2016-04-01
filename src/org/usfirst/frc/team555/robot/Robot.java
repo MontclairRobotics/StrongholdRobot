@@ -1,6 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.ni.vision.NIVision.Image;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -41,8 +42,8 @@ public class Robot extends IterativeRobot {
     
     StateMachine<?> autoProgram;
     
-    USBCamera camera;
-    CameraServer server;
+    public USBCamera camera;
+    public CameraServer server;
     Compressor compressor;
 
     
@@ -167,7 +168,6 @@ public class Robot extends IterativeRobot {
     	
         shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
         
-        
         //leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
         //rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
         update();
@@ -193,22 +193,6 @@ public class Robot extends IterativeRobot {
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
     	dashboard.putNumber("accel-yaw", gyro.getYaw());
-    	
-    	/*ticks++;
-    	if(ticks % 10 == 0) {
-    		ticks = 0;
-    		if(USBcamera) {
-    			boolean enabled = (boolean) cameraEnabler.getSelected();
-    			if(enabled != server.isAutoCaptureStarted()) {
-    				if(enabled) {
-    					camera.startCapture();
-    				} else {
-    					camera.stopCapture();
-    				}
-    			}
-    		}
-    	}*/
-    	
     	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
     	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
     	//coordServer.setResponse(x+","+y);
