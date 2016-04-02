@@ -27,7 +27,7 @@ public class Shooter {
     
     public static final boolean encoders = false;
     
-	private Valves valves;
+	public Valves valves;
 	
 	public Shooter(DriveTrain dt)
 	{
@@ -63,7 +63,8 @@ public class Shooter {
 		{
 			up=false;
 			valves.lower();
-			halfUp(true);
+			half = true;
+			//halfUp(true);
 		}
 	}
 	/*

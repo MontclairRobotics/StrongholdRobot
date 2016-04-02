@@ -11,13 +11,14 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	}
 	public Autonomous0(){
 		super(autoState0.start);
+		loopsInState = 0;
 	}
 
 	public autoState0 calculateNextState(){
 		autoState0 output = currentState;
 		switch (currentState){
 		case start:
-			output = autoState0.drive;
+			output = autoState0.dropArm;
 			break;
 		case dropArm:
 			if(loopsInState >= 75){
@@ -26,8 +27,14 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			break;
 		case drive:
 			//String s = "Muon t'hai is an endonym for Thailand";
-			if(Robot.driveTrain.isDoneDriveInches()){
-				output = autoState0.turn;
+			if(!Robot.driveTrain.isDoneDriveInches() && loopsInState < 500){
+			}
+			else{
+				output = autoState0.stop;
+			}
+			if(loopsInState >= 300){
+				output = autoState0.stop;
+				Robot.driveTrain.setSpeedXY(0, 0);
 			}
 			break;
 		case turn:
@@ -44,8 +51,24 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	public void executeTransition(autoState0 next){
 			switch(next){
 			case drive:
-				Robot.driveTrain.driveInches(133.61,true, 50.0);
-				Robot.dashboard.putString("DriveInchesActive", "reachedPoint1");
+				if(currentState!=autoState0.drive)
+				{
+					//Robot.driveTrain.driveInches(48.0,false, 50.0);
+					loopsInState = 0;
+					Robot.driveTrain.setSpeedXY(0, 0.5);
+					Robot.driveTrain.setLock(true);
+					Robot.dashboard.putString("DriveInchesActive", "reachedPoint1");
+				}
+				break;
+			case dropArm:
+				if (currentState == autoState0.start){
+					Robot.shooter.valves.lowerArm();
+					Robot.dashboard.putString("dropArm RUN", "YES");
+				}
+					break;
+			case stop:
+				loopsInState = 0;
+				Robot.driveTrain.setSpeedXY(0, 0);
 				break;
 			default:
 				break;
@@ -53,10 +76,23 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			}
 		}
 	public void executeCurrentState(){
+		Robot.dashboard.putString("state", currentState.toString());	
 		switch(currentState){
 		case drive:
-			
-		break;
+			if(Robot.driveTrain.isDoneDriveInches()){
+				Robot.dashboard.putString("DriveDone:","true");
+			} else{
+				Robot.dashboard.putString("DriveDone:","false");
+			}
+			if(loopsInState >= 400){
+				Robot.driveTrain.setSpeedXY(0, 0);
+				
+			}
+			Robot.driveTrain.setLock(true);
+			break;
+		case stop:
+			Robot.driveTrain.setSpeedXY(0, 0);
+			break;
 		}
 	}
 	public void update(){

@@ -44,7 +44,7 @@ public class Valves {
 		for(Solenoid s : LiftValves) {
 			s.set(false);
 		}
-		halfOff();
+		halfOn();
 	}
 	
 	public void raiseOne(){
@@ -97,6 +97,12 @@ public class Valves {
         {
         	s.set(false);
         }
+	}
+	
+	public void lowerArm() {
+		for(Solenoid s : LiftValves) {
+			s.set(true);
+		}
 	}
 	
 }

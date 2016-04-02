@@ -45,6 +45,7 @@ public class Robot extends IterativeRobot {
     public USBCamera camera;
     public CameraServer server;
     Compressor compressor;
+    boolean compressorToggle = false;
 
     
     public void robotInit() {
@@ -55,7 +56,8 @@ public class Robot extends IterativeRobot {
     	chooser = new SendableChooser();
         chooser.addDefault("Forward", new Autonomous0());
         chooser.addObject("Adjustable", new AutonomousAdjustable());
-        dashboard.putData("Auto choices", chooser);     
+        chooser.addObject("Disabled", null);
+        dashboard.putData("Auto choices", chooser);
         
         obstacleChooser = new SendableChooser();
         obstacleChooser.addDefault("none", obstacles.none);
@@ -68,8 +70,8 @@ public class Robot extends IterativeRobot {
         dashboard.putData("Obstacle choices", obstacleChooser);
         
         cameraEnabler = new SendableChooser();
-        chooser.addDefault("Enabled", true);
-        chooser.addObject("Disabled", false);
+        cameraEnabler.addDefault("Enabled", true);
+        cameraEnabler.addObject("Disabled", false);
         dashboard.putData("Camera enabler", cameraEnabler);
         
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
@@ -106,6 +108,11 @@ public class Robot extends IterativeRobot {
 		//System.out.println("Auto selected: " + autoSelected);
 		//driveTrain.setDistance(500, 10, 0);//PUT IN REAL VALUES
 		auto = true;
+		if(chooser.getSelected() == null) {
+			auto = false;
+			return;
+		}
+		compressor.start();
 		autoProgram = (StateMachine<?>)chooser.getSelected();
 		if(autoProgram instanceof AutonomousAdjustable) {
 			obstacles mode = (obstacles) obstacleChooser.getSelected();
@@ -137,6 +144,7 @@ public class Robot extends IterativeRobot {
     	//Put default auto code here
             break;
     	}*/
+    	if(!auto) return;
     	((StateMachine<?>)chooser.getSelected()).update();
     	driveTrain.update();
     	
@@ -196,6 +204,23 @@ public class Robot extends IterativeRobot {
     	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
     	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
     	//coordServer.setResponse(x+","+y);
+    	
+    	/*if(Control.getButton(Control.DRIVE_STICK, 12) && !compressorToggle) {
+    		compressorToggle = true;
+    		if(compressor.enabled()) {
+    			compressor.stop();
+    		} else {
+    			compressor.start();
+    		}
+    	} else if(compressorToggle && !Control.getButton(Control.DRIVE_STICK, 12)) {
+    		compressorToggle = false;
+    	}
+    	if(compressorToggle){
+    		dashboard.putString("compressor", "TRUE");
+    	}
+    	else{
+    		dashboard.putString("compressor", "FALSE");
+    	}*/
     }
     
     public void disabledInit() {

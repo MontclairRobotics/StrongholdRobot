@@ -1,6 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
-enum states {start, obstacle, turn, drive2, fire, stop}
+enum states {start, lower, obstacle, turn, drive2, fire, stop}
 enum obstacles {terrain, moat, ramps, chev, gate, wall, lowBar, none}
 
 public class AutonomousAdjustable extends StateMachine<states> {
@@ -9,6 +9,7 @@ public class AutonomousAdjustable extends StateMachine<states> {
 	private int location;
 	private obstacles obstacle;
 	private ObstacleStateMachine driver;
+	private int lowerCounter = 0;
 	
 	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI;
 	
@@ -19,6 +20,7 @@ public class AutonomousAdjustable extends StateMachine<states> {
 	public AutonomousAdjustable(boolean dir,int loc, obstacles obs)
 	{
 		super(states.start);
+		lowerCounter = 0;
 		direction=dir;
 		location=loc;
 		obstacle=obs;
@@ -30,11 +32,19 @@ public class AutonomousAdjustable extends StateMachine<states> {
 		states output = currentState;
 		switch (currentState){
 		case start:
-			output = states.obstacle;
+			output = states.lower;
+			break;
+		case lower:
+			if (lowerCounter >= 10){
+				output = states.obstacle;
+			}
+			else{
+				lowerCounter++;
+			}
 			break;
 		case obstacle:
 			if(driver.isDone()){
-				output = states.turn;
+				output = states.stop;
 			}
 			break;
 		case turn:
@@ -53,6 +63,9 @@ public class AutonomousAdjustable extends StateMachine<states> {
 			switch(next){
 			case obstacle:
 				break;
+			case lower:
+				Robot.shooter.valves.lowerArm();
+				Robot.dashboard.putString("LOWER RUN", "YES");
 			default:
 				break;
 			

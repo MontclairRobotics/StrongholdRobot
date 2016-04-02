@@ -274,11 +274,11 @@ public class DriveTrain {
 	        rightSpd=(y-x)/max;
 	        netSpd=y;
 		}
-		if(Control.halvingButtonPressed()) {
+		/*if(Control.halvingButtonPressed()) {
 			leftSpd /= 2;
 			rightSpd /= 2;
 			netSpd /= 2;
-		}
+		}*/
 		Robot.dashboard.putNumber("leftSpeed", leftSpd);
 		Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
