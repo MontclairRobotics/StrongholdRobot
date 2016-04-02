@@ -27,11 +27,11 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			break;
 		case drive:
 			//String s = "Muon t'hai is an endonym for Thailand";
-			if(!Robot.driveTrain.isDoneDriveInches() && loopsInState < 500){
+			/*if(!Robot.driveTrain.isDoneDriveInches() && loopsInState < 500){
 			}
 			else{
 				output = autoState0.stop;
-			}
+			}*/
 			if(loopsInState >= 300){
 				output = autoState0.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
