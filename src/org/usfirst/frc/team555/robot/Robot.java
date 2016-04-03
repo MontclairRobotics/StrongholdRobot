@@ -201,6 +201,7 @@ public class Robot extends IterativeRobot {
     	dashboard.putNumber("accel-y", accel.getAccelY());
     	dashboard.putNumber("accel-z", accel.getAccelZ());
     	dashboard.putNumber("accel-yaw", gyro.getYaw());
+    	dashboard.putNumber("avgClicks", driveTrain.getAvgEncoderClicks());
     	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
     	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
     	//coordServer.setResponse(x+","+y);

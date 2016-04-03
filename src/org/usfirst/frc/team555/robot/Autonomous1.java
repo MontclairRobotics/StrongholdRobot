@@ -1,28 +1,28 @@
 package org.usfirst.frc.team555.robot;
 
-enum autoState0 {start, dropArm, drive, turn, drive2, fire, stop}
+enum autoState3 {start, dropArm, drive, turn, drive2, fire, stop}
 
-public class Autonomous0 extends StateMachine<autoState0> {
+public class Autonomous1 extends StateMachine<autoState3> {
 	
 	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI; //Inches
 	
-	public Autonomous0(autoState0 initialState) {
+	public Autonomous1(autoState3 initialState) {
 		super(initialState);
 	}
-	public Autonomous0(){
-		super(autoState0.start);
+	public Autonomous1(){
+		super(autoState3.start);
 		loopsInState = 0;
 	}
 
-	public autoState0 calculateNextState(){
-		autoState0 output = currentState;
+	public autoState3 calculateNextState(){
+		autoState3 output = currentState;
 		switch (currentState){
 		case start:
-			output = autoState0.dropArm;
+			output = autoState3.dropArm;
 			break;
 		case dropArm:
 			if(loopsInState >= 75){
-				output = autoState0.drive;
+				output = autoState3.drive;
 			}
 			break;
 		case drive:
@@ -30,10 +30,10 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			/*if(!Robot.driveTrain.isDoneDriveInches() && loopsInState < 500){
 			}
 			else{
-				output = autoState0.stop;
+				output = autoState3.stop;
 			}*/
 			if(loopsInState >= 300){
-				output = autoState0.stop;
+				output = autoState3.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
 			}
 			break;
@@ -44,26 +44,26 @@ public class Autonomous0 extends StateMachine<autoState0> {
 		case fire:
 			break;
 		case stop:
-			output = autoState0.stop;
+			output = autoState3.stop;
 		}
 		return output;
 	}
-	public void executeTransition(autoState0 next){
+	public void executeTransition(autoState3 next){
 			switch(next){
 			case drive:
-				if(currentState!=autoState0.drive)
+				if(currentState!=autoState3.drive)
 				{
 					//Robot.driveTrain.driveInches(48.0,false, 50.0);
 					loopsInState = 0;
-					Robot.driveTrain.setSpeedXY(0, 0.5);
+					Robot.driveTrain.setSpeedXY(0, 1.0);
 					Robot.driveTrain.setLock(true);
 					Robot.dashboard.putString("DriveInchesActive", "reachedPoint1");
 				}
 				break;
 			case dropArm:
-				if (currentState == autoState0.start){
+				if (currentState == autoState3.start){
 					Robot.shooter.valves.lowerArm();
-					Robot.shooter.valves.halfOff();
+					Robot.shooter.valves.halfOn();
 					Robot.dashboard.putString("dropArm RUN", "YES");
 				}
 					break;

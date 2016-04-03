@@ -175,7 +175,7 @@ public class Shooter {
 	{
 		if(!val)return;
 		manual=true;
-		setWheels(-0.8);
+		setWheels(-1.0);
 		
 	}
 	
@@ -183,7 +183,7 @@ public class Shooter {
 	{
 		if(!val)return;
 		manual=true;
-		setWheels(0.8);
+		setWheels(1.0);
 		
 	}
 	public void setWheels(double spd) {

@@ -142,6 +142,8 @@ public class DriveTrain {
 		if (!driveDone) {
 			Robot.dashboard.putString("REACHED POINT B", "BBBBB");
 			double clicks=getAvgEncoderClicks();
+			Robot.dashboard.putNumber("DriveInClicks", clicks);
+			Robot.dashboard.putNumber("DriveInPrevClicks", prevClicks);
 			if(backwards)clicks=-1*clicks;
 			clicksRemaining -= (clicks - prevClicks);
 			prevClicks = clicks;

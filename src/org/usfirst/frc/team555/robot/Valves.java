@@ -66,7 +66,7 @@ public class Valves {
 		resetShooterPush();
 		for(Solenoid s:HalfValves)
 		{
-			s.set(true);
+			s.set(false);
 		}
 	}
 	public void halfOff()
@@ -74,7 +74,7 @@ public class Valves {
 		resetShooterPush();
 		for(Solenoid s:HalfValves)
 		{
-			s.set(false);
+			s.set(true);
 		}
 	}
 	

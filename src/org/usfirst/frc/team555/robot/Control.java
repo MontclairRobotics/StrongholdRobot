@@ -14,8 +14,8 @@ public class Control {
     public static final int SHOOT_AUTO_ACTIVE=2;//TODO
     public static final int SHOOT_UP=8;
 	public static final int SHOOT_DOWN=9;
-	public static final int SHOOT_HALF_UP=10;
-	public static final int SHOOT_HALF_DOWN=11;
+	public static final int SHOOT_HALF_UP=11;
+	public static final int SHOOT_HALF_DOWN=10;
 	//public static final int SHOOT_UP_ONE = 8;
 	//public static final int SHOOT_DOWN_ONE = 9;
 	//public static final int SHOOT_RESET=11;
