@@ -6,6 +6,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	
 	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI; //Inches
 	
+	boolean halfSpeed, halfExtended, reverse;
+	
 	public Autonomous0(autoState0 initialState) {
 		super(initialState);
 	}
@@ -21,7 +23,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			output = autoState0.dropArm;
 			break;
 		case dropArm:
-			if(loopsInState >= 75){
+			if(loopsInState >= 125){
 				output = autoState0.drive;
 			}
 			break;
@@ -32,7 +34,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			else{
 				output = autoState0.stop;
 			}*/
-			if(loopsInState >= 300){
+			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 200 && !halfSpeed)){
 				output = autoState0.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
 			}
@@ -56,12 +58,14 @@ public class Autonomous0 extends StateMachine<autoState0> {
 					//Robot.driveTrain.driveInches(48.0,false, 50.0);
 					loopsInState = 0;
 					double speed = 1.0;
-					if((boolean) Robot.halfSpeed.getSelected()) {
+					halfSpeed = (boolean)Robot.halfSpeed.getSelected();
+					reverse = (boolean)Robot.reverse.getSelected();
+					if(halfSpeed) {
 						speed = 0.5;
 					} else {
 						speed = 1.0;
 					}
-					if((boolean) Robot.reverse.getSelected()) speed *= -1;
+					if(reverse) speed *= -1;
 					
 					Robot.driveTrain.setSpeedXY(0, speed);
 					
@@ -72,7 +76,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			case dropArm:
 				if (currentState == autoState0.start){
 					Robot.shooter.valves.lowerArm();
-					if((boolean) Robot.halfAuto.getSelected()) {
+					halfExtended = (boolean) Robot.halfAuto.getSelected();
+					if(halfExtended) {
 						Robot.shooter.valves.halfOff();
 					} else {
 						Robot.shooter.valves.halfOn();
@@ -98,9 +103,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			} else{
 				Robot.dashboard.putString("DriveDone:","false");
 			}
-			if(loopsInState >= 400){
+			if((loopsInState >= 400 && halfSpeed) || (loopsInState >= 250 && !halfSpeed)){
 				Robot.driveTrain.setSpeedXY(0, 0);
-				
 			}
 			Robot.driveTrain.setLock(true);
 			break;
