@@ -55,7 +55,16 @@ public class Autonomous0 extends StateMachine<autoState0> {
 				{
 					//Robot.driveTrain.driveInches(48.0,false, 50.0);
 					loopsInState = 0;
-					Robot.driveTrain.setSpeedXY(0, 0.5);
+					double speed = 1.0;
+					if((boolean) Robot.halfSpeed.getSelected()) {
+						speed = 0.5;
+					} else {
+						speed = 1.0;
+					}
+					if((boolean) Robot.reverse.getSelected()) speed *= -1;
+					
+					Robot.driveTrain.setSpeedXY(0, speed);
+					
 					Robot.driveTrain.setLock(true);
 					Robot.dashboard.putString("DriveInchesActive", "reachedPoint1");
 				}
@@ -63,7 +72,11 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			case dropArm:
 				if (currentState == autoState0.start){
 					Robot.shooter.valves.lowerArm();
-					Robot.shooter.valves.halfOff();
+					if((boolean) Robot.halfAuto.getSelected()) {
+						Robot.shooter.valves.halfOff();
+					} else {
+						Robot.shooter.valves.halfOn();
+					}
 					Robot.dashboard.putString("dropArm RUN", "YES");
 				}
 					break;

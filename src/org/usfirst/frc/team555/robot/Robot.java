@@ -1,7 +1,6 @@
 package org.usfirst.frc.team555.robot;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.ni.vision.NIVision.Image;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -15,7 +14,7 @@ public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
-    SendableChooser chooser, obstacleChooser, cameraEnabler;
+    public static SendableChooser chooser, obstacleChooser, cameraEnabler, halfAuto, reverse, halfSpeed;
     int ticks = 0;
     
     public static final boolean USBcamera = true;
@@ -67,12 +66,27 @@ public class Robot extends IterativeRobot {
         obstacleChooser.addObject("ramps", obstacles.ramps);
         obstacleChooser.addObject("terrain", obstacles.terrain);
         obstacleChooser.addObject("wall", obstacles.wall);
-        dashboard.putData("Obstacle choices", obstacleChooser);
+        //dashboard.putData("Obstacle choices", obstacleChooser);
         
         cameraEnabler = new SendableChooser();
         cameraEnabler.addDefault("Enabled", true);
         cameraEnabler.addObject("Disabled", false);
         dashboard.putData("Camera enabler", cameraEnabler);
+        
+        halfAuto = new SendableChooser();
+        halfAuto.addDefault("Extended", false);
+        halfAuto.addObject("Retracted", true);
+        dashboard.putData("half auto chooser", halfAuto);
+        
+        reverse = new SendableChooser();
+        reverse.addDefault("Forwards", false);
+        reverse.addObject("Reverse", true);
+        dashboard.putData("reverse chooser", reverse);
+        
+        halfSpeed = new SendableChooser();
+        halfSpeed.addDefault("Full Speed", false);
+        halfSpeed.addObject("Half", true);
+        dashboard.putData("speed auto chooser", halfSpeed);
         
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
