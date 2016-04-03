@@ -129,6 +129,14 @@ public class Shooter {
 		goalY=trajectory.getNetworkTable()[1];
 	}
 	
+	public void setHalf(boolean val) {
+		if(val) {
+			valves.halfOff();
+		} else {
+			valves.halfOn();
+		}
+	}
+	
 	public void updateButtons()
 	{
 		setUp(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP));
@@ -136,8 +144,9 @@ public class Shooter {
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
 		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTO_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
-		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
-		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
+		//halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
+		//halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
+		setHalf(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
 		setWheelsIntake(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_INTAKE_MOTORS_ON));
 		setWheelsShoot(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_SHOOT_MOTORS_ON));
 		//setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
