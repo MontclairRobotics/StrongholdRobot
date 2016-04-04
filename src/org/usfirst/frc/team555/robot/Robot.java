@@ -1,9 +1,11 @@
 package org.usfirst.frc.team555.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.ni.vision.VisionException;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,10 +16,11 @@ public class Robot extends IterativeRobot {
     final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
-    public static SendableChooser chooser, obstacleChooser, cameraEnabler, halfAuto, reverse, halfSpeed;
+    public static SendableChooser chooser, obstacleChooser, /*cameraEnabler,*/ halfAuto, reverse, halfSpeed;
     int ticks = 0;
     
-    public static final boolean USBcamera = true;
+    public static final boolean USBcamera = false;
+    public static final boolean debugOutputs = false;
     
     public static DriveTrain driveTrain;
     public static Shooter shooter;
@@ -68,10 +71,10 @@ public class Robot extends IterativeRobot {
         obstacleChooser.addObject("wall", obstacles.wall);
         //dashboard.putData("Obstacle choices", obstacleChooser);
         
-        cameraEnabler = new SendableChooser();
+        /*cameraEnabler = new SendableChooser();
         cameraEnabler.addDefault("Enabled", true);
         cameraEnabler.addObject("Disabled", false);
-        dashboard.putData("Camera enabler", cameraEnabler);
+        dashboard.putData("Camera enabler", cameraEnabler);*/
         
         halfAuto = new SendableChooser();
         halfAuto.addDefault("Extended", false);
@@ -91,7 +94,7 @@ public class Robot extends IterativeRobot {
         dashboard.putNumber("PID-P", DriveMotor.PID_P);
         dashboard.putNumber("PID-I", DriveMotor.PID_I);
         dashboard.putNumber("PID-D", DriveMotor.PID_D);
-        dashboard.putNumber("auto position", 0);
+        if(Robot.debugOutputs) dashboard.putNumber("auto position", 0);
         
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
@@ -101,10 +104,15 @@ public class Robot extends IterativeRobot {
         
         shooter = new Shooter(driveTrain);
         if(USBcamera) {
-        	camera = new USBCamera("cam1");
+        	try
+        	{
+        		camera = new USBCamera("cam2");
+        		server = CameraServer.getInstance();
+            	server.startAutomaticCapture(camera);
+        	} catch (VisionException ex){
+        		ex.printStackTrace();
+	        }
         	//camera.setSize(640, 480);
-        	server = CameraServer.getInstance();
-        	server.startAutomaticCapture(camera);
         }
         
         compressor = new Compressor(0);
@@ -173,7 +181,7 @@ public class Robot extends IterativeRobot {
         DriveMotor.PID_I = dashboard.getNumber("PID-I");
         DriveMotor.PID_D = dashboard.getNumber("PID-D");
         try {
-        	coordServer = new HTTP(5805,"coords");
+        	//TODO: coordServer = new HTTP(5805,"coords");
         } catch(Exception e) {
         	e.printStackTrace();
         }
@@ -210,12 +218,15 @@ public class Robot extends IterativeRobot {
     	else  {
     		driveTrain.backwards = false;
     	}
-    	dashboard.putNumber("gyro-angle", gyro.getYaw());
-    	dashboard.putNumber("accel-x", accel.getAccelX());
-    	dashboard.putNumber("accel-y", accel.getAccelY());
-    	dashboard.putNumber("accel-z", accel.getAccelZ());
-    	dashboard.putNumber("accel-yaw", gyro.getYaw());
-    	dashboard.putNumber("avgClicks", driveTrain.getAvgEncoderClicks());
+    	if(Robot.debugOutputs) {
+    		dashboard.putNumber("gyro-angle", gyro.getYaw());
+    		dashboard.putNumber("accel-x", accel.getAccelX());
+        	dashboard.putNumber("accel-y", accel.getAccelY());
+        	dashboard.putNumber("accel-z", accel.getAccelZ());
+        	dashboard.putNumber("accel-yaw", gyro.getYaw());
+        	dashboard.putNumber("avgClicks", driveTrain.getAvgEncoderClicks());
+    	}
+    	
     	//int x=(int)((1+Control.getX(Control.DRIVE_STICK))*(320/2));
     	//int y=(int)((1+Control.getY(Control.DRIVE_STICK))*(240/2));
     	//coordServer.setResponse(x+","+y);

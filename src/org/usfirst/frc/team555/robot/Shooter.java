@@ -27,6 +27,8 @@ public class Shooter {
     
     public static final boolean encoders = false;
     
+    public boolean halfExtended = true;
+    
 	public Valves valves;
 	
 	public Shooter(DriveTrain dt)
@@ -88,25 +90,17 @@ public class Shooter {
 	*/
 	public void halfUp(boolean val)//raise half
 	{
-		if(val && !half)
-		{
-			half=true;
-			valves.halfOn();
-		}
+		setHalf(true);
 	}
 	
 	public void halfDown(boolean val)//lower half
 	{
-		if(val && half)
-		{
-			half=false;
-			valves.halfOff();
-		}
+		setHalf(false);
 	}
 	
 	public void setOut(boolean val)//shoot out
 	{
-		if(val && !out)
+		if(val && !out && !halfExtended)
 		{
 			out=true;
 			valves.shootOut();
@@ -130,10 +124,12 @@ public class Shooter {
 	}
 	
 	public void setHalf(boolean val) {
-		if(val) {
+		if(val && !halfExtended) {
 			valves.halfOff();
-		} else {
+			halfExtended = true;
+		} else if(!val && halfExtended) {
 			valves.halfOn();
+			halfExtended = false;
 		}
 	}
 	
@@ -144,9 +140,9 @@ public class Shooter {
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
 		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTO_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
-		//halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
-		//halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
-		setHalf(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
+		halfUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_UP));
+		halfDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
+		//setHalf(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
 		setWheelsIntake(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_INTAKE_MOTORS_ON));
 		setWheelsShoot(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_SHOOT_MOTORS_ON));
 		//setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
@@ -225,7 +221,8 @@ public class Shooter {
 	public void updateHTTP()
 	{
 		double[] autoCoords=trajectory.getNetworkTable();	
-		Robot.coordServer.setResponse(AutoTrajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
+		if(Robot.coordServer!=null)
+			Robot.coordServer.setResponse(AutoTrajectory.windowWidth/2+","+goalY+","+autoCoords[0]+","+autoCoords[1]);
 	}
 	
 	public void update()

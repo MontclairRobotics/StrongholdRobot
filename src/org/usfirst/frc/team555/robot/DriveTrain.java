@@ -69,8 +69,8 @@ public class DriveTrain {
 		//source = new CourseLockPIDSource();
 		//pidOut = new CourseLockPIDOut();
 		pid = new PID(P_CORRECTION_FACTOR, I_CORRECTION_FACTOR,  D_CORRECTION_FACTOR,-180,180);
-		Robot.dashboard.putNumber("Kp", P_CORRECTION_FACTOR);
-		Robot.dashboard.putNumber("Kd", D_CORRECTION_FACTOR);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kp", P_CORRECTION_FACTOR);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kd", D_CORRECTION_FACTOR);
 		
 		for(int i=0; i<WHEELS_PER_SIDE; i++)
 		{
@@ -115,7 +115,7 @@ public class DriveTrain {
 		autoDriveSpd=spd;
 		pid.setTarget(getCurrentVal());
 		
-		Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
+		if(Robot.debugOutputs) Robot.dashboard.putString("auto", "DRIVE " + in + "in: initialized");
 	}
 	
 	// driveFeet(double) derives from driveInches(double)
@@ -138,16 +138,16 @@ public class DriveTrain {
 	}*/
 	
 	public void driveInchesUpdate() {
-		Robot.dashboard.putString("REACHED POINT A","AAAAA");
+		if(Robot.debugOutputs) Robot.dashboard.putString("REACHED POINT A","AAAAA");
 		if (!driveDone) {
-			Robot.dashboard.putString("REACHED POINT B", "BBBBB");
+			if(Robot.debugOutputs) Robot.dashboard.putString("REACHED POINT B", "BBBBB");
 			double clicks=getAvgEncoderClicks();
-			Robot.dashboard.putNumber("DriveInClicks", clicks);
-			Robot.dashboard.putNumber("DriveInPrevClicks", prevClicks);
+			if(Robot.debugOutputs) Robot.dashboard.putNumber("DriveInClicks", clicks);
+			if(Robot.debugOutputs) Robot.dashboard.putNumber("DriveInPrevClicks", prevClicks);
 			if(backwards)clicks=-1*clicks;
 			clicksRemaining -= (clicks - prevClicks);
 			prevClicks = clicks;
-			Robot.dashboard.putNumber("clicks remaining",clicksRemaining);
+			if(Robot.debugOutputs) Robot.dashboard.putNumber("clicks remaining",clicksRemaining);
 			if (clicksRemaining > 0) {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
 				if(spd>autoDriveSpd)spd=autoDriveSpd;
@@ -159,7 +159,7 @@ public class DriveTrain {
 				setSpeedXY(0,0,false,false);
 				driveDone = true;
 				
-				Robot.dashboard.putString("auto", "DRIVE: completed");
+				if(Robot.debugOutputs) Robot.dashboard.putString("auto", "DRIVE: completed");
 			}
 		}
 		
@@ -184,7 +184,7 @@ public class DriveTrain {
 		//autoInterrupted();
 		rotationDone = false;
 		
-		Robot.dashboard.putString("auto", "ROTATION " + deg + "°: initialized");
+		if(Robot.debugOutputs) Robot.dashboard.putString("auto", "ROTATION " + deg + "°: initialized");
 	}
 	
 	public void rotateDegreesUpdate() {
@@ -201,7 +201,7 @@ public class DriveTrain {
 				leftSpd = rightSpd = 0;
 				rotationDone = true;
 				
-				Robot.dashboard.putString("auto", "ROTATION: completed");
+				if(Robot.debugOutputs) Robot.dashboard.putString("auto", "ROTATION: completed");
 			}
 		}
 	}
@@ -281,8 +281,8 @@ public class DriveTrain {
 			rightSpd /= 2;
 			netSpd /= 2;
 		}*/
-		Robot.dashboard.putNumber("leftSpeed", leftSpd);
-		Robot.dashboard.putNumber("rightSpeed", rightSpd);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("leftSpeed", leftSpd);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("rightSpeed", rightSpd);
 	}
 	
 	public void setDistance(double d,double speed,double rotation)
@@ -310,7 +310,7 @@ public class DriveTrain {
 			{
 				//courseLockInput.setTarget();
 				pid.setTarget(getCurrentVal());
-				Robot.dashboard.putString("Lock", "on");
+				if(Robot.debugOutputs) Robot.dashboard.putString("Lock", "on");
 			}
 			loopsSinceLastLock=0;
 			setLock();
@@ -319,7 +319,7 @@ public class DriveTrain {
 		{
 			pid.get(getCurrentVal());
 			loopsSinceLastLock++;
-			Robot.dashboard.putString("Lock", "off");
+			if(Robot.debugOutputs) Robot.dashboard.putString("Lock", "off");
 		}
 	}
 	
@@ -367,11 +367,11 @@ public class DriveTrain {
 		}
 		//lastAngle = angle;
 		//Robot.dashboard.putString("PIDEnabled?", pid.isEnabled() ? "true" : "false" );
-		Robot.dashboard.putNumber("Correction", correction);
-		Robot.dashboard.putNumber("Error", pid.getError());
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Correction", correction);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Error", pid.getError());
 		pid.setPID(Robot.dashboard.getNumber("Kp"), I_CORRECTION_FACTOR, Robot.dashboard.getNumber("Kd"));
-		Robot.dashboard.putNumber("Kp", pid.getP());
-		Robot.dashboard.putNumber("Kd", pid.getD());
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kp", pid.getP());
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kd", pid.getD());
 		return angle;
 	}
 	

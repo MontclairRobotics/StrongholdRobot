@@ -20,6 +20,7 @@ public class Valves {
         
         for(int i = 0; i < Map.SHOOTER_SOLENOID_PORTS.length; i++)
         {
+        	
         	ShooterValves[i] = new Solenoid(Map.SHOOTER_SOLENOID_PORTS[i]);
         }
         
@@ -81,6 +82,8 @@ public class Valves {
 	public void shootOut()
 	{
 		for(Solenoid s : ShooterValves) {
+			Robot.dashboard.putString("Shoot-status", "out");
+			Robot.dashboard.putData("solenoid", s);
 			s.set(true);
 		}
 	}
@@ -88,6 +91,7 @@ public class Valves {
 	public void shootIn()
 	{
 		for(Solenoid s : ShooterValves) {
+			Robot.dashboard.putString("Shoot-status", "in");
 			s.set(false);
 		}
 	}

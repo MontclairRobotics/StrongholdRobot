@@ -89,7 +89,7 @@ public class DriveMotor {
 	{
 		speed = encoders ? spd * ROT_TO_DEGREES : spd*SCALE_FACTOR; // Control scale constant
 	
-		Robot.dashboard.putNumber("Motor "+motorPort, spd);
+		if(Robot.debugOutputs) Robot.dashboard.putNumber("Motor "+motorPort, spd);
 	}
 	
 	public void update()
@@ -105,8 +105,8 @@ public class DriveMotor {
 			controller.setSetpoint(speed);
 		} else {*/
 			motor.set(speed);
-			Robot.dashboard.putNumber("Speed-" + motorPort, speed);
-			if(encoders) Robot.dashboard.putNumber("encoder-" + motorPort, encoder.get());
+			if(Robot.debugOutputs) Robot.dashboard.putNumber("Speed-" + motorPort, speed);
+			if(encoders && Robot.debugOutputs) Robot.dashboard.putNumber("encoder-" + motorPort, encoder.get());
 		//}
 	}
 	
