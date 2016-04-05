@@ -44,6 +44,7 @@ public class Robot extends IterativeRobot {
     
     StateMachine<?> autoProgram;
     
+    // public CameraView cameraView;
     public USBCamera camera;
     public CameraServer server;
     Compressor compressor;
@@ -104,6 +105,7 @@ public class Robot extends IterativeRobot {
         
         shooter = new Shooter(driveTrain);
         if(USBcamera) {
+        	// cameraView = new CameraView("cam1", "cam2"); // TODO: - Find actual names of USB cameras
         	try
         	{
         		camera = new USBCamera("cam2");
@@ -197,6 +199,8 @@ public class Robot extends IterativeRobot {
     	
     	
         shooter.setJoystick(Control.getX(Control.SHOOT_STICK),-Control.getY(Control.SHOOT_STICK),Control.getButton(Control.SHOOT_STICK,Control.SHOOT_OVERRIDE));
+        
+        //cameraView.update();
         
         //leftShoot.setSpeed(Control.getY(Control.SHOOT_STICK));
         //rightShoot.setSpeed(Control.getY(Control.SHOOT_STICK)*-1);
