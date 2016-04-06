@@ -10,9 +10,9 @@ public class DriveTrain {
 	public static final double DEAD_ZONE= .1;
 	public static final double YAW_THRESHOLD = 5;
 	public static final double YAW_CHANGE_FACTOR = 1;
-	private static final double P_CORRECTION_FACTOR = .03;//.01;
-	private static final double D_CORRECTION_FACTOR = 10*P_CORRECTION_FACTOR;
-	private static final double I_CORRECTION_FACTOR = 0.0;
+	public static final double P_CORRECTION_FACTOR = .06;//.01;
+	public static final double D_CORRECTION_FACTOR = 5*P_CORRECTION_FACTOR;
+	public static final double I_CORRECTION_FACTOR = 0.0;
 	private static final int TIME_TO_DISABLE=5;//iterations until lock is deactivated
 	
 	public static final double WHEEL_CIRC = 8 * Math.PI;
@@ -369,7 +369,7 @@ public class DriveTrain {
 		//Robot.dashboard.putString("PIDEnabled?", pid.isEnabled() ? "true" : "false" );
 		if(Robot.debugOutputs) Robot.dashboard.putNumber("Correction", correction);
 		if(Robot.debugOutputs) Robot.dashboard.putNumber("Error", pid.getError());
-		pid.setPID(Robot.dashboard.getNumber("Kp"), I_CORRECTION_FACTOR, Robot.dashboard.getNumber("Kd"));
+		//pid.setPID(Robot.dashboard.getNumber("Kp"), I_CORRECTION_FACTOR, Robot.dashboard.getNumber("Kd"));
 		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kp", pid.getP());
 		if(Robot.debugOutputs) Robot.dashboard.putNumber("Kd", pid.getD());
 		return angle;

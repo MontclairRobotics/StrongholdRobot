@@ -87,13 +87,14 @@ public class Robot extends IterativeRobot {
         dashboard.putData("reverse chooser", reverse);
         
         halfSpeed = new SendableChooser();
-        halfSpeed.addDefault("Full Speed", false);
-        halfSpeed.addObject("Half", true);
+        halfSpeed.addDefault("Full Speed", 1.0);
+        halfSpeed.addObject("Half", 0.5);
+        halfSpeed.addObject("Quarter", 0.25);
         dashboard.putData("speed auto chooser", halfSpeed);
         
-        dashboard.putNumber("PID-P", DriveMotor.PID_P);
-        dashboard.putNumber("PID-I", DriveMotor.PID_I);
-        dashboard.putNumber("PID-D", DriveMotor.PID_D);
+        dashboard.putNumber("PID-P", DriveTrain.P_CORRECTION_FACTOR);
+        dashboard.putNumber("PID-I", DriveTrain.I_CORRECTION_FACTOR);
+        dashboard.putNumber("PID-D", DriveTrain.D_CORRECTION_FACTOR);
         if(Robot.debugOutputs) dashboard.putNumber("auto position", 0);
         
         ahrs = new AHRS(SPI.Port.kMXP);
@@ -177,9 +178,9 @@ public class Robot extends IterativeRobot {
      */
     
     public void teleopInit() {
-    	DriveMotor.PID_P = dashboard.getNumber("PID-P");
-        DriveMotor.PID_I = dashboard.getNumber("PID-I");
-        DriveMotor.PID_D = dashboard.getNumber("PID-D");
+    	/*if(Robot.debugOutputs) DriveTrain.P_CORRECTION_FACTOR = dashboard.getNumber("PID-P");
+    	if(Robot.debugOutputs) DriveTrain.I_CORRECTION_FACTOR = dashboard.getNumber("PID-I");
+    	if(Robot.debugOutputs) DriveTrain.D_CORRECTION_FACTOR = dashboard.getNumber("PID-D");*/
         try {
         	//TODO: coordServer = new HTTP(5805,"coords");
         } catch(Exception e) {

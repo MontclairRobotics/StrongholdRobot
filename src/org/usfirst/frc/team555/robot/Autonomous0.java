@@ -7,6 +7,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	public static final double WHEEL_CIRCUMFERENCE = 8 * Math.PI; //Inches
 	
 	boolean halfSpeed, halfExtended, reverse;
+	double speedFactor;
 	
 	public Autonomous0(autoState0 initialState) {
 		super(initialState);
@@ -34,7 +35,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			else{
 				output = autoState0.stop;
 			}*/
-			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 200 && !halfSpeed)){
+			//if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 200 && !halfSpeed)){
+			if(loopsInState >= 300*speedFactor) {
 				output = autoState0.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
 			}
@@ -58,13 +60,15 @@ public class Autonomous0 extends StateMachine<autoState0> {
 					//Robot.driveTrain.driveInches(48.0,false, 50.0);
 					loopsInState = 0;
 					double speed = 1.0;
-					halfSpeed = (boolean)Robot.halfSpeed.getSelected();
+					//halfSpeed = (boolean)Robot.halfSpeed.getSelected();
+					speedFactor = (double)Robot.halfSpeed.getSelected();
 					reverse = (boolean)Robot.reverse.getSelected();
-					if(halfSpeed) {
+					/*if(halfSpeed) {
 						speed = 0.5;
 					} else {
 						speed = 1.0;
-					}
+					}*/
+					speed = speed*speedFactor;
 					if(reverse) speed *= -1;
 					
 					Robot.driveTrain.setSpeedXY(0, speed);
