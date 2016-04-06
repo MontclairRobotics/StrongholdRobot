@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.vision.USBCamera;
 
 /*
- * CameraView.java
+ * CameraViewer.java
  *
  * Joshua Rapoport 2016
  *
@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
 
 enum states {cam1, cam2}
 
-public class CameraView extends StateMachine<states> {
+public class CameraViewer extends StateMachine<states> {
   
   public CameraServer server;
   USBCamera camera1, camera2;
