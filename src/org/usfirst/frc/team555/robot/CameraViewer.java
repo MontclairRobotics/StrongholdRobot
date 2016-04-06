@@ -24,7 +24,7 @@ public class CameraViewer extends StateMachine<states> {
   public static final int CAM_HEIGHT = 480;
   public static final int CAM_FPS = 16;
   
-  public CameraServer server;
+  CameraServer server;
   USBCamera camera1, camera2;
   
   public CameraView(String name1, String name2) {
@@ -50,7 +50,7 @@ public class CameraViewer extends StateMachine<states> {
   }
   
   public USBCamera currentCamera() {
-    return (currentState == cam1) ? camera1 : camera2
+    return (currentState == cam1) ? camera1 : camera2;
   }
   
   public states calculateNextState() {
