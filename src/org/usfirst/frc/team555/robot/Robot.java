@@ -87,9 +87,9 @@ public class Robot extends IterativeRobot {
         dashboard.putData("reverse chooser", reverse);
         
         halfSpeed = new SendableChooser();
-        halfSpeed.addDefault("Full Speed", 1.0);
-        halfSpeed.addObject("Half", 0.5);
-        halfSpeed.addObject("Quarter", 0.25);
+        halfSpeed.addDefault("Full Speed", false);
+        halfSpeed.addObject("Half", true);
+        //halfSpeed.addObject("Quarter", 0.25);
         dashboard.putData("speed auto chooser", halfSpeed);
         
         dashboard.putNumber("PID-P", DriveTrain.P_CORRECTION_FACTOR);

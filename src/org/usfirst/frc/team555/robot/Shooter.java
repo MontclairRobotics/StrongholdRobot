@@ -148,6 +148,8 @@ public class Shooter {
 		//setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
 		//setOneUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_UP_ONE));
 		//setOneDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_DOWN_ONE));
+		//TODO
+		Robot.dashboard.putString("Half-extended", Boolean.toString(halfExtended));
 		
 	}
 	
