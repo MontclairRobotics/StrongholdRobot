@@ -39,6 +39,13 @@ public class Valves {
 		halfOn();
 	}
 	
+	public void raiseArm() {
+		resetShooterPush();
+		for(Solenoid s : LiftValves) {
+			s.set(true);
+		}
+	}
+	
 	public void lower()
 	{
 		resetShooterPush();
@@ -107,6 +114,10 @@ public class Valves {
 		for(Solenoid s : LiftValves) {
 			s.set(true);
 		}
+	}
+	
+	public boolean isHalfExtended() {
+		return !HalfValves[0].get();
 	}
 	
 }

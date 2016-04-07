@@ -50,25 +50,26 @@ public class Shooter {
 		speed=spd;
 	}
 	
-	public void setUp(boolean val)//raise arm
-	{
-		if(val && !up)
-		{
-			up=true;
-			valves.raise();
+	public void setArm(boolean val) {
+		if(val) {
+			valves.lowerArm();
+		} else {
+			valves.raiseArm();
 		}
 	}
 	
-	public void setDown(boolean val)//lower arm
-	{
-		if(val && up)
-		{
-			up=false;
-			valves.lower();
-			half = true;
-			//halfUp(true);
+	public void armUp(boolean buttonVal) {
+		if(buttonVal) {
+			setArm(true);
 		}
 	}
+	
+	public void armDown(boolean buttonVal) {
+		if(buttonVal) {
+			setArm(false);
+		}
+	}
+	
 	/*
 	public void setOneUp(boolean val)
 	{
@@ -90,37 +91,12 @@ public class Shooter {
 	*/
 	public void halfUp(boolean val)//raise half
 	{
-		setHalf(true);
+		if(val) setHalf(true);
 	}
 	
 	public void halfDown(boolean val)//lower half
 	{
-		setHalf(false);
-	}
-	
-	public void setOut(boolean val)//shoot out
-	{
-		if(val && !out && !halfExtended)
-		{
-			out=true;
-			valves.shootOut();
-		}
-		else if(!val && out)
-		{
-			out=false;
-			valves.shootIn();
-		}
-	}
-	
-	public void setOn(boolean val)
-	{
-		auto_shoot_on=val;
-	}
-	
-	public void setAuto(boolean val)
-	{
-		auto_align=val;
-		goalY=trajectory.getNetworkTable()[1];
+		if(val) setHalf(false);
 	}
 	
 	public void setHalf(boolean val) {
@@ -133,10 +109,34 @@ public class Shooter {
 		}
 	}
 	
+	public void setOut(boolean val)//shoot out
+	{
+		if(val && !valves.isHalfExtended())
+		{
+			valves.shootOut();
+		}
+		else if(!val)
+		{
+			valves.shootIn();
+		}
+	}
+	
+	
+	public void setOn(boolean val)
+	{
+		auto_shoot_on=val;
+	}
+	
+	public void setAuto(boolean val)
+	{
+		auto_align=val;
+		goalY=trajectory.getNetworkTable()[1];
+	}
+	
 	public void updateButtons()
 	{
-		setUp(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP));
-		setDown(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
+		armUp(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP));
+		armDown(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));
 		setOut(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_TRIGGER));
 		setOn(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTO_ACTIVE));
 		setAuto(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_AUTOTARGET));
@@ -145,11 +145,7 @@ public class Shooter {
 		//setHalf(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_HALF_DOWN));
 		setWheelsIntake(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_INTAKE_MOTORS_ON));
 		setWheelsShoot(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_SHOOT_MOTORS_ON));
-		//setReset(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_RESET));
-		//setOneUp(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_UP_ONE));
-		//setOneDown(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_DOWN_ONE));
-		//TODO
-		Robot.dashboard.putString("Half-extended", Boolean.toString(halfExtended));
+		//Robot.dashboard.putString("Half-extended", Boolean.toString(halfExtended));
 		
 	}
 	
