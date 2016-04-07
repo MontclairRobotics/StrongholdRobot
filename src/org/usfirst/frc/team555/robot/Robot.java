@@ -46,9 +46,10 @@ public class Robot extends IterativeRobot {
     
     // public CameraViewer viewer;
     public USBCamera camera;
-    public CameraServer server;
+    public static CameraServer555 cameraServer;
     Compressor compressor;
     boolean compressorToggle = false;
+    public static final String[] CAM_IDS = {"cam1", "cam2"};
 
     
     public void robotInit() {
@@ -107,14 +108,7 @@ public class Robot extends IterativeRobot {
         shooter = new Shooter(driveTrain);
         if(USBcamera) {
         	// viewer = new CameraViewer("cam1", "cam2"); // TODO: - Find actual names of USB cameras
-        	try
-        	{
-        		camera = new USBCamera("cam2");
-        		server = CameraServer.getInstance();
-            	server.startAutomaticCapture(camera);
-        	} catch (VisionException ex){
-        		ex.printStackTrace();
-	        }
+        	cameraServer = new CameraServer555(CAM_IDS);
         	//camera.setSize(640, 480);
         }
         

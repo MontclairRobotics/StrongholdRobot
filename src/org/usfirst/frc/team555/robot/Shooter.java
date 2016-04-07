@@ -28,6 +28,7 @@ public class Shooter {
     public static final boolean encoders = false;
     
     public boolean halfExtended = true;
+    public boolean flopButtonPressed = false;
     
 	public Valves valves;
 	
@@ -146,6 +147,7 @@ public class Shooter {
 		setWheelsIntake(Control.getButton(Control.SHOOT_STICK, Control.SHOOT_INTAKE_MOTORS_ON));
 		setWheelsShoot(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_SHOOT_MOTORS_ON));
 		//Robot.dashboard.putString("Half-extended", Boolean.toString(halfExtended));
+		flop(Control.getButton(Control.DRIVE_STICK, Control.CAM_SWITCH));
 		
 	}
 	
@@ -251,4 +253,14 @@ public class Shooter {
 		updateHTTP();
 		manual=false;
 	}
+	
+	public void flop(boolean val) {
+		if(Robot.cameraServer != null && val && !flopButtonPressed) {
+			flopButtonPressed = true;
+			Robot.cameraServer.swap();
+		} else if(flopButtonPressed && !val) {
+			flopButtonPressed = false;
+		}
+	}
+	
 }
