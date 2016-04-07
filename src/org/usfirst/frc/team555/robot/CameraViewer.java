@@ -1,4 +1,4 @@
-package org.usfirst.frc.team555.robot;
+/*package org.usfirst.frc.team555.robot;
 
 import com.ni.vision.VisionException;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
  **
  */
 
-enum states {cam1, cam2}
+/*enum states {cam1, cam2}
 
 public class CameraViewer extends StateMachine<states> {
   
@@ -73,4 +73,4 @@ public class CameraViewer extends StateMachine<states> {
     }
   }
   
-}
+}*/
