@@ -101,10 +101,10 @@ public class Shooter {
 	}
 	
 	public void setHalf(boolean val) {
-		if(val && !halfExtended) {
+		if(val) {
 			valves.halfOff();
 			halfExtended = true;
-		} else if(!val && halfExtended) {
+		} else {
 			valves.halfOn();
 			halfExtended = false;
 		}
@@ -112,7 +112,7 @@ public class Shooter {
 	
 	public void setOut(boolean val)//shoot out
 	{
-		if(val && !valves.isHalfExtended())
+		if(val)
 		{
 			valves.shootOut();
 		}
