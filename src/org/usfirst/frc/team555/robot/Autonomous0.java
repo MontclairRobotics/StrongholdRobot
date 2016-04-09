@@ -1,5 +1,7 @@
 package org.usfirst.frc.team555.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 enum autoState0 {start, dropArm, drive, turn, drive2, fire, stop}
 
 public class Autonomous0 extends StateMachine<autoState0> {
@@ -15,6 +17,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 	public Autonomous0(){
 		super(autoState0.start);
 		loopsInState = 0;
+		halfExtended = Robot.halfExtendedAuto;
 	}
 
 	public autoState0 calculateNextState(){
@@ -35,7 +38,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			else{
 				output = autoState0.stop;
 			}*/
-			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 200 && !halfSpeed)){
+			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 150 && !halfSpeed)){
 			//if(loopsInState >= 300*(1/speedFactor)) {
 				output = autoState0.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
@@ -58,10 +61,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			case drive:
 				if(currentState!=autoState0.drive)
 				{
-					//Robot.driveTrain.driveInches(48.0,false, 50.0);
 					double speed = 1.0;
 					halfSpeed = Robot.halfSpeedAuto;
-					//speedFactor = (double)Robot.halfSpeed.getSelected();
 					reverse = Robot.reverseAuto;
 					if(halfSpeed) {
 						speed = 0.5;
@@ -69,7 +70,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 						speed = 1.0;
 					}
 					//speed = speed*speedFactor;
-					if(reverse) speed *= -1;
+					if(reverse){ speed *= -1;}
 					
 					Robot.driveTrain.setSpeedXY(0, speed);
 					
@@ -80,11 +81,18 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			case dropArm:
 				if (currentState == autoState0.start){
 					Robot.shooter.valves.lowerArm();
-					halfExtended = true;//Robot.halfExtendedAuto;
-					if(halfExtended) {
+					//Robot.halfExtendedAuto;
+					boolean halfThingy = Robot.halfSwitch.get();
+					Robot.dashboard.putString("halfThingy", Boolean.toString(halfThingy));
+					if(Robot.halfAuto.getSelected() == null) {
+						Robot.dashboard.putString("halfNull", "HALF IS NULL");
+					}
+					if(halfThingy) {
 						Robot.shooter.halfUp(true);
+						Robot.dashboard.putString("halfDone", "halfUp");
 					} else {
 						Robot.shooter.halfDown(true);
+						Robot.dashboard.putString("halfDone", "halfDown");
 					}
 					Robot.dashboard.putString("dropArm RUN", "YES");
 				}

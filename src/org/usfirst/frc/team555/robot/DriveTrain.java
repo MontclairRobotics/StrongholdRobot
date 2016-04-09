@@ -248,15 +248,13 @@ public class DriveTrain {
 	}
 	public void setSpeedXY(double x, double y,boolean manual,boolean userLock, boolean useDeadzone)
 	{   
-		x*=.75;
 		if (backwards) {
 			y = y*-1;
 		}
-		if (Math.abs(x)<Control.DEAD_ZONE || !useDeadzone)
+		if (Math.abs(x)<Control.DEAD_ZONE/* || useDeadzone*/)
 		{
-
 			lock=userLock;
-			if(Math.abs(y)<Control.DEAD_ZONE || !useDeadzone)
+			if(Math.abs(y)<Control.DEAD_ZONE/* || useDeadzone*/)
 			{
 				isControlled=false;
 				leftSpd=0;
@@ -273,6 +271,7 @@ public class DriveTrain {
 		}
 		else
 		{
+			x*=.40;
 			lock=false;
 			isControlled=manual;
 			double max;

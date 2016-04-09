@@ -5,6 +5,7 @@ import com.ni.vision.VisionException;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
@@ -51,6 +52,7 @@ public class Robot extends IterativeRobot {
     boolean compressorToggle = false;
     public static boolean halfExtendedAuto, halfSpeedAuto, reverseAuto;
     public static final String[] CAM_IDS = {"cam1", "cam2"};
+    public static DigitalInput halfSwitch;
 
     
     public void robotInit() {
@@ -82,7 +84,7 @@ public class Robot extends IterativeRobot {
         halfAuto = new SendableChooser();
         halfAuto.addDefault("Extended", false);
         halfAuto.addObject("Retracted", true);
-        dashboard.putData("half auto chooser", halfAuto);
+        dashboard.putData("half-auto", halfAuto);
         
         reverse = new SendableChooser();
         reverse.addDefault("Forwards", false);
@@ -104,6 +106,8 @@ public class Robot extends IterativeRobot {
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
         driveTrain = new DriveTrain();
+        
+        Robot.halfSwitch = new DigitalInput(0);
         
         shooter = new Shooter(driveTrain);
         if(USBcamera) {
@@ -134,10 +138,11 @@ public class Robot extends IterativeRobot {
 		}
 		compressor.start();
 		halfExtendedAuto = (boolean) Robot.halfAuto.getSelected();
+		Robot.dashboard.putString("HalfPistonChosen", halfExtendedAuto? "yes": "no");
 		halfSpeedAuto = (boolean) Robot.halfSpeed.getSelected();
 		reverseAuto = (boolean) Robot.reverse.getSelected();
 		autoProgram = (StateMachine<?>)chooser.getSelected();
-		if(autoProgram instanceof AutonomousAdjustable) {
+		/*if(autoProgram instanceof AutonomousAdjustable) {
 			obstacles mode = (obstacles) obstacleChooser.getSelected();
 			int pos = (int) dashboard.getNumber("auto position");
 			boolean dir;
@@ -150,9 +155,9 @@ public class Robot extends IterativeRobot {
 				break;
 			}
 			autoProgram = new AutonomousAdjustable(dir, pos, mode);
-		} else if(autoProgram instanceof Autonomous0) {
+		} else if(autoProgram instanceof Autonomous0) {*/
 			autoProgram = new Autonomous0();
-		}
+		//}
     	
     }
 
@@ -170,6 +175,7 @@ public class Robot extends IterativeRobot {
             break;
     	}*/
     	if(!auto) return;
+    	Robot.dashboard.putString("halfThingy", Boolean.toString(halfSwitch.get()));
     	((StateMachine<?>)chooser.getSelected()).update();
     	driveTrain.update();
     	
@@ -192,14 +198,14 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-    	if(Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE && 
-    			Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE) {
-    		driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
-    	} else if(Control.getButton(Control.DRIVE_STICK, Control.TURN_LEFT)) {
+    	//if(Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE && 
+    			//Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE) {
+    	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	/*} else if(Control.getButton(Control.DRIVE_STICK, Control.TURN_LEFT)) {
     		driveTrain.turnLeft(true);
     	} else if(Control.getButton(Control.DRIVE_STICK, Control.TURN_RIGHT)) {
     		driveTrain.turnRight(true);
-    	}
+    	}*/
     	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
     	driveTrain.turnLeft(Control.getButton(Control.DRIVE_STICK, Control.TURN_LEFT));
     	driveTrain.turnRight(Control.getButton(Control.DRIVE_STICK, Control.TURN_RIGHT));
