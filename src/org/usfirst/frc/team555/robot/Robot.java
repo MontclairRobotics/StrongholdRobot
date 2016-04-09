@@ -19,7 +19,7 @@ public class Robot extends IterativeRobot {
     public static SendableChooser chooser, obstacleChooser, /*cameraEnabler,*/ halfAuto, reverse, halfSpeed;
     int ticks = 0;
     
-    public static final boolean USBcamera = false;
+    public static final boolean USBcamera = true;
     public static final boolean debugOutputs = false;
     
     public static DriveTrain driveTrain;
@@ -49,6 +49,7 @@ public class Robot extends IterativeRobot {
     public static CameraServer555 cameraServer;
     Compressor compressor;
     boolean compressorToggle = false;
+    public static boolean halfExtendedAuto, halfSpeedAuto, reverseAuto;
     public static final String[] CAM_IDS = {"cam1", "cam2"};
 
     
@@ -102,13 +103,13 @@ public class Robot extends IterativeRobot {
         ahrs = new AHRS(SPI.Port.kMXP);
         accel = new NavXAccelerometer(ahrs);
         gyro = new NavXGyro(ahrs);
-
         driveTrain = new DriveTrain();
         
         shooter = new Shooter(driveTrain);
         if(USBcamera) {
         	// viewer = new CameraViewer("cam1", "cam2"); // TODO: - Find actual names of USB cameras
         	cameraServer = new CameraServer555(CAM_IDS);
+        	cameraServer.startAutomaticCapture();
         	//camera.setSize(640, 480);
         }
         
@@ -132,6 +133,9 @@ public class Robot extends IterativeRobot {
 			return;
 		}
 		compressor.start();
+		halfExtendedAuto = (boolean) Robot.halfAuto.getSelected();
+		halfSpeedAuto = (boolean) Robot.halfSpeed.getSelected();
+		reverseAuto = (boolean) Robot.reverse.getSelected();
 		autoProgram = (StateMachine<?>)chooser.getSelected();
 		if(autoProgram instanceof AutonomousAdjustable) {
 			obstacles mode = (obstacles) obstacleChooser.getSelected();
@@ -146,6 +150,8 @@ public class Robot extends IterativeRobot {
 				break;
 			}
 			autoProgram = new AutonomousAdjustable(dir, pos, mode);
+		} else if(autoProgram instanceof Autonomous0) {
+			autoProgram = new Autonomous0();
 		}
     	
     }
@@ -186,8 +192,18 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-    	driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	if(Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE && 
+    			Math.abs(Control.getX(Control.DRIVE_STICK)) > driveTrain.DEAD_ZONE) {
+    		driveTrain.setSpeedXY(Control.getX(Control.DRIVE_STICK), -Control.getY(Control.DRIVE_STICK));
+    	} else if(Control.getButton(Control.DRIVE_STICK, Control.TURN_LEFT)) {
+    		driveTrain.turnLeft(true);
+    	} else if(Control.getButton(Control.DRIVE_STICK, Control.TURN_RIGHT)) {
+    		driveTrain.turnRight(true);
+    	}
     	driveTrain.setLock(Control.getButton(Control.DRIVE_STICK,Control.LOCK_BUTTON));
+    	driveTrain.turnLeft(Control.getButton(Control.DRIVE_STICK, Control.TURN_LEFT));
+    	driveTrain.turnRight(Control.getButton(Control.DRIVE_STICK, Control.TURN_RIGHT));
+    	
         //shooter.setActive(Control.getButton(Control.DRIVE_STICK,Control.SHOOT_AUTOTARGET));
         //shooter.setLift(Control.getButton(Control.SHOOT_STICK,Control.SHOOT_UP),
         	//	Control.getButton(Control.SHOOT_STICK,Control.SHOOT_DOWN));

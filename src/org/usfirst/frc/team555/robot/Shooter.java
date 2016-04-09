@@ -53,9 +53,9 @@ public class Shooter {
 	
 	public void setArm(boolean val) {
 		if(val) {
-			valves.lowerArm();
-		} else {
 			valves.raiseArm();
+		} else {
+			valves.lowerArm();
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class Shooter {
     	}
     	if(!driveTrain.isControlled && Math.abs(x)>Control.DEAD_ZONE)
     	{
-    		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false);
+    		driveTrain.setSpeedXY(x*TURN_FACTOR, 0, false,false,true);
     	}
     	/*if(Math.abs(y)>Control.DEAD_ZONE && manual)
     	{
@@ -180,7 +180,7 @@ public class Shooter {
 	{
 		if(!val)return;
 		manual=true;
-		setWheels(-1.0);
+		setWheels(-0.7);
 		
 	}
 	
@@ -188,7 +188,8 @@ public class Shooter {
 	{
 		if(!val)return;
 		manual=true;
-		setWheels(1.0);
+		//setWheels(0.475);
+		setWheels(0.7);
 		
 	}
 	public void setWheels(double spd) {

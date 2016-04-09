@@ -12,8 +12,8 @@ public class Control {
 	public static final int SHOOT_TRIGGER=1;//TODO
 	//public static final int SHOOT_ACTIVE=2;//TODO
     public static final int SHOOT_AUTO_ACTIVE=2;//TODO
-    public static final int SHOOT_UP=8;
-	public static final int SHOOT_DOWN=9;
+    public static final int SHOOT_UP=9;
+	public static final int SHOOT_DOWN=8;
 	public static final int SHOOT_HALF_UP=11;
 	public static final int SHOOT_HALF_DOWN=10;
 	//public static final int SHOOT_UP_ONE = 8;
@@ -25,6 +25,8 @@ public class Control {
 	public static final int HALVING_BUTTON = 2;
 	public static final int LOCK_BUTTON=1;
 	public static final int CAM_SWITCH = 4;
+	public static final int TURN_LEFT = 5;
+	public static final int TURN_RIGHT = 6;
 	
 	public static final double DEAD_ZONE=0.2;
 	

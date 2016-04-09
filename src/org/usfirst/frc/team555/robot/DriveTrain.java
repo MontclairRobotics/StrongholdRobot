@@ -152,11 +152,11 @@ public class DriveTrain {
 				double spd = clicksRemaining / SLOW_CLICKS + 0.25;
 				if(spd>autoDriveSpd)spd=autoDriveSpd;
 				if(spd<-autoDriveSpd)spd=-autoDriveSpd;
-				setSpeedXY(0,spd,false,true);
+				setSpeedXY(0,spd,false,true,false);
 				setLock();
 			} else {
 				//clicksRemaining = 0;
-				setSpeedXY(0,0,false,false);
+				setSpeedXY(0,0,false,false,false);
 				driveDone = true;
 				
 				if(Robot.debugOutputs) Robot.dashboard.putString("auto", "DRIVE: completed");
@@ -206,6 +206,18 @@ public class DriveTrain {
 		}
 	}
 	
+	public void turnLeft(boolean val) {
+		if(val) {
+			this.setSpeedXY(0.1, 0, true, false, false);
+		}
+	}
+	
+	public void turnRight(boolean val) {
+		if(val) {
+			this.setSpeedXY(-0.1, 0, true, false, false);
+		}
+	}
+	
 	public double getAvgEncoderClicks() {
 		double sum = 0;
 		
@@ -232,19 +244,19 @@ public class DriveTrain {
 	
 	public void setSpeedXY(double x, double y)
 	{
-		setSpeedXY(x,y,true,Control.getSlider(Control.DRIVE_STICK)<=0.5);
+		setSpeedXY(x,y,true,false,true);
 	}
-	public void setSpeedXY(double x, double y,boolean manual,boolean userLock)
+	public void setSpeedXY(double x, double y,boolean manual,boolean userLock, boolean useDeadzone)
 	{   
 		x*=.75;
 		if (backwards) {
 			y = y*-1;
 		}
-		if (Math.abs(x)<Control.DEAD_ZONE)
+		if (Math.abs(x)<Control.DEAD_ZONE || !useDeadzone)
 		{
 
 			lock=userLock;
-			if(Math.abs(y)<Control.DEAD_ZONE)
+			if(Math.abs(y)<Control.DEAD_ZONE || !useDeadzone)
 			{
 				isControlled=false;
 				leftSpd=0;

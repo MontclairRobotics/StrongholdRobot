@@ -42,7 +42,7 @@ public class Valves {
 	public void raiseArm() {
 		resetShooterPush();
 		for(Solenoid s : LiftValves) {
-			s.set(true);
+			s.set(false);
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class Valves {
 	{
 		resetShooterPush();
 		for(Solenoid s : LiftValves) {
-			s.set(false);
+			s.set(true);
 		}
 		halfOn();
 	}
@@ -72,7 +72,7 @@ public class Valves {
 	public void halfOn()
 	{
 		resetShooterPush();
-		for(Solenoid s:HalfValves)
+		for(Solenoid s : HalfValves)
 		{
 			s.set(false);
 		}
@@ -80,7 +80,7 @@ public class Valves {
 	public void halfOff()
 	{
 		resetShooterPush();
-		for(Solenoid s:HalfValves)
+		for(Solenoid s : HalfValves)
 		{
 			s.set(true);
 		}
@@ -89,8 +89,8 @@ public class Valves {
 	public void shootOut()
 	{
 		for(Solenoid s : ShooterValves) {
-			Robot.dashboard.putString("Shoot-status", "out");
-			Robot.dashboard.putData("solenoid", s);
+			//Robot.dashboard.putString("Shoot-status", "out");
+			//Robot.dashboard.putData("solenoid", s);
 			s.set(true);
 		}
 	}
@@ -98,7 +98,7 @@ public class Valves {
 	public void shootIn()
 	{
 		for(Solenoid s : ShooterValves) {
-			Robot.dashboard.putString("Shoot-status", "in");
+			//Robot.dashboard.putString("Shoot-status", "in");
 			s.set(false);
 		}
 	}
