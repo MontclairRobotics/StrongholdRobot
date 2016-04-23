@@ -27,7 +27,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			output = autoState0.dropArm;
 			break;
 		case dropArm:
-			if(loopsInState >= 125){
+			if(loopsInState >= 150){
 				output = autoState0.drive;
 			}
 			break;
@@ -38,7 +38,7 @@ public class Autonomous0 extends StateMachine<autoState0> {
 			else{
 				output = autoState0.stop;
 			}*/
-			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 150 && !halfSpeed)){
+			if((loopsInState >= 300 && halfSpeed) || (loopsInState >= 175 && !halfSpeed)){
 			//if(loopsInState >= 300*(1/speedFactor)) {
 				output = autoState0.stop;
 				Robot.driveTrain.setSpeedXY(0, 0);
@@ -82,11 +82,8 @@ public class Autonomous0 extends StateMachine<autoState0> {
 				if (currentState == autoState0.start){
 					Robot.shooter.valves.lowerArm();
 					//Robot.halfExtendedAuto;
-					boolean halfThingy = Robot.halfSwitch.get();
+					boolean halfThingy = Robot.halfExtendedAuto;
 					Robot.dashboard.putString("halfThingy", Boolean.toString(halfThingy));
-					if(Robot.halfAuto.getSelected() == null) {
-						Robot.dashboard.putString("halfNull", "HALF IS NULL");
-					}
 					if(halfThingy) {
 						Robot.shooter.halfUp(true);
 						Robot.dashboard.putString("halfDone", "halfUp");

@@ -189,7 +189,13 @@ public class Shooter {
 		if(!val)return;
 		manual=true;
 		//setWheels(0.475);
-		setWheels(0.555);
+		//if(valves.isArmUp()) {
+			setWheels(0.555);
+			//Robot.dashboard.putString("arm-status", "arm up speed");
+		//} else {-
+			//setWheels(0.4);
+			//Robot.dashboard.putString("arm-status", "arm down speed");
+		//}
 		
 	}
 	public void setWheels(double spd) {

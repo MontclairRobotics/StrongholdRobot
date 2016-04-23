@@ -120,4 +120,8 @@ public class Valves {
 		return !HalfValves[0].get();
 	}
 	
+	public boolean isArmUp() {
+		return !LiftValves[0].get();
+	}
+	
 }

@@ -82,8 +82,8 @@ public class Robot extends IterativeRobot {
         dashboard.putData("Camera enabler", cameraEnabler);*/
         
         halfAuto = new SendableChooser();
-        halfAuto.addDefault("Extended", false);
-        halfAuto.addObject("Retracted", true);
+        halfAuto.addDefault("Extended", true);
+        halfAuto.addObject("Retracted", false);
         dashboard.putData("half-auto", halfAuto);
         
         reverse = new SendableChooser();
@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
     	}*/
     	if(!auto) return;
     	Robot.dashboard.putString("halfThingy", Boolean.toString(halfSwitch.get()));
-    	((StateMachine<?>)chooser.getSelected()).update();
+    	autoProgram.update();
     	driveTrain.update();
     	
     }
